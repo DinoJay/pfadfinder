@@ -8,13 +8,19 @@ Array.prototype.indexOfObj = function arrayObjectIndexOf(property, value) {
     return -1;
 };
 
-const width = 1100;
-const height = 800;
+const margin = {
+    left: 80,
+    right: 80,
+    top: 40,
+    bottom: 40
+  };
+
+const width = 1350 - margin.left - margin.right;
+const height = 620 - margin.top - margin.bottom;
 // const center = {
 //     x: width / 2,
 //     y: height / 2
 // };
-// const margin = {left: 100, right: 100, top: 100, bottom: 100};
 
 // const color = d3.scale.linear()
 //     .domain([10, 15, 20, 25, 30, 40, 50, 55, 60, 80, 90, 95, 97, 98, 99, 150])
@@ -37,33 +43,82 @@ const color2 = d3.scale.linear()
         "#8b0000"
     ].reverse());
 
-var data = require("json!./miserables.json");
 
 const GRID_SIZE = 40;
 
+
 const force = d3.layout.force()
-    .charge(d =>  {
-      return - Math.pow(d.radius, 2);
-    })
+    .charge(d => - Math.pow(d.radius, 2))
     .gravity(0.2)
     .friction(0.9)
-    .size([width, height])
+    // push center of force down
+    .size([width + margin.left + margin.right, height + margin.top + margin.bottom + 100])
     .linkDistance(0);
 
-var linkedByIndex = {};
+var linkedByIndex = new function() {
+  return {
+    index: {},
+    init: function(links) {
+      links.forEach(d => this.index[d.source + "," + d.target] = true);
+    },
+    isConnected: function(a, b) {
+        return this.index[a.index + "," + b.index] || this.index[b.index + "," + a.index];
+    }
+  };
+};
 
-// function cropLen(d) {
-//   var circum = d3MeasureText(d.name).width + 10;
-//   // var needLen = circum;
-//   var needLen = circum / Math.PI / 2;
-//   // var availLen = d.radius * 2 * Math.PI;
-//   var availLen = d.radius - (79/320 * d.radius);
-//   if (availLen > needLen) return d.name.length;
-//   else { var offset = parseInt(needLen - availLen);
-//     var len = d.name.length - offset;
-//     return len;
-//   }
-// }
+
+var Grid = function(width, height) { return {
+    cells : [],
+    init : function() {
+      this.cells = [];
+      for(var i = 0; i < width / GRID_SIZE; i++) {
+        for(var j = 0; j < height / GRID_SIZE; j++) {
+          var cell = {
+                x: i * GRID_SIZE,
+                y: j * GRID_SIZE,
+                selected: false
+              };
+          this.cells.push(cell);
+        }
+      }
+    },
+    sqdist : function(a, b) {
+      return Math.pow(a.x - b.x, 2) + Math.pow(a.y - b.y, 2);
+    },
+    occupyNearest : function(p) {
+      var minDist = 100000;
+      var candidate = null;
+      for(var i = 0; i < this.cells.length; i++) {
+        var d = this.sqdist(p, this.cells[i]);
+        if(!p.selected && !this.cells[i].selected && !this.cells[i].occupied && d < minDist) {
+          minDist = d;
+          candidate = this.cells[i];
+        }
+      }
+      if(candidate){
+          candidate.occupied = true;
+          candidate.selected = true;
+        }
+      return candidate;
+    }
+  };
+} (width, height);
+
+
+function griddlePos(d) {
+  var gridpoint = Grid.occupyNearest(d);
+  if(gridpoint) {
+    d.screenX = d.screenX || gridpoint.x;
+    d.screenY = d.screenY || gridpoint.y;
+    d.screenX += (gridpoint.x - d.screenX) * .2;
+    d.screenY += (gridpoint.y - d.screenY) * .2;
+
+    d.x += (gridpoint.x - d.x) * .05;
+    d.y += (gridpoint.y - d.y) * .05;
+  }
+}
+
 
 function collide(data, alpha, padding) {
   var quadtree = d3.geom.quadtree(data);
@@ -93,35 +148,12 @@ function collide(data, alpha, padding) {
   };
 }
 
-// Resolves collisions between d and all other circles.
-// function collide(data, alpha, padding) {
-//   var quadtree = d3.geom.quadtree(data);
-//   var radius = GRID_SIZE / 2 + padding;
-//
-//   return function(d) {
-//       // TODO: change
-//         var nx1 = d.x - radius,
-//           nx2 = d.x + radius,
-//           ny1 = d.y - radius,
-//           ny2 = d.y + radius;
-//       quadtree.visit(function(quad, x1, y1, x2, y2) {
-//           if (quad.point && (quad.point !== d)) {
-//               var x = d.x - quad.point.x,
-//                   y = d.y - quad.point.y,
-//                   l = Math.sqrt(x * x + y * y),
-//                   r = quad.point.radius;
-//
-//               if (l < r) {
-//                   l = (l - r) / l * alpha;
-//                   d.x -= x *= l;
-//                   d.y -= y *= l;
-//                   quad.point.x += x;
-//                   quad.point.y += y;
-//               }
-//           }
-//           return x1 > nx2 || x2 < nx1 || y1 > ny2 || y2 < ny1;
-//       });
-//   };
+
+// function movePos(pos, alpha) {
+//     return function(d) {
+//         d.x = d.x + (pos.x - d.x) * (0.1 + 0.02) * alpha * 1.1;
+//         d.y = d.y + (pos.y - d.y) * (0.1 + 0.02) * alpha * 1.1;
+//     };
 // }
 
 
@@ -152,28 +184,24 @@ function radial(d, index, alpha, radius, length, energy, startAngle, center) {
 // }
 
 
-function defaultTick(node, data) {
+function defaultTick(nodes, node) {
   return function() {
 
-    var svg = d3.select("#vis svg");
-    svg.select("g.gridcanvas").remove();
-    grid.init();
-    var gridCanvas = svg.append("svg:g").attr("class", "gridcanvas");
-    grid.cells.forEach(c => {
-      gridCanvas.append("svg:circle").attr("cx", c.x).attr("cy", c.y).attr("r", 2).style("fill", "#555").style("opacity", .3);
-    });
+    Grid.init();
 
-    node.each(collide(data, 0.8, 1));
+    // node.each(movePos({x: width / 2, y: height / 2}, 0.2));
+    node.each(collide(nodes, 0.8, 1));
+    // node.each(bindToBorderBox);
     node.each(griddlePos);
-    node.attr("transform", d => "translate(" + d.screenX + "," + d.screenY + ")");
+    // sometimes out of bounds the coords
+    node.attr("transform", d => "translate(" + ( d.screenX || 0 ) + "," + ( d.screenY || 0 ) + ")");
   };
 }
 
 
-function tickContextView(data, nbs, node, selectedNode, link) {
-
+function tickContextView(node, neighbor, selectedNode, link) {
   function lineData(d){
-    var straightLine = d3.svg.line().interpolate("step")
+    var straightLine = d3.svg.line().interpolate("step-before")
             .x(d => d.x)
             .y(d => d.y);
 
@@ -184,110 +212,71 @@ function tickContextView(data, nbs, node, selectedNode, link) {
     return straightLine(points);
   }
   return function(e) {
-    var svg = d3.select("#vis svg");
-    svg.select("g.gridcanvas").remove();
-    grid.init();
-    var gridCanvas = svg.append("svg:g").attr("class", "gridcanvas");
-    grid.cells.forEach(c => {
-      gridCanvas.append("svg:circle")
-        .attr("cx", c.x).attr("cy", c.y)
-        .attr("r", 2).style("fill", "#555")
-        .style("opacity", .3);
+
+    Grid.init();
+
+    neighbor.each((d, i) => {
+        radial(d, i, e.alpha, 75, neighbor.data().length, 0.5, 0, selectedNode);
     });
 
-    nbs.forEach((d, i) => {
-        radial(d, i, e.alpha, 75, nbs.length, 0.5, 0, selectedNode);
-    });
-
-    node.each(collide(data.nodes, 1, 20));
+    node.each(collide(node.data(), 0.8, 20));
+    // node.each(bindToBorderBox);
     node.each(griddlePos);
-    node.attr("transform", d => "translate(" + d.screenX + "," + d.screenY + ")");
 
-    // link
-    //   .attr("d", lineData);
-    link.call(updateLink);
+    node.attr("transform", d => "translate(" + d.screenX + "," + d.screenY + ")");
+    link
+      .attr("d", lineData);
+    // link.call(updateLink);
   };
 }
 
-function contextView(data, node, selectedNode) {
-  // force.stop();
-  // d3.selectAll("g.group path").style("fill", "blue");
-  // d3.select(selectedNode).call(function(){
-  //   d3.select(this).style("fill", "blue");
-  // });
 
+function contextView({ links: links, node: node, selectedNode: selectedNode,
+                       linkedByIndex: linkedByIndex}) {
   selectedNode.fixed = true;
 
-  console.log("selectNode", selectedNode);
-  // var oldEdges = d3.selectAll(".hlink").data();
+  console.log("force", force);
   var edges = [];
-  var nbs = [];
 
-  force.links(data.links);
-  console.log("linkedByIndex", linkedByIndex);
-  data.links.forEach(function(d) {
-    linkedByIndex[d.source + "," + d.target] = true;
-  });
+  force.links(links);
 
-  node.each(d => {
-    if (isConnected(selectedNode, d)) {
-      nbs.push(d);
+  var neighbor = node.filter(d => {
+    if (linkedByIndex.isConnected(selectedNode, d)) {
       edges.push({
-          id: selectedNode.index + d.index,
-          source: selectedNode,
-          target: d
+        id: selectedNode.index + d.index,
+        source: selectedNode,
+        target: d
       });
+      return true;
     }
   });
-
-  // var newEdges = oldEdges.concat(edges);
-  console.log("selectedNode", selectedNode);
-  console.log("nbs", nbs);
 
   var link = d3.select("#vis svg").selectAll(".hlink")
       .data(edges, d => d.source.index + "-" + d.target.index);
 
-
   link
     .enter()
-    .insert("line", ":first-child")
+    .insert("path", ":first-child")
     .attr("class", "hlink")
-      .style("stroke-width", () => {
-          return 5;
+      .style("stroke-width", () => { return 5;
       })
       .style("stroke", () => 20);
 
   force.links(edges);
-
-  // node.each(d => d.fixed = true);
   force.linkStrength(0);
-  // force.linkDistance(200);
-  console.log("where is my data", data);
-  force.on("tick", tickContextView(data, nbs, node, selectedNode, link));
+  force.on("tick", tickContextView(node, neighbor, selectedNode, link));
 
   link.exit()
       .remove();
 
-  // force.start();
+  node.selectAll("circle").style("opacity", 0);
+  neighbor.selectAll("path").style("fill", "green");
 }
 
-function isConnected(a, b) {
-    return isConnectedAsTarget(a, b) || isConnectedAsSource(a, b);
-}
 
-function isConnectedAsSource(a, b) {
-    return linkedByIndex[a.index + "," + b.index];
-}
+function render({ data: data, selectedNode:  selectedNode,
+                  linkedByIndex: linkedByIndex, view: view }) {
 
-function isConnectedAsTarget(a, b) {
-    return linkedByIndex[b.index + "," + a.index];
-}
-
-function isEqual(a, b) {
-    return a.index == b.index;
-}
-
-function render(data, linkedByIndex, selectedNode) {
     console.log("render data", data);
 
     // TODO: fix ID issue
@@ -338,7 +327,7 @@ function render(data, linkedByIndex, selectedNode) {
     //   .attr("dy","-1em")
     //   .text(d => d.size > 20 ? d.name.substring(0, cropLen(d)) : null);
 
-    force.on("tick", defaultTick(node, data.nodes));
+    force.on("tick", defaultTick(data.nodes, node));
 
     node
       .on("click", function(d) {
@@ -346,14 +335,39 @@ function render(data, linkedByIndex, selectedNode) {
         if (!d.selected) {
           d.selected = true;
           d3.select(this).select("path").style("fill", "blue");
-          render(data, linkedByIndex, d);
+          render({
+            data:          data,
+            selectedNode:  d,
+            linkedByIndex: linkedByIndex,
+            view:          "contextView"
+          });
         }
-        else render(data, linkedByIndex, null);
+        else render({
+              data:          data,
+              selectedNode:  null,
+              linkedByIndex: linkedByIndex,
+              view:          "overview"
+            });
       })
       .on("mouseover", function() { });
 
-    // contextView(d);
-    if (selectedNode) contextView(data, node, selectedNode);
+    switch (view) {
+      case "contextView":
+        contextView({
+          links:         data.links,
+          node:          node,
+          selectedNode:  selectedNode,
+          linkedByIndex: linkedByIndex
+        });
+        break;
+
+      case "recapView":
+        console.log("arc diagram");
+        recapView({ node: node, force: force });
+        break;
+
+      default: console.log("overview");
+    }
 
     node.exit()
         .remove();
@@ -364,110 +378,137 @@ function render(data, linkedByIndex, selectedNode) {
 
 }
 
-var grid = function(width, height) {
-  return {
-    cells : [],
-    init : function() {
-      this.cells = [];
-      for(var i = 0; i < width / GRID_SIZE; i++) {
-        for(var j = 0; j < height / GRID_SIZE; j++) {
-          // HACK: ^should be a better way to determine number of rows and cols
-          var cell = {
-                x: i * GRID_SIZE,
-                y: j * GRID_SIZE,
-                selected: false
-              };
-          this.cells.push(cell);
-        }
-      }
-    },
-    sqdist : function(a, b) {
-      return Math.pow(a.x - b.x, 2) + Math.pow(a.y - b.y, 2);
-    },
-    occupyNearest : function(p) {
-      var minDist = 100000;
-      var candidate = null;
-      for(var i = 0; i < this.cells.length; i++) {
-        var d = this.sqdist(p, this.cells[i]);
-        if(!p.selected && !this.cells[i].selected && !this.cells[i].occupied && d < minDist) {
-          minDist = d;
-          candidate = this.cells[i];
-        }
-      }
-      if(candidate){
-          candidate.occupied = true;
-          candidate.selected = true;
-        }
-      return candidate;
-    }
-  };
-} (width, height);
 
 const d3ggLayout = {};
 
 d3ggLayout.create = function(el, props) {
     //TODO: props to include as arg
     var svg = d3.select(el).append("svg")
-                // .attr("id", "BubbleCloud")
-                .attr("width", width)
-                .attr("height", height)
-                .append("g");
-                // .attr("transform", "translate(545,300)");
+                // .attr("id", "pf")
+                .attr("width", margin.left + width + margin.right)
+                .attr("height", margin.top + height + margin.bottom)
+                .append("g")
+                .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-    data.nodes.forEach(d => d.radius = 15);
-    console.log("data", data);
-    this.update(svg, data);
+    var gridCanvas = svg.append("svg:g").attr("class", "gridcanvas");
+                        // .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+    Grid.init();
+
+    Grid.cells.forEach(c => {
+      gridCanvas.append("svg:circle")
+        .attr("cx", c.x).attr("cy", c.y)
+        .attr("r", 2).style("fill", "#555")
+        .style("opacity", .3);
+    });
+
+    props.data.nodes.forEach(d => d.radius = 15);
+
+    this.update(svg, props);
 };
 
-d3ggLayout.update = function(svg, data) {
+d3ggLayout.update = function(svg, props) {
 
-  force.nodes(data.nodes);
-  console.log("linkedByIndex", linkedByIndex);
+  force.nodes(props.data.nodes);
+  linkedByIndex.init(props.data.links);
 
-  render(data, linkedByIndex, null);
+  render({
+    data:          props.data,
+    selectedNode:  null,
+    linkedByIndex: linkedByIndex,
+    view:          props.view
+  });
+
 };
 
-// var updateNode = function() {
-//   this.attr("transform", function(d) {
-//       var gridpoint = grid.occupyNearest(d);
-//       if(gridpoint) {
-//         d.screenX = d.screenX || gridpoint.x;
-//         d.screenY = d.screenY || gridpoint.y;
-//         d.screenX += (gridpoint.x - d.screenX) * .2;
-//         d.screenY += (gridpoint.y - d.screenY) * .2;
-//
-//         d.x += (gridpoint.x - d.x) * .05;
-//         d.y += (gridpoint.y - d.y) * .05;
-//       }
-//     return "translate(" + d.screenX + "," + d.screenY + ")";
+function recapView({ node: node }) {
+  console.log("recapView");
+
+  // TODO: fix later
+  var maxGroup = d3.max(node.data(), d => d.group);
+
+  // used to scale node index to x position
+  var xScale = d3.scale.linear()
+      .domain([0, maxGroup])
+      .range([margin.left, width]);
+
+  var line = function(d) {
+    var straightLine = d3.svg.line()
+                         .x(d => d.x)
+                         .y(d => d.y);
+    var points = [
+        {x: xScale(d.group), y: d.y},
+        {x: xScale(d.group), y: d.y + 100}
+    ];
+    return straightLine(points);
+  };
+
+  force
+    .on("tick", tickRecapView(node, xScale))
+    .on("end", function() {
+      var lines = d3.select("#vis svg").selectAll("path.dbar")
+        .data(node.data(), d => d.name);
+
+      lines
+        .enter()
+        .append("path")
+        .attr("class", "dbar")
+        .attr("d", line);
+
+      console.log("Lines", lines);
+    });
+}
+
+function tickRecapView(node, xScale) {
+  return function(e) {
+
+    Grid.init();
+
+    node.each((d, i) => pushAxis(d, i, xScale, e.alpha, 10));
+    // node.each(bindToBorderBox);
+    // node.each(collide(node.data(), 1, 0));
+    // node.each(griddlePos);
+    node.attr("transform", d => "translate(" + d.x + "," + d.y + ")");
+
+    // link
+    //   .attr("d", lineData);
+    // // link.call(updateLink);
+  };
+}
+
+function pushAxis(d, i, xScale, alpha, energy) {
+
+    //console.log(360/length);
+    var axisPoint= {
+        x: xScale(d.group),
+        y: 50
+    };
+
+    var affectSize = alpha * energy;
+
+    d.x += (axisPoint.x - d.x) * affectSize;
+    d.y += (axisPoint.y - d.y) * affectSize;
+}
+
+function bindToBorderBox(d) {
+  d.x = Math.max(d.radius, Math.min(width - d.radius, d.x));
+  d.y = Math.max(margin.top * 2 + d.radius * 2, Math.min(height - d.radius, d.y));
+
+
+  // d.screenX = Math.max(d.radius, Math.min(width - d.radius, d.screenX));
+  // d.screenY = Math.max(d.radius, Math.min(height - d.radius, d.screenY));
+}
+// var updateLink = function() {
+//   this.attr("x1", function(d) {
+//     return d.source.screenX;
+//   }).attr("y1", function(d) {
+//     return d.source.screenY;
+//   }).attr("x2", function(d) {
+//     return d.target.screenX;
+//   }).attr("y2", function(d) {
+//     return d.target.screenY;
 //   });
 // };
-
-var griddlePos = function(d) {
-  var gridpoint = grid.occupyNearest(d);
-  if(gridpoint) {
-    d.screenX = d.screenX || gridpoint.x;
-    d.screenY = d.screenY || gridpoint.y;
-    d.screenX += (gridpoint.x - d.screenX) * .2;
-    d.screenY += (gridpoint.y - d.screenY) * .2;
-
-    d.x += (gridpoint.x - d.x) * .05;
-    d.y += (gridpoint.y - d.y) * .05;
-  }
-};
-
-
-var updateLink = function() {
-  this.attr("x1", function(d) {
-    return d.source.screenX;
-  }).attr("y1", function(d) {
-    return d.source.screenY;
-  }).attr("x2", function(d) {
-    return d.target.screenX;
-  }).attr("y2", function(d) {
-    return d.target.screenY;
-  });
-};
 
 
 export default d3ggLayout;

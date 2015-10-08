@@ -5,17 +5,18 @@ var Graph = React.createClass({
   getDefaultProps: function() {
     return {
       data: [],
-      history: []
+      view: "overview"
     };
   },
 
   componentDidMount: function() {
     var el = this.getDOMNode();
-    d3ggLayout.create(el, this.props, this.props.callback);
+    d3ggLayout.create(el, this.props);
   },
 
   componentDidUpdate: function() {
     var el = this.getDOMNode();
+    console.log("component Update");
     d3ggLayout.update(el, this.props);
   },
 
