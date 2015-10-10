@@ -12,10 +12,13 @@ var App = React.createClass({
   },
 
   changeView: function () {
-    this.setState({view: "recapView"});
+    console.log("state", this.state.view);
+    if (this.state.view === "overView") this.setState({view: "recapView"});
+    else this.setState({view: "overView"});
   },
 
   render: function() {
+    console.log("state", this.state.view);
     return (
       <div>
         <div className="container">

@@ -9,7 +9,7 @@ Array.prototype.indexOfObj = function arrayObjectIndexOf(property, value) {
 };
 
 const margin = {
-    left: 80,
+    left: 120,
     right: 80,
     top: 40,
     bottom: 40
@@ -43,14 +43,13 @@ const color2 = d3.scale.linear()
         "#8b0000"
     ].reverse());
 
-
 const GRID_SIZE = 40;
-
 
 const force = d3.layout.force()
     .charge(d => - Math.pow(d.radius, 2))
     .gravity(0.2)
     .friction(0.9)
+    // .alpha(0.5)
     // push center of force down
     .size([width + margin.left + margin.right, height + margin.top + margin.bottom + 100])
     .linkDistance(0);
@@ -363,7 +362,7 @@ function render({ data: data, selectedNode:  selectedNode,
 
       case "recapView":
         console.log("arc diagram");
-        recapView({ node: node, force: force });
+        recapView({node: node, links: data.links});
         break;
 
       default: console.log("overview");
@@ -372,12 +371,190 @@ function render({ data: data, selectedNode:  selectedNode,
     node.exit()
         .remove();
 
+    // d3.selectAll("path.dbar").data([]).exit().remove();
+    // d3.selectAll(".label").data([]).exit().remove();
+
     force.start();
 
     node.style("opacity", d => d.selected ? 1 : 0.5);
 
 }
 
+
+function recapView({node: node, links: links}) {
+
+  // var straightLine = d3.svg.line()
+  //                      .x(d => d.x)
+  //                      .y(d => d.y);
+
+  var nodes = node.data().slice();
+  var tmpLinks = [];
+  var bilinks = [];
+
+  links.forEach(function(link) {
+      var s = nodes[link.source],
+          t = nodes[link.target],
+          i = {type: "tmp", group: (s.group + t.group) / 2 }; // intermediate node
+
+      if (s.group !== t.group) {
+        nodes.push(i);
+        tmpLinks.push({source: s, target: i}, {source: i, target: t});
+        bilinks.push([s, i, t]);
+      }
+
+    });
+  console.log("recapView", force.links());
+
+  force.links(tmpLinks);
+  force.nodes(nodes);
+
+  var groups = d3.nest()
+                 .key(d => d.group)
+                 .entries(node.data());
+
+  // used to scale node index to x position
+  var xScale = d3.scale.linear()
+      .domain([0, groups.length])
+      .range([margin.left, margin.left + width]);
+
+    var link = d3.select("#vis svg").selectAll("path.dbar")
+      .data(bilinks);
+
+
+    link
+      .enter()
+      .append("path")
+      .attr("class", "dbar");
+      // .attr("transform", function(d) {
+      //   // arc will always be drawn around (0, 0)
+      //   // shift so (0, 0) will be between source and target
+      //   var xshift = d.source.x + (d.target.x - d.source.x) / 2;
+      //   return "translate(" + d.source.x + ", " + d.target.y + ")";
+      //
+      // })
+      // .attr("d", path);
+
+    link.exit()
+        .remove();
+
+    var label = d3.select("#vis svg").selectAll(".label")
+      .data(groups, d => d.key);
+
+    label
+      .enter()
+      .append("text")
+      .attr("class", "label")
+      .attr("text-anchor", "middle")
+      // .attr("fill", "white")
+      .attr("x", d => xScale(d.key))
+      .attr("y", 250)
+      .text(d => d.key);
+
+    label.exit()
+         .remove();
+
+    force
+      .charge(0)
+      // .charge(d => - Math.pow(d.radius, 1.5))
+      // .size([0, 0])
+      .gravity(0)
+      // .friction(0.6)
+      .linkStrength(0)
+      .on("tick", tickRecapView(force.nodes(), node, link, xScale));
+
+  // var path = function(d) {
+  //   var radians = d3.scale.linear()
+  //                         .range([Math.PI / 2, 3 * Math.PI / 2]);
+  //
+  // // var arc = d3.svg.arc()
+  // //   .innerRadius(d => d.radius - 10)
+  // //   .outerRadius(d => d.radius)
+  // //   .startAngle(0)
+  // //   .endAngle(2 * Math.PI);
+  //
+  //   var arcLine = d3.svg.line.radial()
+  //           // .interpolate("basis")
+  //           // .tension(0)
+  //           .angle(function(d) { return radians(d); });
+  //
+  //   console.log("link", d);
+  //   // get x distance between source and target
+  //   var xdist = Math.abs(d.source.x - d.target.x);
+  //   console.log("xdist", xdist);
+  //
+  //   // set arc radius based on x distance
+  //   arcLine.radius(xdist / 2);
+  //
+  //   // want to generate 1/3 as many points per pixel in x direction
+  //   var points = d3.range(0, Math.ceil(xdist / 3));
+  //   console.log("points", points);
+  //
+  //   // set radian scale domain
+  //   radians.domain([0, points.length - 1]);
+  //
+  //   return arcLine(points);
+  //
+  // };
+
+
+  d3.selectAll("*").on("click", d => console.log(d));
+}
+
+function tickRecapView(nodes, node, link, xScale) {
+  return function(e) {
+
+    Grid.init();
+
+    nodes.forEach((d, i) => pushAxis(d, i, xScale, e.alpha, 0.5));
+    // node.each(bindToBorderBox);
+    node.each(collide(node.data(), 0.1, -8));
+    // node.each(griddlePos);
+    node.attr("transform", d => "translate(" + d.x + "," + d.y + ")");
+
+    link.attr("d", function(d) {
+          return "M" + d[0].x + "," + d[0].y
+              + "S" + d[1].x + "," + d[1].y
+              + " " + d[2].x + "," + d[2].y;
+        });
+    // node.attr("transform", d => "translate(" + ( d.screenX || 0 ) + "," + ( d.screenY || 0 ) + ")");
+    // link
+    //   .attr("d", lineData);
+    // // link.call(updateLink);
+  };
+}
+
+function pushAxis(d, i, xScale, alpha, energy) {
+
+    //console.log(360/length);
+    var axisPoint= {
+        x: xScale(d.group),
+        y: d.type === "tmp" ? 400:  50
+    };
+
+    var affectSize = alpha * energy;
+
+   //d.x = d.x + (target.x - d.x) * (@damper + 0.02) * alpha * 1.1
+    d.x += (axisPoint.x - d.x) * affectSize;
+    d.y += (axisPoint.y - d.y) * affectSize;
+}
+
+function bindToBorderBox(d) {
+  d.x = Math.max(d.radius, Math.min(width - d.radius, d.x));
+  d.y = Math.max(margin.top * 2 + d.radius * 2, Math.min(height - d.radius, d.y));
+  // d.screenX = Math.max(d.radius, Math.min(width - d.radius, d.screenX));
+  // d.screenY = Math.max(d.radius, Math.min(height - d.radius, d.screenY));
+}
+// var updateLink = function() {
+//   this.attr("x1", function(d) {
+//     return d.source.screenX;
+//   }).attr("y1", function(d) {
+//     return d.source.screenY;
+//   }).attr("x2", function(d) {
+//     return d.target.screenX;
+//   }).attr("y2", function(d) {
+//     return d.target.screenY;
+//   });
+// };
 
 const d3ggLayout = {};
 
@@ -420,95 +597,5 @@ d3ggLayout.update = function(svg, props) {
   });
 
 };
-
-function recapView({ node: node }) {
-  console.log("recapView");
-
-  // TODO: fix later
-  var maxGroup = d3.max(node.data(), d => d.group);
-
-  // used to scale node index to x position
-  var xScale = d3.scale.linear()
-      .domain([0, maxGroup])
-      .range([margin.left, width]);
-
-  var line = function(d) {
-    var straightLine = d3.svg.line()
-                         .x(d => d.x)
-                         .y(d => d.y);
-    var points = [
-        {x: xScale(d.group), y: d.y},
-        {x: xScale(d.group), y: d.y + 100}
-    ];
-    return straightLine(points);
-  };
-
-  force
-    .on("tick", tickRecapView(node, xScale))
-    .on("end", function() {
-      var lines = d3.select("#vis svg").selectAll("path.dbar")
-        .data(node.data(), d => d.name);
-
-      lines
-        .enter()
-        .append("path")
-        .attr("class", "dbar")
-        .attr("d", line);
-
-      console.log("Lines", lines);
-    });
-}
-
-function tickRecapView(node, xScale) {
-  return function(e) {
-
-    Grid.init();
-
-    node.each((d, i) => pushAxis(d, i, xScale, e.alpha, 10));
-    // node.each(bindToBorderBox);
-    // node.each(collide(node.data(), 1, 0));
-    // node.each(griddlePos);
-    node.attr("transform", d => "translate(" + d.x + "," + d.y + ")");
-
-    // link
-    //   .attr("d", lineData);
-    // // link.call(updateLink);
-  };
-}
-
-function pushAxis(d, i, xScale, alpha, energy) {
-
-    //console.log(360/length);
-    var axisPoint= {
-        x: xScale(d.group),
-        y: 50
-    };
-
-    var affectSize = alpha * energy;
-
-    d.x += (axisPoint.x - d.x) * affectSize;
-    d.y += (axisPoint.y - d.y) * affectSize;
-}
-
-function bindToBorderBox(d) {
-  d.x = Math.max(d.radius, Math.min(width - d.radius, d.x));
-  d.y = Math.max(margin.top * 2 + d.radius * 2, Math.min(height - d.radius, d.y));
-
-
-  // d.screenX = Math.max(d.radius, Math.min(width - d.radius, d.screenX));
-  // d.screenY = Math.max(d.radius, Math.min(height - d.radius, d.screenY));
-}
-// var updateLink = function() {
-//   this.attr("x1", function(d) {
-//     return d.source.screenX;
-//   }).attr("y1", function(d) {
-//     return d.source.screenY;
-//   }).attr("x2", function(d) {
-//     return d.target.screenX;
-//   }).attr("y2", function(d) {
-//     return d.target.screenY;
-//   });
-// };
-
 
 export default d3ggLayout;
