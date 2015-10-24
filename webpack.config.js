@@ -12,7 +12,7 @@ module.exports = {
     filename: 'bundle.js'
   },
   resolve: {
-    extensions: ['', '.js', '.jsx']
+    extensions: ['', '.js', '.jsx', 'json']
   },
   module: {
     loaders: [
@@ -23,6 +23,7 @@ module.exports = {
       },
       {test: /bootstrap\/js\//, loader: 'imports?jQuery=jquery' },
       {test: /\.less$/, loader: 'style-loader!css-loader!less-loader'},
+      {test: /\.json$/, exclude: /app/, loader: 'json'},
       {test: /\.css$/, loader: 'style-loader!css-loader'},
       {test: /\.woff(2)?(\?v=\d+\.\d+\.\d+)?$/, loader: "url?limit=10000&mimetype=application/font-woff" },
       {test: /\.ttf(\?v=\d+\.\d+\.\d+)?$/, loader: "url?limit=10000&mimetype=application/octet-stream" },

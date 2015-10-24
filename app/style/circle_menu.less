@@ -1,0 +1,87 @@
+@width: 1400px;
+@height: 800px;
+@diameter: 100px;
+@offset: 100px;
+
+@posX: @width / 2 - @diameter / 2;
+@posY: @height / 2 - @diameter / 2;
+
+.menu_opener {
+  display: none;
+}
+
+.menu_opener:checked ~ .link_one {
+  left: @posX - @offset;
+  top: @posY;
+}
+.menu_opener:checked ~ .link_two {
+  left: @posX + @offset;
+  top: @posY;
+}
+.menu_opener:checked ~ .link_three {
+  left: @posX;
+  top: @posY + @offset;
+}
+.menu_opener:checked ~ .link_four {
+  left: @posX;
+  top: @posY - @offset;
+}
+.menu_opener:checked ~ .barre_hamburger {
+  opacity: 0;
+}
+.menu_opener:checked ~ .menu_opener_label:after {
+  transform: rotate(45deg);
+  top: 70px;
+}
+.menu_opener:checked ~ .menu_opener_label:before {
+  transform: rotate(-45deg);
+  top: 70px;
+}
+
+.menu_opener_label {
+  background: url(https://cdn2.iconfinder.com/data/icons/windows-8-metro-style/64/database.png) no-repeat;
+  // background: #f1c40f;
+  background-color: #AAAAAA;
+  // width: 100px;
+  // height: 100px;
+  background-position: center;
+  cursor: pointer;
+  border-radius: 50%;
+  position: absolute;
+  // top: 225px;
+  // left: 225px;
+  z-index: 10;
+}
+
+.link_general {
+  width: 100px;
+  height: 100px;
+  display: block;
+  border-radius: 50%;
+  position: absolute;
+  top: 225px;
+  left: 225px;
+  background: #ecf0f1;
+  -webkit-transition: all 0.4s ease;
+  transition: all 0.4s ease;
+}
+
+.link_one {
+  left: @posX;
+  top: @posY;
+}
+
+.link_two {
+  left: @posX;
+  top: @posY;
+}
+
+.link_three {
+  left: @posX;
+  top: @posY;
+}
+
+.link_four {
+  left: @posX;
+  top: @posY;
+}
