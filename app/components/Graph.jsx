@@ -4,13 +4,29 @@ import d3ggLayout from "../lib/d3ggLayout.js";
 var linkedByIndex = new function() {
   return {
     index: {},
-    init: function(links) {
-      links.forEach(d => this.index[d.source + "," + d.target] = true);
+    nodes: [],
+    init: function(nodes, links) {
+      links.forEach(d => this.index[d.source + "," + d.target] = d);
+      this.nodes = nodes;
       return this;
     },
     isConnected: function(a, b) {
-        return this.index[a.index + "," + b.index] || this.index[b.index + "," + a.index];
+      return ( this.index[a.index + "," + b.index]
+        || this.index[b.index + "," + a.index] );
+    },
+    nbs: function(a) {
+      return this.nodes.filter(b => {
+        return ( this.index[a.index + "," + b.index]
+          || this.index[b.index + "," + a.index] );
+      });
     }
+    // getEdges: function(a) {
+    //   return this.nodes.map(b => {
+    //     var edge = (this.index[a.index + "," + b.index]
+    //       || this.index[b.index + "," + a.index]);
+    //       if (edge) return this.nodes[edge.target];
+    //   }).filter(d => d);
+    // }
   };
 };
 
@@ -26,14 +42,20 @@ var Graph = React.createClass({
         bottom: 0
       },
       data: [],
+      selected: [],
       view: "overview",
       initDataType: "group"
     };
   },
 
   getInitialState: function() {
+    var nodes = this.props.data.nodes.map((d, i) => {
+      d.index = i;
+      return d;
+    });
+
     return {
-      linkedByIndex: linkedByIndex.init(this.props.data.links)
+      linkedByIndex: linkedByIndex.init(nodes, this.props.data.links)
     };
   },
 
@@ -54,6 +76,8 @@ var Graph = React.createClass({
   // },
 
   render: function() {
+    console.log("state Graph", this.state);
+    console.log("props Graph", this.props);
     return (
       <div id="vis"></div>
     );

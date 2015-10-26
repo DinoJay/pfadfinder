@@ -19,8 +19,7 @@ var App = React.createClass({
         top: 0,
         bottom: 0
       },
-      data: [],
-
+      data: []
     };
   },
 
