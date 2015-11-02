@@ -32,14 +32,6 @@ var CircleMenu = React.createClass({
         <label htmlFor="menu_opener_id"
           className="menu_opener_label"
           style={this.state.style}/>
-        <a href="#" className="link_one link_general"
-         onClick={this.clickHandler}></a>
-        <a href="#" className="link_two link_general"
-         onClick={this.clickHandler} ></a>
-        <a href="#" className="link_three link_general"
-         onClick={this.clickHandler}></a>
-        <a href="#" className="link_four link_general"
-         onClick={this.clickHandler}></a>
       </input>
     );
   }

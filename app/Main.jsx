@@ -1,9 +1,11 @@
 import React from "react";
 import Graph from "./components/Graph";
+import Timeline from "./components/Timeline";
 
 import CircleMenu from "./components/CircleMenu";
 
-var data = require("json!./miserables.json");
+// var data = require("json!./miserables.json");
+var data = require("json!./data_30_10.json");
 
 require("./style.less");
 
@@ -12,7 +14,7 @@ var App = React.createClass({
   getDefaultProps: function() {
     return {
       widthTotal: 1400,
-      heightTotal: 800,
+      heightTotal: 1000,
       margin: {
         left: 0,
         right: 0,
@@ -49,9 +51,10 @@ var App = React.createClass({
   // },
 
   render: function() {
+    console.log("MAIN", data);
 
     return (
-      <div className="cont">
+      <div id="cont">
         {/* <h1 className="page-header">reduced Graph</h1> */}
         <CircleMenu
           width={this.state.width}
@@ -64,7 +67,10 @@ var App = React.createClass({
           data={data}
           view={this.state.view}
           margin={this.props.margin}
-          initDataType={"group"}
+          initDataType={"datatype"}
+        />
+        <Timeline
+          data={data}
         />
       </div>
     );

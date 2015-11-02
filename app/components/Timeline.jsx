@@ -1,5 +1,5 @@
 import React from "react";
-import d3ggLayout from "../lib/d3ggLayout.js";
+import d3Timeline from "../lib/d3Timeline.js";
 
 var linkedByIndex = new function() {
   return {
@@ -10,15 +10,12 @@ var linkedByIndex = new function() {
       this.nodes = nodes;
       return this;
     },
-    isConnected: function(a, b) {
-      return this.index[a.index + "," + b.index] ;//|| this.index[a.index + "," + b.index];
-    },
-    isConnected2: function(a, b, type) {
-      var isEdge0 =  (this.index[a.index + "," + b.index]
-          && this.index[a.index + "," + b.index].values.indexOf(type));
-      var isEdge1 = (this.index[a.index + "," + b.index]
-                    && this.index[a.index + "," + b.index].values.indexOf(type));
-      return isEdge0 || isEdge1;
+    isConnected: function(a, b, type) {
+        // var isEdge0 =  (this.index[a.index + "," + b.index]
+        //     && this.index[a.index + "," + b.index].values.indexOf(type));
+        var isEdge1 = (this.index[b.index + "," + a.index]
+                      && this.index[b.index + "," + a.index].values.indexOf(type));
+        return  isEdge1;
     },
     nbs: function(a, type) {
       return this.nodes.filter(b => {
@@ -27,23 +24,22 @@ var linkedByIndex = new function() {
         var isEdge1 = (this.index[a.index + "," + b.index]
                       && this.index[a.index + "," + b.index].values.indexOf(type));
         return isEdge0 || isEdge1;
-
-      });
-    },
-    nbs0: function(a) {
-      return this.nodes.filter(b => {
-        var isEdge0 =  this.index[a.index + "," + b.index];
-        var isEdge1 = this.index[a.index + "," + b.index];
-        return isEdge0 || isEdge1;
       });
     }
+    // getEdges: function(a) {
+    //   return this.nodes.map(b => {
+    //     var edge = (this.index[a.index + "," + b.index]
+    //       || this.index[b.index + "," + a.index]);
+    //       if (edge) return this.nodes[edge.target];
+    //   }).filter(d => d);
+    // }
   };
 };
 
-var Graph = React.createClass({
+var Timeline = React.createClass({
   getDefaultProps: function() {
     return {
-      width: 1350,
+      width: 500,
       height: 500,
       margin: {
         left: 40,
@@ -52,28 +48,33 @@ var Graph = React.createClass({
         bottom: 0
       },
       data: [],
-      path: [],
+      selected: [],
       view: "overview",
       initDataType: "datatype"
     };
   },
 
   getInitialState: function() {
+    var nodes = this.props.data.documents.map((d, i) => {
+      d.index = i;
+      return d;
+    });
+    console.log("GRAPH NODES", nodes);
+
     return {
-      linkedByIndex: linkedByIndex.init(this.props.data.documents,
-                                        this.props.data.links)
+      linkedByIndex: linkedByIndex.init(nodes, this.props.data.links)
     };
   },
 
   componentDidMount: function() {
     var el = this.getDOMNode();
-    d3ggLayout.create(el, { ...this.props, ...this.state});
+    d3Timeline.create(el, { ...this.props, ...this.state});
   },
 
   componentDidUpdate: function() {
     var el = this.getDOMNode();
     console.log("component Update");
-    d3ggLayout.update(el, { ...this.props, ...this.state});
+    d3Timeline.update(el, { ...this.props, ...this.state});
   },
 
   // componentWillUnmount: function() {
@@ -82,12 +83,12 @@ var Graph = React.createClass({
   // },
 
   render: function() {
-    console.log("state Graph", this.state);
-    console.log("props Graph", this.props);
+    console.log("state Timeline", this.state);
+    console.log("props Timeline", this.props);
     return (
-      <div id="vis-cont"></div>
+      <div id="timeline-cont"></div>
     );
   }
 });
 
-export default Graph;
+export default Timeline;

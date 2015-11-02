@@ -3,24 +3,27 @@ import d3MeasureText from "d3-measure-text"; d3MeasureText.d3 = d3;
 import _ from "lodash";
 
 const D2R = Math.PI / 180;
+// var countries = require("i18n-iso-countries");
+// var convTable = require("json!./map_data/ioc_iso_conv.json");
+// var continents = require("json!./map_data/continents.json");
 
-var NODE_RAD = 20;
-var NODE_PADDING = 20;
-var LABEL_OFFSET = 15;
-
+// var NODE_RAD = 20;
+// var NODE_PADDING = 20;
+// var LABEL_OFFSET = 15;
+//
 // var INIT_RAD_LAYOUT = 150;
 // var INIT_NODE_PADDING = 20;
+//
+// var LAYOUT_RAD = 125;
+//
+// var DOC_URL = "https://cdn4.iconfinder.com/data/icons/flat-icon-set/128/"
+//               + "flat_icons-graficheria.it-11.png";
+// var EMAIL_URL = "https://cdn0.iconfinder.com/data/icons/social-icons-20/200"
+//                 + "/mail-icon-128.png";
+// var CALENDAR_URL = "https://cdn1.iconfinder.com/data/icons/education-colored-"
+//                    +"icons-vol-3/128/145-128.png";
 
-var LAYOUT_RAD = 125;
-
-var DOC_URL = "https://cdn4.iconfinder.com/data/icons/flat-icon-set/128/"
-              + "flat_icons-graficheria.it-11.png";
-var EMAIL_URL = "https://cdn0.iconfinder.com/data/icons/social-icons-20/200"
-                + "/mail-icon-128.png";
-
-var CALENDAR_URL = "https://cdn1.iconfinder.com/data/icons/education-colored-"
-                   +"icons-vol-3/128/145-128.png";
-
+// misc
 Array.prototype.indexOfObj = function arrayObjectIndexOf(property, value) {
     for (var i = 0, len = this.length; i < len; i++) {
         if (this[i][property] === value) return i;
@@ -29,11 +32,14 @@ Array.prototype.indexOfObj = function arrayObjectIndexOf(property, value) {
 };
 Array.prototype.last = function() {
     return this[this.length-1];
-};
+}
 
 function makeEdges(stack) {
+
+  console.log("stack", stack);
   var edges = [];
-  while(stack.length > 1) { var target = stack.pop();
+  while(stack.length > 1) {
+    var target = stack.pop();
     var edge  = {
       id: stack[stack.length - 1] + "-" + target,
       source: stack[stack.length - 1],
@@ -88,7 +94,6 @@ function labelArc(innerRadius, outerRadius) {
 //       }
 //     }
 // }
-
 function cropLen(string) {
   if (string.length > 13) return string.substring(0, 14).concat("...");
   else return string;
@@ -101,7 +106,6 @@ function cropLen(string) {
 //     + "Z";
 //     return ret !== "MZ" ? ret : null;
 // };
-
 // var groupFill = function(d, i) { return fill(i & 3); };
 // var fill = d3.scale.category10();
 
@@ -153,7 +157,9 @@ function collide(data, alpha, padding) {
 function radial(d, radius,  alpha, energy, center) {
 
     // var currentAngle = d.angle || (1 * index);
+  console.log("hey");
   var currentAngleRadians = d.angle * D2R;
+  console.log("currentAngleRadians", currentAngleRadians);
 
   var radialPoint = {
     x: center.x + radius * Math.cos(currentAngleRadians),
@@ -175,9 +181,34 @@ function radial(d, radius,  alpha, energy, center) {
 // }
 
 
-function tick(node, link, width, height) {
+function defaultTick(node, width, height) {
+  return function(e) {
+    // node.each(movePos({x: width / 2, y: height / 2}, 0.2));
+    node.data().forEach((d, i) => {
+      d.angle = 360 / node.data().length * i;
+      radial(d, d.dim*LAYOUT_RAD, e.alpha, 0.5, {x: width/2, y: height/2});
+    });
+    node.each(collide(node.data(), 0.1, /* INIT_NODE_PADDING + */ LABEL_OFFSET));
+    // node.each(bindToBorderBox);
+    // sometimes out of bounds the coords
+    node.attr("transform", d => "translate(" + d.x + "," +  d.y  + ")");
+
+    if (e.alpha < 0.05 && d3.select("#background-arc1").empty()) {
+      d3.select("#vis-cont svg")
+        .insert("path", ":first-child")
+        .attr("d", backgroundArc(LAYOUT_RAD - (NODE_RAD + LABEL_OFFSET) ))
+        .attr("id", "background-arc1")
+        .attr("transform", "translate(" + width/2 + "," +  height/2  + ")")
+        .style("stroke-width", 1)
+        .attr("fill", "lightgrey");
+    }
+  };
+
+}
+
+function tickContextView(node, link, width, height) {
   function lineData(d){
-    var straightLine = d3.svg.line().interpolate("bundle")
+    var straightLine = d3.svg.line()
             .x(d => d.x)
             .y(d => d.y);
 
@@ -195,12 +226,10 @@ function tick(node, link, width, height) {
 
   return function(e) {
     nodeGroups.forEach(group => {
-      group.values.forEach((d, i) => {
-        d.angle = d.angle || 360 / node.data().length * i;
+      group.values.forEach(d => {
         radial(d, d.dim*LAYOUT_RAD, e.alpha, 0.5, {x: width/2, y: height/2});
       });
     });
-
     node.each(collide(node.data(), 0.1, 10 + LABEL_OFFSET));
 
     node.attr("transform", d => "translate(" + d.x + "," + d.y + ")");
@@ -237,44 +266,62 @@ function tick(node, link, width, height) {
 //}
 function update(props) {
   var svg = d3.select("#vis-cont svg");
+  console.log("update", props);
+  var selectedNode = props.selected.last();
+  force.nodes(props.data.nodes);
+  console.log("force", force);
+
   var edges = [];
-  var selectedNode = props.path.last();
+  if (props.selected.last()) {
+    var nbs = [];
+    var sumRadius = 0;
 
-  console.log("selectedNode", selectedNode);
-
-  if (selectedNode) {
-    var nbs = selectedNode.values || props.linkedByIndex.nbs0(selectedNode);
-    console.log("nbs", nbs);
-    var sumRadius = d3.sum(nbs, d => d.radius);
+    if (selectedNode.values) {
+      selectedNode.values.forEach(d => {
+        edges.push({
+          id: selectedNode.id + "-" + d.id,
+          source: selectedNode,
+          target: d,
+          value: 1
+        });
+        d.dim = selectedNode.dim + 1;
+        nbs.push(d);
+        sumRadius += d.radius + NODE_PADDING;
+      });
+    } else {
+      props.linkedByIndex.nbs(selectedNode, "Authorship").forEach(d => {
+        if (!d.selected){
+          edges.push({
+            id: selectedNode.id + "-" + d.id,
+            source: selectedNode,
+            target: d,
+            value: 1
+          });
+          d.dim = selectedNode.dim + 1;
+          nbs.push(d);
+          sumRadius += d.radius + NODE_PADDING;
+        }
+      });
+      console.log("NBS linkedByIndex", nbs);
+    }
+    edges = edges.concat(makeEdges(props.selected.slice()));
 
     nbs.forEach((d, i) => {
-      edges.push({
-        id: selectedNode.title + "-" + d.title,
-        source: selectedNode,
-        target: d,
-        value: 1
-      });
-      d.dim = selectedNode.dim + 1;
+      // crazy formula, I know
       d.angle = selectedNode.angle - (sumRadius / (d.dim*2))
                 + ((i * (d.radius + NODE_PADDING)) / d.dim );
     });
 
-    edges = edges.concat(makeEdges(props.path.slice()));
-
-    // attach nbs
-    if (props.forward)
-      props.dataStack.push(_.uniq(props.dataStack.last().concat(nbs), "title"));
-
+    // filter out duplicates
+    props.data.nodes = _.uniq(props.data.nodes.concat(nbs), "id");
     force.links(edges);
   }
 
-  force.nodes(props.dataStack.last());
-  // console.log("dataStack", props.dataStack.last().map(d => d.title));
+  force.nodes(props.data.nodes);
 
   // TODO: fix ID issue
   var node = svg.selectAll("g.group")
-                // TODO: does not work with id
-                .data(props.dataStack.last(), d => d.title);
+                .data(props.data.nodes, d => d.id);
 
   // TODO: important
   var group = node
@@ -328,46 +375,58 @@ function update(props) {
     .attr("text-anchor", "middle")
     .attr("opacity", 0.5);
 
+
+  svg.selectAll("path.link")
+    .data([]).exit().remove();
+
+  svg.selectAll(".group-label")
+    .data([]).exit().remove();
+
   node
     .on("click", function(d) {
+      console.log("clickclick", d);
       if (!d.selected) {
+        console.log("click", d);
+        // d.fixed = true;
         d.selected = true;
-        props.path.push(d);
-        props.forward = true;
-
+        // d3.select(this).select("path").style("fill", "blue");
+        props.selected.push(d);
         update(props);
       } else {
+        console.log("UNclick", d);
         d.selected = false;
-        props.path.pop();
-        props.forward = false;
-        props.dataStack.pop();
-
+        props.selected.pop();
         update(props);
       }
-    });
 
+    })
+    .on("mouseover", function() { });
+
+  console.log("node", props.data.nodes);
   var link = d3.select("#vis-cont svg").selectAll(".link")
-      .data(edges, d => d.source.title + "-" + d.target.title);
-
-  link.style("stroke-width", d => d.value);
+      .data(edges, d => d.source.id + "-" + d.target.id);
 
   link
     .enter()
     .insert("path", ":first-child")
     .attr("class", "link")
-    .style("stroke", 20);
+    .style("stroke-width", d => d.value)
+    .style("stroke", () => 20);
 
-  force.on("tick", tick(node, link, props.width, props.height));
+  if (edges.length > 0) {
+    force.on("tick", tickContextView(node, link, props.width, props.height));
+  }
+  else force.on("tick", defaultTick(node, props.width, props.height));
 
+  node.exit()
+      .remove();
+
+  // d3.selectAll("path.dbar").data([]).exit().remove();
   force.start();
-
-  link.exit().remove();
-  node.exit().remove();
-
 }
 
 
-const d3ggLayout = {};
+const d3Timeline = {};
 
 // defaultProps{
 //   widthTotal: 1350,
@@ -381,53 +440,45 @@ const d3ggLayout = {};
 //   data: [],
 //   view: "overview"
 // };
-d3ggLayout.create = function(el, props) {
+d3Timeline.create = function(el, props) {
+  var docs = props.data.documents;
 
-  // TODO: fix hack
-  props.data.documents.forEach(d => {
-    d.dim = 1;
-    d.radius = NODE_RAD;
-    // d.index = i;
-    // d.group = parseInt(d.group) % 4;
+  docs.forEach(d => {
+    d.date = new Date(d.createdDate);
+    console.log("date getTime", d.date.getTime());
   });
 
+  docs.sort((a, b) => a.date.getTime() - b.date.getTime());
 
-  // TODO: not working, BUG
-  // props.data.nodes.forEach(d => {
-  //   props.data.nodes.forEach(e => {
-  //     if (props.linkedByIndex.isConnected(d, e) && !d.selected) {
-  //       console.log("source", d.title, "target", e.title);
-  //       d.values.push(e);
-  //     }
-  //   });
-  // });
+  console.log("sortedDocs", props.data.documents);
 
-  var groupedData = d3.nest()
-                 .key(d => d[props.initDataType])
-                 .entries(props.data.documents);
+  var x = d3.time.scale()
+      .domain([docs[0].date, docs[docs.length - 1].date])
+      .rangeRound([0, props.width - props.margin.left - props.margin.right]);
 
-  // hack TODO: fix
-  groupedData.forEach(d => {
-    d.title = d.key;
-    d.id = d.key;
-    d.dim = 1;
-    d.radius = NODE_RAD;
-  });
-  console.log("groupedData", groupedData);
+  var xAxis = d3.svg.axis()
+      .scale(x)
+      .orient("right")
+      .ticks(d3.time.days, 1)
+      .tickFormat(d3.time.format("%a %d"))
+      .tickSize(0)
+      .tickPadding(8);
 
-  props.dataStack = [ groupedData ];
+  console.log("props init data", props.initDataType);
 
   //TODO: props to include as arg
   d3.select(el).append("svg")
     // .attr("id", "pf")
     .attr("width", props.width)
-    .attr("height", props.height);
+    .attr("height", props.height)
+    .append("g")
+    .call(xAxis);
 
-  force.size([props.width, props.height]);
+  // force.size([props.width, props.height]);
 
-  this.update(props);
+  // this.update(props);
 };
 
-d3ggLayout.update = update;
+d3Timeline.update = update;
 
-export default d3ggLayout;
+export default d3Timeline;
