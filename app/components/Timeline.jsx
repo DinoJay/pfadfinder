@@ -54,26 +54,19 @@ var Timeline = React.createClass({
     };
   },
 
-  getInitialState: function() {
-    var nodes = this.props.data.documents.map((d, i) => {
-      d.index = i;
-      return d;
-    });
-    console.log("GRAPH NODES", nodes);
-
-    return {
-      linkedByIndex: linkedByIndex.init(nodes, this.props.data.links)
-    };
-  },
+  // getInitialState: function() {
+  // },
 
   componentDidMount: function() {
     var el = this.getDOMNode();
+    console.log("Timeline component did mount",
+                { ...this.props, ...this.state});
     d3Timeline.create(el, { ...this.props, ...this.state});
   },
 
   componentDidUpdate: function() {
     var el = this.getDOMNode();
-    console.log("component Update");
+    console.log("Timeline component Update", { ...this.props, ...this.state});
     d3Timeline.update(el, { ...this.props, ...this.state});
   },
 
@@ -83,8 +76,6 @@ var Timeline = React.createClass({
   // },
 
   render: function() {
-    console.log("state Timeline", this.state);
-    console.log("props Timeline", this.props);
     return (
       <div id="timeline-cont"></div>
     );

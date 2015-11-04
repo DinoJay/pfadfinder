@@ -70,11 +70,11 @@ var Graph = React.createClass({
     d3ggLayout.create(el, { ...this.props, ...this.state});
   },
 
-  componentDidUpdate: function() {
-    var el = this.getDOMNode();
-    console.log("component Update");
-    d3ggLayout.update(el, { ...this.props, ...this.state});
-  },
+  // componentDidUpdate: function() {
+  //   var el = this.getDOMNode();
+  //   console.log("component Update");
+  //   d3ggLayout.update(el, { ...this.props, ...this.state});
+  // },
 
   // componentWillUnmount: function() {
   //   var el = this.getDOMNode();

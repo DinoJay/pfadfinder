@@ -32,9 +32,16 @@ var App = React.createClass({
       height: (this.props.heightTotal - this.props.margin.top
                - this.props.margin.bottom),
       view: "overView",
-      CircleMenuState: null
+      CircleMenuState: null,
+      path: []
     };
   },
+
+  getPath: function(path) {
+    console.log("getPath", path);
+    this.setState({path: path});
+  },
+
 
   // changeView: function () {
   //   console.log("state", this.state.view);
@@ -51,7 +58,7 @@ var App = React.createClass({
   // },
 
   render: function() {
-    console.log("MAIN", data);
+    console.log("state MAIN", this.props.state);
 
     return (
       <div id="cont">
@@ -68,10 +75,9 @@ var App = React.createClass({
           view={this.state.view}
           margin={this.props.margin}
           initDataType={"datatype"}
+          getPath={this.getPath}
         />
-        <Timeline
-          data={data}
-        />
+        <Timeline data={this.state.path} />
       </div>
     );
   }
