@@ -1,3 +1,4 @@
+/* @flow */
 import d3 from "d3";
 import d3MeasureText from "d3-measure-text"; d3MeasureText.d3 = d3;
 import _ from "lodash";
@@ -12,7 +13,7 @@ var LABEL_OFFSET = 15;
 // var INIT_RAD_LAYOUT = 150;
 // var INIT_NODE_PADDING = 20;
 
-var LAYOUT_RAD = 125;
+var LAYOUT_RAD = 150;
 
 var DOC_URL = "https://cdn4.iconfinder.com/data/icons/flat-icon-set/128/"
               + "flat_icons-graficheria.it-11.png";
@@ -156,7 +157,7 @@ function tick(node, link, width, height) {
             .y(d => d.y);
 
     var points = [
-        {x: d.source.x, y: d.source.y},
+        {x: d.source.x - (NODE_RAD - LABEL_OFFSET), y: d.source.y},
         {x: d.target.x, y: d.target.y}
     ];
     return straightLine(points);
@@ -180,7 +181,8 @@ function tick(node, link, width, height) {
     node.attr("transform", d => "translate(" + d.x + "," + d.y + ")");
     link.attr("d", lineData);
 
-    if (e.alpha < 0.1 && d3.select("#background-arc" + lastGroup.key).empty()) {
+    var arc = d3.select("#background-arc" + lastGroup.key);
+    if (e.alpha < 0.1 && arc.empty()) {
         d3.select("#vis-cont svg")
           .insert("path", ":first-child")
           .attr("d", backgroundArc(lastGroup.key*(LAYOUT_RAD - NODE_RAD - LABEL_OFFSET)))
@@ -213,38 +215,13 @@ function tick(node, link, width, height) {
 var create = function(el, props) {
 
   // TODO: fix hack
-  props.data.documents.forEach(d => {
-    d.dim = 1;
+  props.initData.forEach(d => {
     d.radius = NODE_RAD;
     // d.index = i;
     // d.group = parseInt(d.group) % 4;
   });
 
-
-  // TODO: not working, BUG
-  // props.data.nodes.forEach(d => {
-  //   props.data.nodes.forEach(e => {
-  //     if (props.linkedByIndex.isConnected(d, e) && !d.selected) {
-  //       console.log("source", d.title, "target", e.title);
-  //       d.values.push(e);
-  //     }
-  //   });
-  // });
-
-  var groupedData = d3.nest()
-                 .key(d => d[props.initDataType])
-                 .entries(props.data.documents);
-
-  // hack TODO: fix
-  groupedData.forEach(d => {
-    d.title = d.key;
-    d.id = d.key;
-    d.dim = 1;
-    d.radius = NODE_RAD;
-  });
-  console.log("groupedData", groupedData);
-
-  props.dataStack = [ groupedData ];
+  props.dataStack = [ props.initData ];
 
   //TODO: props to include as arg
   d3.select(el).append("svg")
@@ -266,7 +243,8 @@ var update = function(props, that) {
   console.log("selectedNode", selectedNode);
 
   if (selectedNode) {
-    var nbs = selectedNode.values || props.linkedByIndex.nbs0(selectedNode);
+    var type = "Keyword";
+    var nbs = props.linkedByIndex.nbs(selectedNode, type);
     console.log("nbs", nbs);
     var sumRadius = d3.sum(nbs, d => d.radius);
 
@@ -277,6 +255,7 @@ var update = function(props, that) {
         target: d,
         value: 1
       });
+      d.connectedByType = type;
       d.dim = selectedNode.dim + 1;
       d.angle = selectedNode.angle - (sumRadius / (d.dim*2))
                 + ((i * (d.radius + NODE_PADDING)) / d.dim );
@@ -285,8 +264,10 @@ var update = function(props, that) {
     edges = edges.concat(makeEdges(props.path.slice()));
 
     // attach nbs
-    if (props.forward)
-      props.dataStack.push(_.uniq(props.dataStack.last().concat(nbs), "title"));
+    if (props.forward) {
+      props.dataStack.push(_.uniq(props.path.concat(nbs), "title"));
+    }
+
 
     console.log("update Graph inner", this);
     that.force.links(edges);
@@ -301,61 +282,62 @@ var update = function(props, that) {
                 .data(props.dataStack.last(), d => d.title);
 
   // TODO: important
-  var group = node
+  node
     .enter()
-    .append("g")
-    .attr("class", "group");
+    .call(function() {
+      var g = this.append("g")
+        .attr("class", "group");
 
-  group.append("svg:image")
-    .attr("xlink:href", d => {
-      switch (d.datatype) {
-        case "Publication":
-          return DOC_URL;
-        case "Email":
-          return EMAIL_URL;
-        case "Note":
-          return CALENDAR_URL;
-        default:
-          return CALENDAR_URL;
-      }
-    })
-    .attr("x", d => - d.radius)
-    .attr("y", d => - d.radius)
-    .attr("height", d => d.radius * 2)
-    .attr("width", d => d.radius * 2);
-    // .attr("opacity", 0.7);
+      g.append("svg:image")
+        .attr("xlink:href", d => {
+          switch (d.datatype) {
+            case "Publication":
+              return DOC_URL;
+            case "Email":
+              return EMAIL_URL;
+            case "Note":
+              return CALENDAR_URL;
+            default:
+              return CALENDAR_URL;
+          }
+        })
+        .attr("x", d => - d.radius)
+        .attr("y", d => - d.radius)
+        .attr("height", d => d.radius * 2)
+        .attr("width", d => d.radius * 2);
+        // .attr("opacity", 0.7);
 
-  group.append("path")
-    .attr("d", labelArc(NODE_RAD, NODE_RAD))
-    // .attr("fill", "lightgrey")
-    .attr("id", (_, i) => "arc"+i)
-    .style("font-size", 20)
-    .attr("alignment-baseline", "middle")
-    .attr("text-anchor", "middle");
-    // .attr("opacity", 0.5);
+      g.append("path")
+        .attr("d", labelArc(NODE_RAD, NODE_RAD))
+        // .attr("fill", "lightgrey")
+        .attr("id", (_, i) => "arc"+i)
+        .style("font-size", 20)
+        .attr("alignment-baseline", "middle")
+        .attr("text-anchor", "middle");
+        // .attr("opacity", 0.5);
 
-  group.append("text")
-    // .attr("x", 8)
-    .attr("dy", - 2)
-    .append("textPath")
-    .attr("textLength", d => {
-      return d3MeasureText(cropLen(d.title)).width;
-    })
-    .attr("xlink:href",(_, i) => "#arc"+i)
-    .attr("startOffset", 3/40)
-    .attr("dy","-1em")
-    .text(d => cropLen(d.title));//.each(wrap);
+      g.append("text")
+        // .attr("x", 8)
+        .attr("dy", - 2)
+        .append("textPath")
+        .attr("textLength", d => {
+          return d3MeasureText(cropLen(d.title)).width;
+        })
+        .attr("xlink:href",(_, i) => "#arc"+i)
+        .attr("startOffset", 3/40)
+        .attr("dy","-1em")
+        .text(d => cropLen(d.title));//.each(wrap);
 
-  group.append("path")
-    .attr("d", labelArc(NODE_RAD, NODE_RAD + LABEL_OFFSET))
-    .attr("fill", "lightgrey")
-    .attr("alignment-baseline", "middle")
-    .style("font-size", 20)
-    .attr("text-anchor", "middle")
-    .attr("opacity", 0.5);
+      g.append("path")
+        .attr("d", labelArc(NODE_RAD, NODE_RAD + LABEL_OFFSET))
+        .attr("fill", "lightgrey")
+        .attr("alignment-baseline", "middle")
+        .style("font-size", 20)
+        .attr("text-anchor", "middle")
+        .attr("opacity", 0.5);
+    });
 
   var maxDim = d3.max(node.data(), d => d.dim);
-
   node.attr("opacity", d => {
     if (d.dim < maxDim && !d.selected) return 0.1;
     if (d.dim === maxDim && !d.selected) return 0.5;
@@ -367,6 +349,7 @@ var update = function(props, that) {
       if (parseFloat(d3.select(this).attr("opacity")) === 0.1) return;
 
       if (!d.selected) {
+        d.fixed = true;
         d.selected = true;
         props.path.push(d);
         props.forward = true;
@@ -375,12 +358,15 @@ var update = function(props, that) {
 
         update(props, that);
       } else {
+        d.fixed = false;
         d.selected = false;
         props.path.pop();
         props.forward = false;
         props.dataStack.pop();
-
         props.getPath(_.cloneDeep(props.path));
+        props.dataStack.last().forEach(e => {
+          if (e.dim > d.dim) e.dim = d.dim;
+        });
         update(props, that);
       }
     });
@@ -430,6 +416,5 @@ const d3ggLayout = new function(){
     create: create
   };
 };
-
 
 export default d3ggLayout;

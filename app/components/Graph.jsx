@@ -1,5 +1,6 @@
 import React from "react";
 import d3ggLayout from "../lib/d3ggLayout.js";
+import _ from "lodash";
 
 var linkedByIndex = new function() {
   return {
@@ -21,13 +22,11 @@ var linkedByIndex = new function() {
       return isEdge0 || isEdge1;
     },
     nbs: function(a, type) {
+      console.log("linkedByIndex", this.nodes, "Index", this.index);
       return this.nodes.filter(b => {
-        var isEdge0 =  (this.index[a.index + "," + b.index]
-            && this.index[a.index + "," + b.index].values.indexOf(type));
-        var isEdge1 = (this.index[a.index + "," + b.index]
-                      && this.index[a.index + "," + b.index].values.indexOf(type));
-        return isEdge0 || isEdge1;
-
+        // console.log("RetValue", a.index, b.index);
+        return (this.index[a.i + "," + b.i]);
+            // && this.index[a.index + "," + b.index].values.indexOf(type));
       });
     },
     nbs0: function(a) {
@@ -39,7 +38,6 @@ var linkedByIndex = new function() {
     }
   };
 };
-
 var Graph = React.createClass({
   getDefaultProps: function() {
     return {
@@ -53,15 +51,23 @@ var Graph = React.createClass({
       },
       data: [],
       path: [],
-      view: "overview",
-      initDataType: "datatype"
+      // view: "overview",
+      // initDataType: "datatype",
+      filter: "Publication"
     };
   },
 
   getInitialState: function() {
+    var documents = this.props.data.documents.map((d, i) => {
+      d.i = i;
+      d.dim = 1;
+      return d;
+    });
+
     return {
-      linkedByIndex: linkedByIndex.init(this.props.data.documents,
-                                        this.props.data.links)
+      linkedByIndex: linkedByIndex.init(documents,
+                                        _.cloneDeep(this.props.data.links)),
+      initData: documents.filter(d => d.datatype === this.props.filter)
     };
   },
 

@@ -18,6 +18,7 @@ var linkedByIndex = new function() {
         return  isEdge1;
     },
     nbs: function(a, type) {
+      // TODO: BUG!
       return this.nodes.filter(b => {
         var isEdge0 =  (this.index[a.index + "," + b.index]
             && this.index[a.index + "," + b.index].values.indexOf(type));
@@ -39,15 +40,15 @@ var linkedByIndex = new function() {
 var Timeline = React.createClass({
   getDefaultProps: function() {
     return {
-      width: 500,
-      height: 500,
+      width: 600,
+      height: 2000,
       margin: {
         left: 40,
         right: 40,
-        top: 40,
+        top: 0,
         bottom: 0
       },
-      data: [],
+      initData: [],
       selected: [],
       view: "overview",
       initDataType: "datatype"
@@ -67,6 +68,9 @@ var Timeline = React.createClass({
   componentDidUpdate: function() {
     var el = this.getDOMNode();
     console.log("Timeline component Update", { ...this.props, ...this.state});
+    // TODO: anti pattern
+    this.props.data.forEach(d => d.date = new Date(d.createdDate));
+
     d3Timeline.update(el, { ...this.props, ...this.state});
   },
 

@@ -5,7 +5,7 @@ import Timeline from "./components/Timeline";
 import CircleMenu from "./components/CircleMenu";
 
 // var data = require("json!./miserables.json");
-var data = require("json!./data_30_10.json");
+var data = require("json!./data/data_30_10.json");
 
 require("./style.less");
 
@@ -39,6 +39,8 @@ var App = React.createClass({
 
   getPath: function(path) {
     console.log("getPath", path);
+    // TODO: hack
+    path.forEach(d => d.fixed = false);
     this.setState({path: path});
   },
 

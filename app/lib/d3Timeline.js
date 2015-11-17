@@ -1,8 +1,18 @@
 import d3 from "d3";
-import d3MeasureText from "d3-measure-text"; d3MeasureText.d3 = d3;
+import moment from "moment";
 
 import { makeEdges } from "./misc.js";
 
+
+var DOC_URL = "https://cdn4.iconfinder.com/data/icons/flat-icon-set/128/"
+              + "flat_icons-graficheria.it-11.png";
+var EMAIL_URL = "https://cdn0.iconfinder.com/data/icons/social-icons-20/200"
+                + "/mail-icon-128.png";
+var CALENDAR_URL = "https://cdn1.iconfinder.com/data/icons/education-colored-"
+                   +"icons-vol-3/128/145-128.png";
+
+// const BOXWIDTH  = 140;
+// const BOXHEIGHT = 40;
 
 // misc
 Array.prototype.indexOfObj = function arrayObjectIndexOf(property, value) {
@@ -13,32 +23,32 @@ Array.prototype.indexOfObj = function arrayObjectIndexOf(property, value) {
 };
 Array.prototype.last = function() {
     return this[this.length-1];
-}
+};
 
-function collideBox(data) {
-    var quadtree = d3.geom.quadtree(data);
-    return function(detailBox) {
-      var nx1, nx2, ny1, ny2, padding;
-      padding = 40;
-      nx1 = detailBox.x - padding;
-      nx2 = detailBox.x2() + padding;
-      ny1 = detailBox.y - padding;
-      ny2 = detailBox.y2() + padding;
-
+function collide(data, alpha, padding) {
+  var quadtree = d3.geom.quadtree(data);
+  return function(d) {
+      var r = d.radius + padding,
+          // nx1 = d.x - r,
+          // nx2 = d.x + r,
+          ny1 = d.y - r,
+          ny2 = d.y + r;
       quadtree.visit(function(quad, x1, y1, x2, y2) {
-          // var dx;
-          var dy;
-          if (quad.point && (quad.point !== detailBox)) {
-              if (overlap(detailBox, quad.point)) {
-                dy = Math.min(detailBox.y2() - quad.point.y,
-                              quad.point.y2() - detailBox.y) / 2;
-                detailBox.y -= dy;
-                quad.point.y += dy;
-              }
+        if (quad.point && (quad.point !== d)) {
+          var y = d.y - quad.point.y,
+              l = Math.abs(y),
+              r = d.radius + padding + quad.point.radius;
+
+          console.log("lr quadPoint", l, r, quad.point.radius);
+          if (l < r) {
+            l = (l - r) / l * alpha;
+            d.y -= y *= l;
+            quad.point.y += y;
           }
-          return x1 > nx2 || x2 < nx1 || y1 > ny2 || y2 < ny1;
-      });
-    };
+        }
+        return y1 > ny2 || y2 < ny1;
+    });
+  };
 }
 
 function overlap(a, b) {
@@ -56,33 +66,41 @@ function overlap(a, b) {
 //     };
 // }
 
-// function pushAxis(d, yScale, alpha, energy) {
-//
-//     var affectSize = alpha * energy;
-//     d.y += (yScale(d.date) - d.y) * affectSize;
-// }
+function pushAxis(d, posY, posX, alpha, energy) {
+    var affectSize = alpha * energy;
+    d.y += (posY - d.y) * affectSize;
+    d.x += (posX - d.x) * affectSize;
+}
 
-function tick(detailBox, yScale, link, width, height) {
-  function lineData(d){
-    var straightLine = d3.svg.line().interpolate("step-before")
-            .x(d => d.x + 30)
-            .y(d => d.y);
-
-    var points = [
-        {x: d.source.x, y: d.source.y},
-        {x: d.target.x, y: d.target.y}
-    ];
-    return straightLine(points);
-  }
+function tick(detailBox, yScale, link, linkText, width, height) {
 
   return function(e) {
     // detailBox.each(movePos(pos, alpha));
-    link.attr("d", lineData);
-    // detailBox.each(d => pushAxis(d, yScale, e.alpha, 0.5));
-    detailBox.each(collideBox(detailBox.data()));
+    detailBox.each((d, i) => pushAxis(d, yScale(i), width/2,
+                                      e.alpha, 0.5));
+    // detailBox.each(collide(detailBox.data(), e.alpha, 10));
+    // link.attr("d", lineData);
+    link.attr("d", d => {
+      var sourceX, centerX, targetX;
+      if ( d.counter % 2 === 0 ) {
+          sourceX =  d.source.x;
+          centerX = d.source.centerX() - 200;
+          targetX = d.target.x;
+       }
+      else {
+        sourceX =  d.source.x2();
+        centerX = d.source.centerX() + 200;
+        targetX = d.target.x2();
+      }
+      var centerY = (d.source.y2() + d.target.y)/2;
+
+          return "M" + sourceX + "," + d.source.y2()
+              + "S" + centerX + "," + centerY
+              + " " + targetX + "," + d.target.y;
+    });
 
     detailBox
-      .style("right", d => d.x + "px")
+      .style("left", d => d.x + "px")
       .style("top", d => d.y + "px");
   };
 }
@@ -105,76 +123,168 @@ function tick(detailBox, yScale, link, width, height) {
 //  },
 //}
 function update(el, props) {
+  var onEnterDetailBox = function() {
+
+    var container = this
+      .insert("div", ":first-child")
+        .attr("class", "tooltip")
+      .append("span")
+        .attr("class", "content");
+
+      container.append("div")
+        .attr("class", "title")
+        .text(d => d.title);
+
+    container
+      .append("img")
+      .attr("src", DOC_URL)
+      .attr("class", "doc-pic")
+      .text(d => d.title);
+
+    var subcontent = container
+      .append("div")
+      .attr("class", "sub-content");
+
+    subcontent
+      .append("p")
+      .attr("class", "authors")
+      .append("span")
+      .attr("class", "text-muted")
+      .text("Authors: ");
+
+    subcontent.select(".authors")
+        .append("span")
+        .text(d => d.authors.join(", "));
+
+    subcontent
+    .append("p")
+    .attr("class", "keywords")
+    .append("span")
+    .attr("class", "text-muted")
+    .text("Keywords: ");
+    subcontent.select(".keywords")
+    .append("span")
+    .text(d => d.keywords ? d.keywords.join(", ") : null);
+
+    subcontent
+      .append("p")
+      .attr("class", "date")
+      .append("span")
+      .attr("class", "text-muted")
+      .text("Date: ");
+
+    subcontent.select(".date")
+      .append("span")
+      .text(d => moment(d.date).format("MMMM Do YYYY, h:mm:ss a"));
+
+    subcontent
+      .append("p")
+      .attr("class", "task")
+      .append("span")
+      .attr("class", "text-muted")
+      .text("Tasks: ");
+
+    subcontent.select(".task")
+      .append("span")
+      .text(d => d.tasks.join(", "));
+  }
+
   if (props.data.length === 0) return;
 
-  console.log("Timeline Update", props);
+  var nodes = props.data.slice();
+  var edges = makeEdges(nodes.slice());
 
-  var docs = props.data;
-  docs.forEach(d => {
-    // d.date = new Date(d.createdDate);
-    d.x2 = function() {
-        return this.x + 140;
-    };
-    d.y2 = function() {
-        return this.y + 100;
-    };
-  });
-  // docs.sort((a, b) => a.date.getTime() - b.date.getTime());
-
-  console.log("sortedDocs", props.data.documents);
-
-  var yScale = d3.scale.linear()
-      .domain([0, docs.length])
-      .range([props.margin.left, props.margin.left + props.width]);
-
-  // var yScale = d3.time.scale()
-  //       .domain(new Date(), new Date())
-  //       .rangeRound([0, props.width - props.margin.left
-  //                   - props.margin.right]);
-
-  // if (docs.length > 0) yScale .domain(docs[0].date, docs.last().date);
-
+  var height = nodes.length * 500;
   var div = d3.select(el);
-  this.force.size([props.width, props.height]);
-  this.force.nodes(docs);
-  console.log("edges", makeEdges(docs.slice()));
-  this.force.links(makeEdges(docs.slice()));
 
-  console.log("links", this.force.links());
+  div.select("svg")
+      .attr("height", height);
+
+  var svg = div.select("svg")
+               .attr("height", height);
+
+  var yScale = d3.scale.ordinal()
+      .domain(d3.range(nodes.length))
+      // .rangeRoundBands([0, 100], 200, 0);
+      .rangeRoundBands([props.margin.top, props.margin.top + height], 0.4, 0);
+
+  this.force.nodes(nodes);
+  this.force.links(edges);
 
   // TODO: fix ID issue
-  var detailBox = div.selectAll(".tooltip-right")
-                .data(docs, d => d.id+"detailBox");
+  var detailBox = div.selectAll(".tooltip")
+                .data(nodes, d => d.id+"detailBox");
+
 
   detailBox.enter()
-      .insert("div", ":first-child")
-      .attr("class", "tooltip-right") // TODO
-      .attr("id", (d, i) => d.id+"detailBox"+i)
-      .style("opacity", 0.9)
-    .append("span").text(d => d.title);
+    .call(onEnterDetailBox);
 
-  detailBox
-    .on("click", function(d) {
-      console.log("click", d.date);
-    })
-    .on("mouseover", function() { });
+  detailBox.select("span").each(function(d){
+    var height = this.getBoundingClientRect().height;
+    var width = this.getBoundingClientRect().width;
+    d.x2 = function() {
+        return this.x + width;
+    };
+    d.y2 = function() {
+        return this.y + height;
+    };
+    d.centerX = function() {
+        return this.x + width / 2;
+    };
+  });
 
-  var link = d3.select(el).select("svg").selectAll(".link")
-      .data(this.force.links(), d => d.source.title + "-" + d.target.title);
-
-  link.style("stroke-width", d => d.value);
+  var link = svg.selectAll(".link-detail")
+      .data(edges, d => d.id);
 
   link
     .enter()
     .insert("path", ":first-child")
-    .attr("class", "link")
-    .style("stroke", 20);
+    .attr("class", "link-detail")
+    .attr("id",function(d) { return "linkId_" + d.id; })
+    .style("stroke", 20)
+    .attr("marker-end", "url(#end)");
 
-  this.force.on("tick", tick(detailBox, yScale, link, props.width,
-                             props.height));
+  var linkText = svg.selectAll(".linkText")
+    // TODO: update mechanism
+    .data(this.force.links(), d => "label" + d.id);
 
-  detailBox.exit()
-      .remove();
+  linkText.enter()
+    .append("g")
+    .append("text")
+      .attr("class","linkText")
+      .attr("dx", -5)
+      .attr("dy", 20)
+      .style("fill", "DarkSlateGray")
+    .append("textPath")
+      .attr("xlink:href",function(d) { return "#linkId_" + d.id;})
+      .attr("transform", "rotate(-90)")
+      .attr("startOffset", "25%")
+      .style("text-anchor", "start")
+    .text(d => d.type);
+
+
+  // build the arrow.
+  svg.append("svg:defs").selectAll("marker")
+      .data(["end"])      // Different link/path types can be defined here
+    .enter().append("svg:marker")    // This section adds in the arrows
+      .attr("id", String)
+      .attr("viewBox", "0 -5 10 10")
+      .attr("refX", 5)
+      .attr("refY", 0)
+      .attr("markerWidth", 3)
+      .attr("markerHeight", 3)
+      .attr("orient", "auto")
+      .style("fill", "DarkSlateGray")
+    .append("svg:path")
+      .attr("d", "M0,-5L10,0L0,5");
+
+  console.log("linkText", linkText.data());
+
+  this.force.on("tick", tick(detailBox, yScale, link, linkText, props.width, props.height));
+
+  detailBox.exit().remove();
+  link.exit().remove();
+  linkText.exit().remove();
 
   this.force.start();
 }
@@ -204,10 +314,9 @@ const d3Timeline = new function(){
     update: update,
 
     create: function(el, props) {
-      console.log("create Timeline", props);
-      d3.select(el).append("svg")
-        .attr("width", props.width)
-        .attr("height", props.height);
+      d3.select(el)
+      .append("svg")
+        .attr("width", props.width);
 
       update(el, props);
     }

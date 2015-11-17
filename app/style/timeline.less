@@ -1,25 +1,101 @@
 #timeline-cont {
-  float: right;
-  margin-top: 100px;
+  // float: right;
+  margin-top: 50px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  height: 1000px;
+  width: 600px;
 }
 
 
-div.tooltip-right {
+
+// div.tooltip span {
+//   position: absolute;
+//   width: 140px;
+//   // height: 40px;
+//   color: #000000;
+//   background: lightgrey;
+//   text-align: center;
+//   border-radius: 10px;
+//   // left: 100%;
+//   // top: 50%;
+//   // margin-top: -10px;
+//   // margin-left: -15px;
+//   z-index: 999;
+// }
+
+
+path.link-detail {
+  stroke: #333;
+  stroke-opacity: 0.5;
+  stroke-width: 4;
+  fill: none;
+  pointer-events: none;
+}
+
+// .doc-card {
+//     position: absolute;
+//     width: 140px;
+//     float: left;
+//     width: 33%;
+//     margin-bottom: 2rem;
+//     // color: #000000;
+//     background: lightgrey;
+//     text-align: center;
+//     border-radius: 10px;
+//     // left: 100%;
+//     // top: 50%;
+//     // margin-top: -10px;
+//     // margin-left: -15px;
+//     z-index: 999;
+// }
+
+div.tooltip {
+  opacity: 1;
   position: relative;
+  // background: lightgrey;
 }
 
-div.tooltip-right span {
-  position: absolute;
-  width:140px;
-  height:40px;
-  color: #FFFFFF;
-  background: #000000;
-  text-align: center;
-  border-radius: 6px;
-  opacity: 0.8;
-  left: 100%;
-  top: 50%;
-  // margin-top: -10px;
-  // margin-left: -15px;
-  z-index: 999;
+// .tooltip {outline:none; }
+.tooltip strong {margin-bottom:30px;}
+
+.tooltip .content {
+    z-index: 10;
+    // display: none;
+    padding: 14px 20px;
+    // margin-top:60px; margin-left:-160px;
+    // color: black;
+    width: 300px;
+    height: 250px;
+    line-height: 16px;
+    display: inline;
+    position: absolute;
+    border: 1px solid gray;
+    // background: lightgrey;
+    border-radius: 10px;
+    // box-shadow: 0px 0px 8px 4px #666;
 }
+
+.content .sub-content {
+  float: left;
+  // margin-left: 10px;
+}
+
+.title {
+  float: left;
+  width: 75%;
+  font-size: 14px;
+  font-family: "Segoe UI",Arial,sans-serif;
+  font-weight: 400;
+  margin-bottom: 10px;
+}
+
+.doc-pic {
+  float: right;
+  width: 50px;
+  height: 50px
+}
+
+// .callout {z-index:20;position:absolute;border:0;top:-14px;left:120px;}
+
+

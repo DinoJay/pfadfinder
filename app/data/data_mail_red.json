@@ -1,0 +1,52 @@
+{
+   "documents":[
+      {
+         "id":"150d7057d406bf5a",
+         "title":"The many ways to share in Evernote",
+         "datatype":"Email",
+         "authors":[
+            "Evernote Team \u003cteam@email.evernote.com\u003e"
+         ],
+         "keywords":[
+            "INBOX",
+            "CATEGORY_UPDATES",
+            "UNREAD"
+         ],
+         "createdDate":"Nov 6, 2015 11:16:53 AM",
+         "tasks":[
+
+         ],
+         "content":"Learn how to share notes with the people you work with. View in browser. Evernote Make Evernote the",
+         "kind":"Digital"
+      },
+      {
+         "id":"150c6258158845e5",
+         "title":"Sync: have every note, everywhere",
+         "datatype":"Email",
+         "authors":[
+            "Evernote Team \u003cteam@email.evernote.com\u003e"
+         ],
+         "keywords":[
+            "INBOX",
+            "CATEGORY_UPDATES",
+            "UNREAD"
+         ],
+         "createdDate":"Nov 6, 2015 11:16:53 AM",
+         "tasks":[
+
+         ],
+         "content":"Take all your work anywhere you go. View in browser. Evernote We call it sync, you\u0026#39;ll call it",
+         "kind":"Digital"
+      }
+   ],
+   "links":[
+      {
+         "source":1,
+         "target":0,
+         "values":[
+            "Keyword",
+            "Authorship"
+         ]
+      }
+   ]
+}
