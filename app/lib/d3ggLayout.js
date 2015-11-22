@@ -1,8 +1,10 @@
-/* @flow */
 import d3 from "d3";
 import d3MeasureText from "d3-measure-text"; d3MeasureText.d3 = d3;
 import _ from "lodash";
+import $ from "jquery";
+
 import { makeEdges } from "./misc.js";
+
 
 const D2R = Math.PI / 180;
 
@@ -12,7 +14,6 @@ var LABEL_OFFSET = 15;
 
 // var INIT_RAD_LAYOUT = 150;
 // var INIT_NODE_PADDING = 20;
-
 var LAYOUT_RAD = 150;
 
 var DOC_URL = "https://cdn4.iconfinder.com/data/icons/flat-icon-set/128/"
@@ -26,6 +27,22 @@ var CALENDAR_URL = "https://cdn1.iconfinder.com/data/icons/education-colored-"
 Array.prototype.last = function() {
     return this[this.length-1];
 };
+
+function getTangibles() {
+ $.ajax({
+  url: "http://localhost:8080/CamCapture/AjaxServlet",
+  type: "POST",
+  dataType: "jsonp",
+    // Accept: 'application/sparql-results+json',
+    // async: false,
+    success: function(data) {
+      console.log("data", data);
+    },
+    error: function(err) {
+      console.log("err", err);
+    }
+ });
+}
 
 
 function backgroundArc(radius) {
@@ -125,9 +142,8 @@ function collide(data, alpha, padding) {
 // }
 
 
-function radial(d, radius,  alpha, energy, center) {
+function radial(d, radius, alpha, energy, center) {
 
-    // var currentAngle = d.angle || (1 * index);
   var currentAngleRadians = d.angle * D2R;
 
   var radialPoint = {
@@ -170,10 +186,34 @@ function tick(node, link, width, height) {
 
   return function(e) {
     nodeGroups.forEach(group => {
-      group.values.forEach((d, i) => {
-        d.angle = d.angle || 360 / node.data().length * i;
-        radial(d, d.dim*LAYOUT_RAD, e.alpha, 0.5, {x: width/2, y: height/2});
-      });
+
+      // TODO: better solution
+      // if (group.key === "1") {
+      //   console.log("group", group);
+      //   var maxNodes = Math.floor( 360 / (NODE_RAD + LABEL_OFFSET) );
+      //   var firstNodes = group.values.slice(0, maxNodes + 1);
+      //   var restNodes = group.values.slice(maxNodes+1);
+      //
+      //   firstNodes.forEach((d, i) => {
+      //     var radius = d.dim*LAYOUT_RAD;
+      //     d.angle = d.angle || 360 / firstNodes.length * i;
+      //     radial(d, radius + d.offset, e.alpha, 0.9, {x: width/2, y: height/2});
+      //   });
+      //
+      //   restNodes.forEach((d, i) => {
+      //     var radius = d.dim*LAYOUT_RAD;
+      //     d.angle = d.angle || 360 / restNodes.length * i;
+      //     d.offset = NODE_RAD + LABEL_OFFSET + 50;
+      //     radial(d, radius + d.offset, e.alpha, 0.9, {x: width/2, y: height/2});
+      //   });
+      // } else {
+        group.values.forEach((d, i) => {
+          var radius = d.dim*LAYOUT_RAD;
+          d.angle = d.angle || 360 / group.values.length * i;
+          // d.offset = NODE_RAD + LABEL_OFFSET + 50;
+          radial(d, radius + d.offset, e.alpha, 0.9, {x: width/2, y: height/2});
+        });
+      // }
     });
 
     node.each(collide(node.data(), 0.1, 10 + LABEL_OFFSET));
@@ -183,9 +223,10 @@ function tick(node, link, width, height) {
 
     var arc = d3.select("#background-arc" + lastGroup.key);
     if (e.alpha < 0.1 && arc.empty()) {
+      var radius = lastGroup.key*(LAYOUT_RAD - NODE_RAD - LABEL_OFFSET);
         d3.select("#vis-cont svg")
           .insert("path", ":first-child")
-          .attr("d", backgroundArc(lastGroup.key*(LAYOUT_RAD - NODE_RAD - LABEL_OFFSET)))
+          .attr("d", backgroundArc(radius))
           .attr("id", "background-arc" + lastGroup.key)
           .attr("transform", "translate(" + width/2 + "," +  height/2  + ")")
           .style("stroke-width", 1)
@@ -229,23 +270,24 @@ var create = function(el, props) {
     .attr("width", props.width)
     .attr("height", props.height);
 
-  console.log("this Create", this);
+  // console.log("this Create", this);
   this.force.size([props.width, props.height]);
 
   this.update(props, this);
 };
 
-var update = function(props, that) {
+function update(props, that) {
   var svg = d3.select("#vis-cont svg");
   var edges = [];
   var selectedNode = props.path.last();
 
-  console.log("selectedNode", selectedNode);
+  // console.log("selectedNode", selectedNode);
 
   if (selectedNode) {
+    // TODO: fix later
     var type = "Keyword";
     var nbs = props.linkedByIndex.nbs(selectedNode, type);
-    console.log("nbs", nbs);
+    // console.log("nbs", nbs);
     var sumRadius = d3.sum(nbs, d => d.radius);
 
     nbs.forEach((d, i) => {
@@ -257,8 +299,10 @@ var update = function(props, that) {
       });
       d.connectedByType = type;
       d.dim = selectedNode.dim + 1;
+
       d.angle = selectedNode.angle - (sumRadius / (d.dim*2))
-                + ((i * (d.radius + NODE_PADDING)) / d.dim );
+                + ((i * (d.radius)) / d.dim );
+      d.offset = selectedNode.offset;
     });
 
     edges = edges.concat(makeEdges(props.path.slice()));
@@ -268,8 +312,7 @@ var update = function(props, that) {
       props.dataStack.push(_.uniq(props.path.concat(nbs), "title"));
     }
 
-
-    console.log("update Graph inner", this);
+    // console.log("update Graph inner", this);
     that.force.links(edges);
   }
 
@@ -279,7 +322,7 @@ var update = function(props, that) {
   // TODO: fix ID issue
   var node = svg.selectAll("g.group")
                 // TODO: does not work with id
-                .data(props.dataStack.last(), d => d.title);
+                .data(props.dataStack.last(), d => d.id);
 
   // TODO: important
   node
@@ -305,7 +348,6 @@ var update = function(props, that) {
         .attr("y", d => - d.radius)
         .attr("height", d => d.radius * 2)
         .attr("width", d => d.radius * 2);
-        // .attr("opacity", 0.7);
 
       g.append("path")
         .attr("d", labelArc(NODE_RAD, NODE_RAD))
@@ -314,7 +356,6 @@ var update = function(props, that) {
         .style("font-size", 20)
         .attr("alignment-baseline", "middle")
         .attr("text-anchor", "middle");
-        // .attr("opacity", 0.5);
 
       g.append("text")
         // .attr("x", 8)
@@ -337,42 +378,55 @@ var update = function(props, that) {
         .attr("opacity", 0.5);
     });
 
+  console.log("Node data", node.data());
   var maxDim = d3.max(node.data(), d => d.dim);
-  node.attr("opacity", d => {
-    if (d.dim < maxDim && !d.selected) return 0.1;
-    if (d.dim === maxDim && !d.selected) return 0.5;
-    return 1;
-  });
+  node
+    .attr("opacity", d => {
+      if (d.dim < maxDim && !d.selected) return 0.1;
+      // TODO: delete later
+      if (d.dim === maxDim && !d.selected) return 0.5;
+      return 1;
+    });
 
   node
     .on("click", function(d) {
-      if (parseFloat(d3.select(this).attr("opacity")) === 0.1) return;
+      console.log("clicked d", d);
 
       if (!d.selected) {
+        getTangibles();
+        // TODO: Ajax Request
         d.fixed = true;
         d.selected = true;
         props.path.push(d);
         props.forward = true;
 
-        props.getPath(_.cloneDeep(props.path));
+        props.getPath(props.path);
 
         update(props, that);
       } else {
+        // only last node can be disabled
+        if (props.path.last().id !== d.id) return;
         d.fixed = false;
         d.selected = false;
+
         props.path.pop();
         props.forward = false;
         props.dataStack.pop();
-        props.getPath(_.cloneDeep(props.path));
+
+        // send path to parent component
+        console.log("props.path", props.path);
+        props.getPath(props.path);
         props.dataStack.last().forEach(e => {
           if (e.dim > d.dim) e.dim = d.dim;
         });
+        // reset angles
+        if (d.dim === 1) props.dataStack.last().forEach(e => e.angle = null );
         update(props, that);
       }
     });
 
   var link = d3.select("#vis-cont svg").selectAll(".link")
-      .data(edges, d => d.source.title + "-" + d.target.title);
+        .data(edges, d => d.source.title + "-" + d.target.title);
 
   link.style("stroke-width", d => d.value);
 
@@ -389,7 +443,7 @@ var update = function(props, that) {
   link.exit().remove();
   node.exit().remove();
 
-};
+}
 
 // defaultProps{
 //   widthTotal: 1350,
@@ -403,7 +457,6 @@ var update = function(props, that) {
 //   data: [],
 //   view: "overview"
 // };
-
 const d3ggLayout = new function(){
   return {
     force: d3.layout.force()

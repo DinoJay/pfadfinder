@@ -1,6 +1,6 @@
 import React from "react";
 import d3ggLayout from "../lib/d3ggLayout.js";
-import _ from "lodash";
+// import _ from "lodash";
 
 var linkedByIndex = new function() {
   return {
@@ -11,29 +11,18 @@ var linkedByIndex = new function() {
       this.nodes = nodes;
       return this;
     },
-    isConnected: function(a, b) {
-      return this.index[a.index + "," + b.index] ;//|| this.index[a.index + "," + b.index];
-    },
-    isConnected2: function(a, b, type) {
-      var isEdge0 =  (this.index[a.index + "," + b.index]
-          && this.index[a.index + "," + b.index].values.indexOf(type));
-      var isEdge1 = (this.index[a.index + "," + b.index]
-                    && this.index[a.index + "," + b.index].values.indexOf(type));
-      return isEdge0 || isEdge1;
-    },
-    nbs: function(a, type) {
-      console.log("linkedByIndex", this.nodes, "Index", this.index);
+    // nbs: function(a, type) {
+    //   // console.log("linkedByIndex", this.nodes, "Index", this.index);
+    //   return this.nodes.filter(b => {
+    //     return (this.index[a.i + "," + b.i] #<{(| || this.index[a.i + "," + b.i] |)}>#);
+    //         // && this.index[a.index + "," + b.index].values.indexOf(type));
+    //   });
+    // },
+    nbs: function(a) {
       return this.nodes.filter(b => {
-        // console.log("RetValue", a.index, b.index);
-        return (this.index[a.i + "," + b.i]);
-            // && this.index[a.index + "," + b.index].values.indexOf(type));
-      });
-    },
-    nbs0: function(a) {
-      return this.nodes.filter(b => {
-        var isEdge0 =  this.index[a.index + "," + b.index];
-        var isEdge1 = this.index[a.index + "," + b.index];
-        return isEdge0 || isEdge1;
+        var isEdge0 = this.index[a.i + "," + b.i] && a.i !== b.i;
+        // var isEdge1 = this.index[b.index + "," + a.index] || a.index !== b.index;
+        return isEdge0; //|| isEdge1;
       });
     }
   };
@@ -51,23 +40,29 @@ var Graph = React.createClass({
       },
       data: [],
       path: [],
-      // view: "overview",
-      // initDataType: "datatype",
-      filter: "Publication"
+      filter: null
     };
   },
 
   getInitialState: function() {
     var documents = this.props.data.documents.map((d, i) => {
+      // important
       d.i = i;
       d.dim = 1;
+      d.offset = 0;
       return d;
     });
 
+    console.log("documents", documents);
+
+    var initDocs;
+    if (this.props.filter) {
+      initDocs = documents.filter(d => d.datatype === this.props.filter);
+    } else initDocs = documents;
+
     return {
-      linkedByIndex: linkedByIndex.init(documents,
-                                        _.cloneDeep(this.props.data.links)),
-      initData: documents.filter(d => d.datatype === this.props.filter)
+      linkedByIndex: linkedByIndex.init(initDocs, this.props.data.links),
+      initData: initDocs
     };
   },
 
@@ -76,20 +71,7 @@ var Graph = React.createClass({
     d3ggLayout.create(el, { ...this.props, ...this.state});
   },
 
-  // componentDidUpdate: function() {
-  //   var el = this.getDOMNode();
-  //   console.log("component Update");
-  //   d3ggLayout.update(el, { ...this.props, ...this.state});
-  // },
-
-  // componentWillUnmount: function() {
-  //   var el = this.getDOMNode();
-  //   //d3BubbleCloud.destroy(el);
-  // },
-
   render: function() {
-    console.log("state Graph", this.state);
-    console.log("props Graph", this.props);
     return (
       <div id="vis-cont"></div>
     );

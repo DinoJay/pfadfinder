@@ -39,7 +39,7 @@ function collide(data, alpha, padding) {
               l = Math.abs(y),
               r = d.radius + padding + quad.point.radius;
 
-          console.log("lr quadPoint", l, r, quad.point.radius);
+          // console.log("lr quadPoint", l, r, quad.point.radius);
           if (l < r) {
             l = (l - r) / l * alpha;
             d.y -= y *= l;
@@ -73,7 +73,6 @@ function pushAxis(d, posY, posX, alpha, energy) {
 }
 
 function tick(detailBox, yScale, link, linkText, width, height) {
-
   return function(e) {
     // detailBox.each(movePos(pos, alpha));
     detailBox.each((d, i) => pushAxis(d, yScale(i), width/2,
@@ -123,82 +122,17 @@ function tick(detailBox, yScale, link, linkText, width, height) {
 //  },
 //}
 function update(el, props) {
-  var onEnterDetailBox = function() {
 
-    var container = this
-      .insert("div", ":first-child")
-        .attr("class", "tooltip")
-      .append("span")
-        .attr("class", "content");
-
-      container.append("div")
-        .attr("class", "title")
-        .text(d => d.title);
-
-    container
-      .append("img")
-      .attr("src", DOC_URL)
-      .attr("class", "doc-pic")
-      .text(d => d.title);
-
-    var subcontent = container
-      .append("div")
-      .attr("class", "sub-content");
-
-    subcontent
-      .append("p")
-      .attr("class", "authors")
-      .append("span")
-      .attr("class", "text-muted")
-      .text("Authors: ");
-
-    subcontent.select(".authors")
-        .append("span")
-        .text(d => d.authors.join(", "));
-
-    subcontent
-    .append("p")
-    .attr("class", "keywords")
-    .append("span")
-    .attr("class", "text-muted")
-    .text("Keywords: ");
-    subcontent.select(".keywords")
-    .append("span")
-    .text(d => d.keywords ? d.keywords.join(", ") : null);
-
-    subcontent
-      .append("p")
-      .attr("class", "date")
-      .append("span")
-      .attr("class", "text-muted")
-      .text("Date: ");
-
-    subcontent.select(".date")
-      .append("span")
-      .text(d => moment(d.date).format("MMMM Do YYYY, h:mm:ss a"));
-
-    subcontent
-      .append("p")
-      .attr("class", "task")
-      .append("span")
-      .attr("class", "text-muted")
-      .text("Tasks: ");
-
-    subcontent.select(".task")
-      .append("span")
-      .text(d => d.tasks.join(", "));
-  }
-
-  if (props.data.length === 0) return;
-
+  console.log("this force", this);
   var nodes = props.data.slice();
   var edges = makeEdges(nodes.slice());
 
+  // TODO: adjust height growth
   var height = nodes.length * 500;
   var div = d3.select(el);
 
   div.select("svg")
-      .attr("height", height);
+     .attr("height", height);
 
   var svg = div.select("svg")
                .attr("height", height);
@@ -208,29 +142,94 @@ function update(el, props) {
       // .rangeRoundBands([0, 100], 200, 0);
       .rangeRoundBands([props.margin.top, props.margin.top + height], 0.4, 0);
 
+
   this.force.nodes(nodes);
   this.force.links(edges);
 
   // TODO: fix ID issue
   var detailBox = div.selectAll(".tooltip")
-                .data(nodes, d => d.id+"detailBox");
-
+                     .data(nodes, d => d.id+"detailBox");
 
   detailBox.enter()
-    .call(onEnterDetailBox);
+    .call(function() {
+      var container = this
+        .insert("div", ":first-child")
+          .attr("class", "tooltip")
+        .append("span")
+          .attr("class", "content");
 
-  detailBox.select("span").each(function(d){
-    var height = this.getBoundingClientRect().height;
-    var width = this.getBoundingClientRect().width;
-    d.x2 = function() {
-        return this.x + width;
-    };
-    d.y2 = function() {
-        return this.y + height;
-    };
-    d.centerX = function() {
-        return this.x + width / 2;
-    };
+        container.append("div")
+          .attr("class", "title")
+          .text(d => d.title);
+
+      container
+        .append("img")
+        // TODO: get pic
+        .attr("src", DOC_URL)
+        .attr("class", "doc-pic")
+        .text(d => d.title);
+
+      var subcontent = container
+        .append("div")
+        .attr("class", "sub-content");
+
+      subcontent
+        .append("p")
+        .attr("class", "authors")
+        .append("span")
+        .attr("class", "text-muted")
+        .text("Authors: ");
+
+      subcontent.select(".authors")
+          .append("span")
+          .text(d => d.authors.join(", "));
+
+      subcontent
+        .append("p")
+        .attr("class", "keywords")
+        .append("span")
+        .attr("class", "text-muted")
+        .text("Keywords: ");
+      subcontent.select(".keywords")
+        .append("span")
+        .text(d => d.keywords ? d.keywords.join(", ") : null);
+
+      subcontent
+        .append("p")
+        .attr("class", "date")
+        .append("span")
+        .attr("class", "text-muted")
+        .text("Date: ");
+
+      subcontent.select(".date")
+        .append("span")
+        .text(d => moment(d.date).format("MMMM Do YYYY, h:mm:ss a"));
+
+      subcontent
+        .append("p")
+        .attr("class", "task")
+        .append("span")
+        .attr("class", "text-muted")
+        .text("Tasks: ");
+
+      subcontent.select(".task")
+        .append("span")
+        .text(d => d.tasks.join(", "));
+    });
+
+  detailBox
+    .select("span").each(function(d){
+      var height = this.getBoundingClientRect().height;
+      var width = this.getBoundingClientRect().width;
+      d.x2 = function() {
+          return this.x + width;
+      };
+      d.y2 = function() {
+          return this.y + height;
+      };
+      d.centerX = function() {
+          return this.x + width / 2;
+      };
   });
 
   var link = svg.selectAll(".link-detail")
@@ -262,7 +261,6 @@ function update(el, props) {
       .style("text-anchor", "start")
     .text(d => d.type);
 
-
   // build the arrow.
   svg.append("svg:defs").selectAll("marker")
       .data(["end"])      // Different link/path types can be defined here
@@ -278,7 +276,7 @@ function update(el, props) {
     .append("svg:path")
       .attr("d", "M0,-5L10,0L0,5");
 
-  console.log("linkText", linkText.data());
+  // console.log("linkText", linkText.data());
 
   this.force.on("tick", tick(detailBox, yScale, link, linkText, props.width, props.height));
 
@@ -287,6 +285,12 @@ function update(el, props) {
   linkText.exit().remove();
 
   this.force.start();
+}
+
+function create(el, props) {
+      d3.select(el)
+        .append("svg")
+          .attr("width", props.width);
 }
 
 
@@ -313,13 +317,7 @@ const d3Timeline = new function(){
 
     update: update,
 
-    create: function(el, props) {
-      d3.select(el)
-      .append("svg")
-        .attr("width", props.width);
-
-      update(el, props);
-    }
+    create: create
   };
 };
 

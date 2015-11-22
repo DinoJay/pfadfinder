@@ -5,7 +5,7 @@
   "main": "''",
   "scripts": {
     "build": "webpack --progress --profile --colors ",
-    "dev": "webpack-dev-server --progress --profile --colors --inline --hot"
+    "dev": "webpack-dev-server --port 8081 --progress --profile --colors --inline --hot"
   },
   "repository": {
     "type": "git",

@@ -1,11 +1,12 @@
 import React from "react";
 import Graph from "./components/Graph";
-import Timeline from "./components/Timeline";
+import _ from "lodash";
 
+import Timeline from "./components/Timeline";
 import CircleMenu from "./components/CircleMenu";
 
 // var data = require("json!./miserables.json");
-var data = require("json!./data/data_30_10.json");
+var data = require("json!./data/data.json");
 
 require("./style.less");
 
@@ -38,10 +39,10 @@ var App = React.createClass({
   },
 
   getPath: function(path) {
-    console.log("getPath", path);
-    // TODO: hack
-    path.forEach(d => d.fixed = false);
-    this.setState({path: path});
+    var pathCopy = _.cloneDeep(path);
+    pathCopy.forEach(d => d.fixed = false);
+    console.log("Main: path", path);
+    this.setState({path: pathCopy});
   },
 
 
@@ -60,7 +61,8 @@ var App = React.createClass({
   // },
 
   render: function() {
-    console.log("state MAIN", this.props.state);
+    console.log("render MAIN", this.state);
+    console.log("Main data", data);
 
     return (
       <div id="cont">
@@ -76,7 +78,6 @@ var App = React.createClass({
           data={data}
           view={this.state.view}
           margin={this.props.margin}
-          initDataType={"datatype"}
           getPath={this.getPath}
         />
         <Timeline data={this.state.path} />

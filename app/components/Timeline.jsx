@@ -50,34 +50,24 @@ var Timeline = React.createClass({
       },
       initData: [],
       selected: [],
-      view: "overview",
       initDataType: "datatype"
     };
   },
 
-  // getInitialState: function() {
-  // },
-
   componentDidMount: function() {
     var el = this.getDOMNode();
-    console.log("Timeline component did mount",
-                { ...this.props, ...this.state});
     d3Timeline.create(el, { ...this.props, ...this.state});
+    d3Timeline.update(el, { ...this.props, ...this.state});
   },
 
   componentDidUpdate: function() {
     var el = this.getDOMNode();
-    console.log("Timeline component Update", { ...this.props, ...this.state});
+
     // TODO: anti pattern
     this.props.data.forEach(d => d.date = new Date(d.createdDate));
 
     d3Timeline.update(el, { ...this.props, ...this.state});
   },
-
-  // componentWillUnmount: function() {
-  //   var el = this.getDOMNode();
-  //   //d3BubbleCloud.destroy(el);
-  // },
 
   render: function() {
     return (
