@@ -24,6 +24,7 @@ var CircleMenu = React.createClass({
   clickHandler: function (e) {
     e.preventDefault();
     console.log("event", e);
+    this.props.getDocType("Publication");
   },
 
   render: function() {
@@ -31,7 +32,9 @@ var CircleMenu = React.createClass({
       <input type="checkbox" id="menu_opener_id" className="menu_opener">
         <label htmlFor="menu_opener_id"
           className="menu_opener_label"
-          style={this.state.style}/>
+          style={this.state.style}
+          onClick={this.clickHandler}
+        />
       </input>
     );
   }

@@ -4,9 +4,9 @@ import _ from "lodash";
 
 import Timeline from "./components/Timeline";
 import CircleMenu from "./components/CircleMenu";
+import Legend from "./components/Legend";
 
-// var data = require("json!./miserables.json");
-var data = require("json!./data/data.json");
+var data = require("json!./data/data3.json");
 
 require("./style.less");
 
@@ -32,19 +32,20 @@ var App = React.createClass({
               - this.props.margin.right ),
       height: (this.props.heightTotal - this.props.margin.top
                - this.props.margin.bottom),
-      view: "overView",
-      CircleMenuState: null,
-      path: []
+      path: [],
+      data: data
     };
   },
 
   getPath: function(path) {
     var pathCopy = _.cloneDeep(path);
     pathCopy.forEach(d => d.fixed = false);
-    console.log("Main: path", path);
     this.setState({path: pathCopy});
   },
 
+  getDocType: function(docType) {
+    this.setState({docType: docType});
+  },
 
   // changeView: function () {
   //   console.log("state", this.state.view);
@@ -61,25 +62,23 @@ var App = React.createClass({
   // },
 
   render: function() {
-    console.log("render MAIN", this.state);
-    console.log("Main data", data);
-
     return (
       <div id="cont">
-        {/* <h1 className="page-header">reduced Graph</h1> */}
         <CircleMenu
           width={this.state.width}
           height={this.state.height}
           diameter={100}
+          getDocType={this.getDocType}
         />
         <Graph
           width={this.state.width}
           height={this.state.height}
           data={data}
-          view={this.state.view}
           margin={this.props.margin}
           getPath={this.getPath}
+          // filter={this.state.docType}
         />
+        <Legend/>
         <Timeline data={this.state.path} />
       </div>
     );

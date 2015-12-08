@@ -1,0 +1,3414 @@
+{
+    "documents": [
+        {
+            "authors": [
+                "Su Inn Park",
+                "Frank Shipman"
+            ],
+            "content": "Systems are needed to support access to and analysis of large heterogeneous scientific datasets. We developed PerCon, a data management and analysis environment, to support such activities. PerCon processes and integrates data gathered via queries to existing data providers to create a personal digital library of data. Users may then search, browse, visualize and annotate the data as they proceed with analysis and interpretation. Interpretation in PerCon takes place in a visual workspace in which multiple data visualizations and annotations are placed into spatial arrangements based on the current task. The system watches for patterns in the user\u00c3\u00a2\u00c2\u20ac\u00c2\u2122s data selection and organization and through mixed-initiative interaction assists users by suggesting potentially relevant data from unexplored data sources. PerCon\u00c3\u00a2\u00c2\u20ac\u00c2\u2122s data location and analysis capabilities were evaluated in a controlled study with 24 users. Study participants had to locate and analyze heterogeneous weather and river data with and without the visual workspace and mixed-initiative interaction, respectively. Results indicate that the visual workspace facilitated information representation and aided in the identification of relationships between datasets. The system\u00c3\u00a2\u00c2\u20ac\u00c2\u2122s suggestions encouraged data exploration, leading participants to identify more evidence of correlation among data streams and more potential interactions among weather and river data.",
+            "createdDate": "Nov 27, 2015 3:58:47 PM",
+            "datatype": "Publication",
+            "id": "5a7d5ceb-6f62-32b0-9dd4-c3f8db020f97",
+            "keywords": [
+                "data analysis",
+                "heterogeneous data",
+                "management",
+                "visual",
+                "wise"
+            ],
+            "kind": "Digital",
+            "tasks": [
+                "Research training"
+            ],
+            "title": "PerCon : A Personal Digital Library for Heterogeneous Data"
+        },
+        {
+            "authors": [
+                "Michael Stonebraker",
+                "Samuel Madden",
+                "Daniel J Abadi",
+                "Stavros Harizopoulos",
+                "Nabil Hachem",
+                "Pat Helland"
+            ],
+            "content": "In previous papers SC05, SBC+07, some of us predicted the end of \"one size fits all\" as a commercial relational DBMS paradigm. These papers presented reasons and experimental evidence that showed that the major RDBMS vendors can be outperformed by 1-2 orders of magnitude by specialized engines in the data warehouse, stream processing, text, and scientific database markets. Assuming that specialized engines dominate these markets over time, the current relational DBMS code lines will be left with the business data processing (OLTP) market and hybrid markets where more than one kind of capability is required. In this paper we show that current RDBMSs can be beaten by nearly two orders of magnitude in the OLTP market as well. The experimental evidence comes from comparing a new OLTP prototype, H-Store, which we have built at M.I.T. to a popular RDBMS on the standard transactional benchmark, TPC-C. We conclude that the current RDBMS code lines, while attempting to be a \"one size fits all\" solution, in fact, excel at nothing. Hence, they are 25 year old legacy code lines that should be retired in favor of a collection of \"from scratch\" specialized engines. The DBMS vendors (and the research community) should start with a clean sheet of paper and design systems for tomorrow's requirements, not continue to push code lines and architectures designed for yesterday's needs.",
+            "createdDate": "Nov 27, 2015 3:58:47 PM",
+            "datatype": "Publication",
+            "id": "acc3f66b-d6dc-358a-95f3-6951849aade6",
+            "keywords": [
+                "wise"
+            ],
+            "kind": "Digital",
+            "tasks": [],
+            "title": "The End of an Architectural Era (It is Time for a Complete Rewrite)"
+        },
+        {
+            "authors": [
+                "Steven Jeuris",
+                "Steven Houben",
+                "Jakob Bardram"
+            ],
+            "content": "Prior studies show that knowledge work is characterized by highly interlinked practices, including task, file and window management. However, existing personal information management tools primarily focus on a limited subset of knowledge work, forcing users to perform additional manual configuration work to integrate the different tools they use. In order to understand tool usage, we review literature on how users' activities are created and evolve over time as part of knowledge worker practices. From this we derive the activity life cycle, a conceptual framework describing the different states and transitions of an activity. The life cycle is used to inform the design of Laevo, a temporal activity-centric desktop interface for personal knowledge work. Laevo allows users to structure work within dedicated workspaces, managed on a timeline. Through a centralized notification system which doubles as a to-do list, incoming interruptions can be handled. Our field study indicates how highlighting the temporal nature of activities results in lightweight scalable activity management, while making users more aware about their ongoing and planned work.",
+            "createdDate": "Nov 27, 2015 3:58:47 PM",
+            "datatype": "Publication",
+            "id": "e75fe1f5-e27d-38ac-919a-946f6117a637",
+            "keywords": [
+                "desktop",
+                "interface",
+                "knowledge"
+            ],
+            "kind": "Digital",
+            "tasks": [],
+            "title": "Laevo: A Temporal Desktop Interface for Integrated Knowledge Work"
+        },
+        {
+            "authors": [
+                "Akrivi Katifori",
+                "Costas Vassilakis",
+                "Alan Dix"
+            ],
+            "content": "Ontologies, as knowledge engineering tools, allow information to be modelled in ways resembling to those used by the human brain, and may be very useful in the context of personal information management (PIM) and task information management (TIM). This work proposes the use of ontologies as a long-term knowledge store for PIM-related information, and the use of spreading activation over ontologies in order to provide context inference to tools that support TIM. Details on the ontology creation and content are provided, along with a full description of the spreading activation algorithm and its preliminary evaluation. ?? 2009 Elsevier B.V.",
+            "createdDate": "Nov 27, 2015 3:58:47 PM",
+            "datatype": "Publication",
+            "id": "4608262b-21ce-39ed-8020-9640f7d01604",
+            "keywords": [
+                "Ontology",
+                "Personal interaction",
+                "Personal ontology",
+                "Spreading activation",
+                "User tasks"
+            ],
+            "kind": "Digital",
+            "tasks": [],
+            "title": "Ontologies and the brain: Using spreading activation through ontologies to support personal interaction"
+        },
+        {
+            "authors": [
+                "Kazutaka Kurihara",
+                "M Goto",
+                "J Ogata"
+            ],
+            "content": "In this paper we present a presentation training system that observes a presentation rehearsal and provides the speaker with recommendations for improving the delivery of the presentation, such as to speak more slowly and to look at the audience. Our system \"Presentation Sensei\" is equipped with a microphone and camera to analyze a presentation by combining speech and image processing techniques. Based on the results of the analysis, the system gives the speaker instant feedback with respect to the speaking rate, eye contact with the audience, and timing. It also alerts the speaker when some of these indices exceed predefined warning thresholds. After the presentation, the system generates visual summaries of the analysis results for the speaker's self-examinations. Our goal is not to improve the content on a semantic level, but to improve the delivery of it by reducing inappropriate basic behavior patterns. We asked a few test users to try the system and they found it very useful for improving their presentations. We also compared the system's output with the observations of a human evaluator. The result shows that the system successfully detected some inappropriate behavior. The contribution of this work is to introduce a practical recognition-based human training system and to show its feasibility despite the limitations of state-of-the-art speech and video recognition technologies.",
+            "createdDate": "Nov 27, 2015 3:58:47 PM",
+            "datatype": "Publication",
+            "id": "eb1b10b1-96f0-3dd5-a8cc-819aa002b737",
+            "keywords": [
+                "image processing",
+                "presentation",
+                "speech processing",
+                "training"
+            ],
+            "kind": "Digital",
+            "tasks": [],
+            "title": "Presentation sensei: a presentation training system using speech and image processing"
+        },
+        {
+            "authors": [
+                "Joel Lanir",
+                "Kellogg S Booth",
+                "Anthony Tang"
+            ],
+            "content": "We introduce MultiPresenter, a novel presentation system designed to work on very large display spaces (multiple displays or physically large high-resolution displays). MultiPresenter allows presenters to organize and present pre-made and dynamic presentations that take advantage of a very large display space accessed from a personal laptop. Presenters can use the extra space to provide long-term persistency of information to the audience. Our design deliberately separates content generation (authoring) from the presentation of content. We focus on supporting presentation flow and a variety of presentation styles, ranging from automated, scripted sequences of pre-made slides to highly dynamic ad-hoc, and non-linear content. By providing smooth transition between these styles, presenters can easily alter the flow of content during a presentation to adapt to an audience or to change emphasis in response to emerging interests. We describe our goals, rationale and the design process, providing a detailed description of the current version of the system, and discuss our experience using it throughout a one-semester first year computer science course.",
+            "createdDate": "Nov 27, 2015 3:58:47 PM",
+            "datatype": "Publication",
+            "id": "17d5bd47-f0ee-355f-946d-37a26ea9a0b0",
+            "keywords": [
+                "all or part of",
+                "displays",
+                "high-resolution displays",
+                "human-centered design",
+                "multiple",
+                "or hard copies of",
+                "permission to make digital",
+                "presentations",
+                "this work for"
+            ],
+            "kind": "Digital",
+            "tasks": [],
+            "title": "MultiPresenter: A Presentation System for (Very) Large Display Spaces"
+        },
+        {
+            "authors": [
+                "Reinout Roels"
+            ],
+            "createdDate": "Nov 27, 2015 3:58:47 PM",
+            "datatype": "Publication",
+            "id": "5961f6f2-37c3-35a2-8314-8c1b8b215b39",
+            "keywords": [
+                "interaction",
+                "presentation"
+            ],
+            "kind": "Digital",
+            "tasks": [],
+            "title": "An Extensible Presentation Tool for Flexible Human-Information Interaction"
+        },
+        {
+            "authors": [
+                "Dawei Jiang",
+                "Gang Chen",
+                "Beng Chin Ooi",
+                "Kian-Lee Tan",
+                "Sai Wu"
+            ],
+            "content": "The Big Data problem is characterized by the so called 3V features: Volume - a huge amount of data, Velocity - a high data ingestion rate, and Variety - a mix of structured data, semi-structured data, and unstructured data. The state-of-the-art solutions to the Big Data problem are largely based on the MapReduce framework (aka its open source implementation Hadoop). Although Hadoop handles the data volume challenge successfully, it does not deal with the data variety well since MapReduce enforces a key-value data model along with a row-oriented data processing strategy and bundles the data processing model with the underlying concurrent programming model. This paper presents epiC, an extensible system to tackle the Big Data\u00c3\u00a2\u00c2\u20ac\u00c2\u2122s data variety challenge. epiC introduces a general Actor-like concurrent programming model, independent of the data processing models, for specifying parallel computations. Users process multi-structured datasets with appropriate epiC extensions, the implementation of a data processing model best suited for the data type and auxiliary code for mapping that data processing model into epiC\u00c3\u00a2\u00c2\u20ac\u00c2\u2122s concurrent programming model. Like Hadoop, programs written in this way can be automatically parallelized and the runtime system takes care of fault tolerance and inter-machine communications. We present the design and implementation of epiC\u00c3\u00a2\u00c2\u20ac\u00c2\u2122s concurrent programming model. We also present two customized data processing model, an optimized MapReduce extension and a relational model, on top of epiC. Experiments demonstrate the effectiveness and ef\u00c3\u00af\u00c2\u00ac\u00c2\u0081ciency of our proposed epiC.",
+            "createdDate": "Nov 27, 2015 3:58:47 PM",
+            "datatype": "Publication",
+            "id": "f5e840fe-669f-3ad1-9ea0-e93343c433cc",
+            "kind": "Digital",
+            "tasks": [],
+            "title": "epiC"
+        },
+        {
+            "authors": [
+                "Sandra Trullemans",
+                "Beat Signer"
+            ],
+            "createdDate": "Nov 27, 2015 3:58:47 PM",
+            "datatype": "Publication",
+            "id": "db33b836-d255-333c-a5a7-9cdb7953ddf3",
+            "kind": "Digital",
+            "tasks": [],
+            "title": "Towards a Conceptual Framework and Metamodel for Context-aware Personal Cross-Media Information Management Systems"
+        },
+        {
+            "authors": [
+                "Dominique Guinard",
+                "Vlad Trifa",
+                "Erik Wilde"
+            ],
+            "content": "Many efforts are centered around creating large-scale networks of \u00c3\u00a2\u00c2\u20ac\u00c2\u0153smart things\u00c3\u00a2\u00c2\u20ac\u00c2\u009d found in the physical world (e.g., wireless sensor and actuator networks, embedded devices, tagged objects). Rather than exposing real-world data and functionality through proprietary and tightly-coupled systems, we propose to make them an integral part of the Web. As a result, smart things become easier to build upon. Popular Web languages (e.g., HTML, Python, JavaScript, PHP) can be used to easily build applications involving smart things and users can leverage well-known Web mechanisms (e.g., browsing, searching, bookmarking, caching, linking) to interact and share these devices. In this paper, we begin by describing the Web of Things architecture and best-practices based on the RESTful principles that have already contributed to the popular success, scalability, and modularity of the traditional Web. We then discuss several prototypes designed in accordance with these principles to connect environmental sensor nodes and an energy monitoring system to the World Wide Web. We finally show how Web-enabled smart things can be used in lightweight ad-hoc applications called \u00c3\u00a2\u00c2\u20ac\u00c2\u0153physical mashups\u00c3\u00a2\u00c2\u20ac\u00c2\u009d.",
+            "createdDate": "Nov 27, 2015 3:58:47 PM",
+            "datatype": "Publication",
+            "id": "0542965f-06ad-3aa4-b284-1ab91bd734b5",
+            "keywords": [
+                "Computer architecture",
+                "Internet",
+                "Logic gates",
+                "Protocols",
+                "RESTful principles",
+                "Service oriented architecture",
+                "Web languages",
+                "Web of things architecture",
+                "Web server",
+                "World Wide Web",
+                "actuator networks",
+                "embedded devices",
+                "energy monitoring system",
+                "environmental sensor nodes",
+                "large-scale networks",
+                "resource oriented architecture",
+                "smart things",
+                "software architecture",
+                "tagged objects",
+                "wireless sensor networks"
+            ],
+            "kind": "Digital",
+            "tasks": [],
+            "title": "A resource oriented architecture for the Web of Things"
+        },
+        {
+            "authors": [
+                "Reinout Roels",
+                "Beat Signer"
+            ],
+            "content": "Existing presentation tools and document formats show a number of shortcomings in terms of the management, visualisation and navigation of rich cross-media content. While slideware was originally designed for the production of physical transparencies, there is an in- creasing need for richer and more interactive media types.We investigate innovative forms of organising, visualising and navigating presentations. This includes the introduction of a new document format supporting the integration or transclusion of content from different presentations and cross-media sources as well as the non-linear navigation of presen- tations.We present MindXpres, a web technology-based extensible plat- form for content-driven cross-media presentations. The modular architec- ture and plug-in mechanism of MindXpres enable the reuse or integration of new visualisation and interaction components. Our MindXpres pro- totype forms a platform for the exploration and rapid prototyping of innovative concepts for presentation tools. Its support for multi-device user interfaces further enables an active participation of the audience which should ultimately result in more dynamic, engaging presentations and improved knowledge transfer. Keywords:",
+            "createdDate": "Nov 27, 2015 3:58:47 PM",
+            "datatype": "Publication",
+            "id": "9ce3f516-f6f3-33ea-a6fc-932496ac028b",
+            "keywords": [
+                "cross-media transclusion",
+                "mindxpres",
+                "non-linear",
+                "slideware"
+            ],
+            "kind": "Digital",
+            "tasks": [],
+            "title": "MindXpres: An Extensible Content-driven Cross-Media Presentation Platform"
+        },
+        {
+            "authors": [
+                "Daniel Sui"
+            ],
+            "content": "The field of GIS (S for Systems, Sciences, Services, and Studies) is at a cross-road in the early 2010s. Aiming to link the multiple visions for the next phase of GIS development, this article suggests that the emerging open GIS should serve as a guiding concept. Contextualized in the broader literature of open science, this article proposes open GIS should include eight dimensions related to data, software, hardware, standards, research, publication, funding, and education. For the GIS community, open GIS offers four exciting opportunities: (1) technology-driven opportunities for addressing challenges posed by the (spatial) big data deluge; (2) application-led opportunities for confronting the problems of a rapidly changing planet; (3) curiosity-inspired, crowd-powered opportunities for the development of an open and geographic citizen science; and (4) education-focused opportunities for implementing the vision of a spatial university. Although there are academic, legal, social/political, and environmental impediments for the practice of open GIS, open GIS will become increasingly important in shaping our research and educational agendas in the future.",
+            "createdDate": "Nov 27, 2015 3:58:47 PM",
+            "datatype": "Publication",
+            "id": "fdf38c41-d7e6-3c28-bfc2-84eda9fefcd9",
+            "kind": "Digital",
+            "tasks": [
+                "Paper writing",
+                "Thesis work"
+            ],
+            "title": "Opportunities and impediments for open GIS"
+        },
+        {
+            "authors": [
+                "Nicholas Chen",
+                "Fran\u00c3\u0192\u00c2\u00a7ois Guimbreti\u00c3\u0192\u00c2\u00a8re",
+                "Abigail Sellen"
+            ],
+            "content": "In laboratory studies, multi-surface slate-based reading sys- tems have shown great promise as platforms for active reading. However, the true utility of such a system can only be ascertained through the rigors of real world use. We conducted month-long deployments of a multi-slate reading system to support the active reading activities of graduate students in the humanities. During these deployments we documented how the added display area and increased mi- cro-mobility of multiple devices enhanced navigation and reading comfort. We also noted the essential role of writing and annotation. Finally, we observed how electronic affor- dances like synchronization across devices helped provide functionality that would not have been possible with paper documents. This paper contributes new information about how electronic reading solutions fit into real world reading workflows.",
+            "createdDate": "Nov 27, 2015 3:58:47 PM",
+            "datatype": "Publication",
+            "id": "d485e0d7-de2e-3cb9-bf5b-79a96e998f83",
+            "keywords": [
+                "academia",
+                "deployment",
+                "e-book",
+                "e-reading",
+                "graduate students",
+                "multi-screen computing",
+                "multi-slate",
+                "reading",
+                "tablet"
+            ],
+            "kind": "Digital",
+            "tasks": [
+                "Paper writing"
+            ],
+            "title": "Graduate student use of a multi-slate reading system"
+        },
+        {
+            "authors": [
+                "Ruopeng Lu",
+                "Shazia Sadiq"
+            ],
+            "content": "Variance in business process execution can be the result of several situations, such as disconnection between documented models and business operations, workarounds in spite of process execution engines, dynamic change and exception handling, flexible and ad-hoc approaches, and collaborative and/or knowledge intensive work. It is imperative that effective support for managing process variance be extended to organizations mature in their BPM (Business Process Management) uptake so that they can ensure organization wide consistency, promote reuse and capitalize on their BPM investments. Process variants are complex objects that contain features of different dimensions, such as variant design or variant execution data. This paper provides a technique for effective utilization of the adaptations manifested in process variants. In particular, we will present a facility for discovery of preferred variants through effective search and retrieval based on the notion of process similarity, where multiple aspects of the process variants are compared according to specific query requirements. The major advantage of this approach is the ability to provide a quantitative measure for the similarity between process variants, which further facilitates various BPM activities such as process reuse, analysis and discovery.",
+            "createdDate": "Nov 27, 2015 3:58:47 PM",
+            "datatype": "Publication",
+            "id": "95a6e689-3c4c-3f4a-bdf8-79907dbd1c98",
+            "kind": "Digital",
+            "tasks": [
+                "Next Generation UI project",
+                "Thesis work"
+            ],
+            "title": "Conceptual Modeling - ER 2007"
+        },
+        {
+            "authors": [
+                "Sandra Trullemans",
+                "Beat Signer"
+            ],
+            "content": "The efficient management of our daily information in phys- ical and digital information spaces is a well-known prob- lem. Current research on personal information manage- ment (PIM) aims to understand and improve organisational and re-finding activities. We present a case study about organisational strategies in cross-media information spaces, consisting of physical as well as digital information. In con- trast to existing work, we provide a unified view on organi- sational strategies and investigate how re-finding cues differ across the physical and digital space. We further introduce a new mixing organisational strategy which is used in addi- tion to the well-known filing and piling strategies. Last but not least, based on the results of our study we discuss op- portunities and pitfalls for future descriptive PIM research and outline some directions for future PIM system design. Categories",
+            "createdDate": "Nov 27, 2015 3:58:47 PM",
+            "datatype": "Publication",
+            "id": "4c9fc040-ca4f-38a8-955b-d8205dd63b88",
+            "keywords": [
+                "cross-media information spaces",
+                "definition of files",
+                "mixing",
+                "organisational strategies",
+                "personal information management",
+                "piles",
+                "pim"
+            ],
+            "kind": "Digital",
+            "tasks": [
+                "Next Generation UI project"
+            ],
+            "title": "From User Needs to Opportunities in Personal Information Management: A Case Study on Organisational Strategies in Cross-Media Information Spaces"
+        },
+        {
+            "authors": [
+                "Bruno Dumas",
+                "Bram Moerman",
+                "Sandra Trullemans",
+                "Beat Signer"
+            ],
+            "content": "We present ArtVis, an application combining advanced visualisation techniques and tangible interaction to explore a large digital collection of almost 28 000 European artworks managed by the Web Gallery of Art. In order to get new insights by exploring",
+            "createdDate": "Nov 27, 2015 3:58:47 PM",
+            "datatype": "Publication",
+            "id": "2e0784ef-85be-3320-b7aa-88090959d8e2",
+            "keywords": [
+                "action",
+                "artvis",
+                "artwork explorer",
+                "categories and subject descriptors",
+                "faceted browsing",
+                "information visualisation",
+                "tangible inter-"
+            ],
+            "kind": "Digital",
+            "tasks": [
+                "Next Generation UI project"
+            ],
+            "title": "ArtVis : Combining Advanced Visualisation and Tangible Interaction for the Exploration , Analysis and Browsing of Digital Artwork Collections"
+        },
+        {
+            "authors": [
+                "Bruno Dumas",
+                "Bram Moerman",
+                "Sandra Trullemans",
+                "Beat Signer"
+            ],
+            "content": "We present ArtVis, an advanced user interface combining state- of-the-art visualisation techniques and tangible interaction to ex- plore the Web Gallery of Art digital artwork collection consisting of almost 28 000 European artworks. The graphical ArtVis inter- face contains three separate visualisation panels that allow users to temporally, semantically and geographically investigate the dig- ital artwork collection. The goal of ArtVis is that users can gain new insights by visually analysing and exploring a large data set rather than to only provide detailed information about individual artworks. This explorative ArtVis interaction style is further fos- tered by a tangible user interface where physical artefacts can be used as simple handles to drive the faceted browsing of the rich digital information space.",
+            "createdDate": "Nov 27, 2015 3:58:47 PM",
+            "datatype": "Publication",
+            "id": "8064f0d9-e12c-301e-88d1-d22969b6c573",
+            "keywords": [
+                "ArtVis",
+                "Artwork Explorer",
+                "Faceted Browsing",
+                "Information Visualisation",
+                "Tangible Interaction",
+                "action",
+                "artvis",
+                "artwork explorer",
+                "faceted browsing",
+                "figure 1",
+                "graphical artvis user interface",
+                "information visualisation",
+                "tangible inter-"
+            ],
+            "kind": "Digital",
+            "tasks": [],
+            "title": "An Advanced User Interface for Exploring , Analysing and Browsing Digital Artwork Collections"
+        },
+        {
+            "authors": [
+                "Nava Tintarev",
+                "Judith Masthoff"
+            ],
+            "content": "The collaborative filtering (CF) approach to recommenders has recently enjoyed much interest and progress. The fact that it played a central role within the recently completed Netflix competition has contributed to its popularity. This chapter surveys the recent progress in the field. Matrix factorization techniques, which became a first choice for implementing CF, are described together with recent innovations. We also describe several extensions that bring competitive accuracy into neighborhood methods, which used to dominate the field. The chapter demonstrates how to utilize temporal models and implicit feedback to extend models accuracy. In passing, we include detailed descriptions of some the central methods developed for tackling the challenge of the Netflix Prize competition.",
+            "createdDate": "Nov 27, 2015 3:58:47 PM",
+            "datatype": "Publication",
+            "id": "2cf51d10-3caf-3a79-8169-5238741cb7c1",
+            "kind": "Digital",
+            "tasks": [],
+            "title": "Recommender Systems Handbook"
+        },
+        {
+            "authors": [
+                "Vincenzo Suraci",
+                "Vincenzo Suraci",
+                "Silvano Mignanti",
+                "Silvano Mignanti",
+                "Augusto Silvani",
+                "Augusto Silvani",
+                "Massimiliano Tamburriello",
+                "Massimiliano Tamburriello"
+            ],
+            "createdDate": "Nov 27, 2015 3:58:47 PM",
+            "datatype": "Publication",
+            "id": "c68e44e2-a56b-3585-8269-34ead694e253",
+            "kind": "Digital",
+            "tasks": [],
+            "title": "Context-awareness in Content Discovery architectures"
+        },
+        {
+            "authors": [
+                "Rachid Benlamri",
+                "Xiaoyun Zhang"
+            ],
+            "createdDate": "Nov 27, 2015 3:58:47 PM",
+            "datatype": "Publication",
+            "id": "5eadb5fa-6892-334f-b369-c54d2468e167",
+            "keywords": [
+                "Context modeling and management",
+                "Mobile learning",
+                "Ontology design",
+                "Semantic web",
+                "Ubiquitous learning",
+                "context modeling and management",
+                "mobile learning",
+                "ontology design",
+                "semantic web",
+                "ubiquitous learning"
+            ],
+            "kind": "Digital",
+            "tasks": [],
+            "title": "Context-aware recommender for mobile learners"
+        },
+        {
+            "authors": [
+                "Tom Broens",
+                "Stanislav Pokraev",
+                "Marten Sinderen",
+                "Johan Koolwaaij",
+                "Patricia Dockhorn Costa"
+            ],
+            "content": "Service discovery is a process of locating, or discovering, one or more documents, that describe a particular service. Most of the current service discovery approaches perform syntactic matching, that is, they retrieve services descriptions that contain particular keywords from the user\u00c3\u00a2\u00c2\u20ac\u00c2\u2122s query. This often leads to poor discovery results, because the keywords in the query can be semantically similar but syntactically different, or syntactically similar but semantically different from the terms in a service description. Another drawback of the existing service discovery mechanisms is that the query-service matching score is calculated taking into account only the keywords from the user\u00c3\u00a2\u00c2\u20ac\u00c2\u2122s query and the terms in the service descriptions. Thus, regardless of the context of the service user and the context of the services providers, the same list of results is returned in response to a particular query. This paper presents a novel approach for service discovery that uses ontologies to capture the semantics of the user\u00c3\u00a2\u00c2\u20ac\u00c2\u2122s query, of the services and of the contextual information that is considered relevant in the matching process.",
+            "createdDate": "Nov 27, 2015 3:58:47 PM",
+            "datatype": "Publication",
+            "id": "42082304-9b26-3f73-ba86-49cd129a23c6",
+            "kind": "Digital",
+            "tasks": [],
+            "title": "Context-Aware, Ontology-Based Service Discovery"
+        },
+        {
+            "authors": [
+                "G Kembellec",
+                "G Chartron",
+                "I Saleh"
+            ],
+            "createdDate": "Nov 27, 2015 3:58:47 PM",
+            "datatype": "Publication",
+            "id": "6925817d-682f-36a5-af59-6c782297d88f",
+            "kind": "Digital",
+            "tasks": [],
+            "title": "Recommender Systems"
+        },
+        {
+            "authors": [
+                "Tom Broens"
+            ],
+            "createdDate": "Nov 27, 2015 3:58:47 PM",
+            "datatype": "Publication",
+            "id": "d3214b35-7844-363f-a880-627f39d9fb76",
+            "kind": "Digital",
+            "tasks": [],
+            "title": "Context-aware, Ontology based, Semantic Service Discovery"
+        },
+        {
+            "authors": [
+                "G Kembellec",
+                "G Chartron",
+                "I Saleh"
+            ],
+            "createdDate": "Nov 27, 2015 3:58:47 PM",
+            "datatype": "Publication",
+            "id": "f8ce5531-d8b6-3c07-aa24-57ff92b2e30f",
+            "kind": "Digital",
+            "tasks": [],
+            "title": "Recommender Systems"
+        },
+        {
+            "authors": [
+                "Linas Baltrunas",
+                "Bernd Ludwig",
+                "Francesco Ricci"
+            ],
+            "content": "Research on context aware recommender systems is taking for granted that context matters. But, often attempts to show the influence of context have failed. In this paper we consider the problem of quantitatively assessing context relevance. For this purpose we are assuming that users can imagine a situation described by a contextual feature, and judge if this feature is relevant for their decision making task. We have designed a UI suited for acquiring such information in a travel planning scenario. In fact, this interface is generic and can also be used for other domains (e.g., music). The experimental results show that it is possible to identify the contextual factors that are relevant for the given task and that the relevancy depends on the type of the place of interest to be included in the plan.",
+            "createdDate": "Nov 27, 2015 3:58:47 PM",
+            "datatype": "Publication",
+            "id": "524d511b-c2a2-3410-a962-979a38499ae4",
+            "keywords": [
+                "Algorithms",
+                "Experimentation",
+                "Human Factors",
+                "Information Filtering"
+            ],
+            "kind": "Digital",
+            "tasks": [],
+            "title": "Context relevance assessment for recommender systems"
+        },
+        {
+            "authors": [
+                "Linas Baltrunas",
+                "Bernd Ludwig",
+                "Stefan Peer",
+                "Francesco Ricci"
+            ],
+            "content": "In order to generate relevant recommendations, a context-aware recommender system (CARS) not only makes use of user preferences, but also exploits information about the specific contextual situation in which the recommended item will be consumed. For instance, when recommending a holiday destination, a CARS could take into account whether the trip will happen in summer or winter. It is unclear, however, which contextual factors are important and to which degree they influence user ratings. A large amount of data and complex context-aware predictive models must be exploited to understand these relationships. In this paper, we take a new approach for assessing and modeling the relationship between contextual factors and item ratings. Rather than using the traditional approach to data collection, where recommendations are rated with respect to real situations as participants go about their lives as normal, we simulate contextual situations to more easily capture data regarding how the context influences user ratings. To this end, we have designed a methodology whereby users are asked to judge whether a contextual factor (e.g., season) influences the rating given a certain contextual condition (e.g., season is summer). Based on the analyses of these data, we built a context-aware mobile recommender system that utilizes the contextual factors shown to be important. In a subsequent user evaluation, this system was preferred to a similar variant that did not exploit contextual information.",
+            "createdDate": "Nov 27, 2015 3:58:47 PM",
+            "datatype": "Publication",
+            "id": "e6ba38cf-6d6f-3870-af95-4a6970b9548f",
+            "keywords": [
+                "Collaborative filtering",
+                "Context",
+                "Mobile applications",
+                "Recommender system",
+                "User study"
+            ],
+            "kind": "Digital",
+            "tasks": [],
+            "title": "Context relevance assessment and exploitation in mobile recommender systems"
+        },
+        {
+            "authors": [
+                "Lora Aroyo",
+                "Natalia Stash",
+                "Yiwen Wang",
+                "Peter Gorgels",
+                "Lloyd Rutledge"
+            ],
+            "content": "The main objective of the CHIP project is to demonstrate how Semantic Web technologies can be deployed to provide personalized access to digital museum collections. We illustrate our approach with the digital database ARIA of the Rijksmuseum Amsterdam. For the semantic enrichment of the Rijksmuseum ARIA database we collaborated with the CATCH STITCH project to produce mappings to Iconclass, and with the MultimediaN E-culture project to produce the RDF/OWL of the ARIA and Adlib databases. The main focus of CHIP is on exploring the potential of applying adaptation techniques to provide personalized experience for the museum visitors both on the Web site and in the museum.",
+            "createdDate": "Nov 27, 2015 3:58:47 PM",
+            "datatype": "Publication",
+            "id": "be635bde-38f8-3a1b-8cb9-f970475faa28",
+            "kind": "Digital",
+            "tasks": [],
+            "title": "CHIP demonstrator: Semantics-driven recommendations and museum tour generation"
+        },
+        {
+            "authors": [
+                "Guus Schreiber",
+                "Alia Amin",
+                "Lora Aroyo",
+                "Mark van Assem",
+                "Victor de Boer",
+                "Lynda Hardman",
+                "Michiel Hildebrand",
+                "Borys Omelayenko",
+                "Jacco van Osenbruggen",
+                "Anna Tordai",
+                "Jan Wielemaker",
+                "Bob Wielinga"
+            ],
+            "createdDate": "Nov 27, 2015 3:58:47 PM",
+            "datatype": "Publication",
+            "id": "c39416ea-008d-341d-bf66-eb03eaf5535b",
+            "keywords": [
+                "-based queries of the",
+                "all representing potential semantic",
+                "all software is based",
+                "and is already being",
+                "clusters",
+                "css",
+                "currently 20 m triples",
+                "graph",
+                "in particular html",
+                "matches of the original",
+                "on established web standards",
+                "owl",
+                "query",
+                "rdf",
+                "result",
+                "resulting in semantically grouped",
+                "s",
+                "scenario",
+                "search",
+                "software is open source",
+                "sparql and",
+                "the annotation and search",
+                "used by third parties",
+                "we show two sample",
+                "xml"
+            ],
+            "kind": "Digital",
+            "tasks": [],
+            "title": "Semantic annotation and search of cultural-heritage collections: The MultimediaN E-Culture demonstrator"
+        },
+        {
+            "authors": [
+                "Yiwen Wang",
+                "Natalia Stash",
+                "Lora Aroyo",
+                "Peter Gorgels",
+                "Lloyd Rutledge",
+                "Guus Schreiber"
+            ],
+            "createdDate": "Nov 27, 2015 3:58:47 PM",
+            "datatype": "Publication",
+            "id": "1b13ac94-98b1-3b2d-9553-62ba11ea291d",
+            "kind": "Digital",
+            "tasks": [],
+            "title": "Recommendations based on semantically enriched museum collections"
+        },
+        {
+            "authors": [
+                "Pia Borlund"
+            ],
+            "createdDate": "Nov 27, 2015 3:58:47 PM",
+            "datatype": "Publication",
+            "id": "ffa8f3ed-7477-394f-a623-9287a60d4562",
+            "kind": "Digital",
+            "tasks": [],
+            "title": "The concept of relevance in information retrieval"
+        },
+        {
+            "authors": [
+                "Ross McKerlich",
+                "Cindy Ives",
+                "Rory McGreal"
+            ],
+            "content": "(Open Nottingham OER report; survey of 51 undergraduates' use of OER.)",
+            "createdDate": "Nov 27, 2015 3:58:47 PM",
+            "datatype": "Publication",
+            "id": "6569df9d-1983-3f7f-a275-d8d63c8c50be",
+            "keywords": [
+                "OER",
+                "Open educational resources",
+                "Open learning",
+                "Open textbooks"
+            ],
+            "kind": "Digital",
+            "tasks": [],
+            "title": "Measuring use and creation of open educational resources in higher education"
+        },
+        {
+            "authors": [
+                "Ross McKerlich",
+                "Cindy Ives",
+                "Rory McGreal"
+            ],
+            "content": "(Open Nottingham OER report; survey of 51 undergraduates' use of OER.)",
+            "createdDate": "Nov 27, 2015 3:58:47 PM",
+            "datatype": "Publication",
+            "id": "f17b2a58-adcb-3345-9740-4c2661185b20",
+            "keywords": [
+                "OER",
+                "Open educational resources",
+                "Open learning",
+                "Open textbooks"
+            ],
+            "kind": "Digital",
+            "tasks": [],
+            "title": "Measuring use and creation of open educational resources in higher education"
+        },
+        {
+            "authors": [
+                "Antonina Danylenko"
+            ],
+            "createdDate": "Nov 27, 2015 3:58:47 PM",
+            "datatype": "Publication",
+            "id": "09f1370e-fa5d-3b3b-a2d0-d6be07a681fc",
+            "keywords": [
+                "-context-aware recommender systems",
+                "context-aware composition",
+                "functional requirements",
+                "non-"
+            ],
+            "kind": "Digital",
+            "tasks": [],
+            "title": "Context-Aware Recommender Systems for Non-functional Requirements"
+        },
+        {
+            "authors": [
+                "Saul Vargas",
+                "Pablo Castells",
+                "David Vallet"
+            ],
+            "content": "Diversity as a relevant dimension of retrieval quality is receiving increasing attention in the Information Retrieval and Recommender Systems (RS) fields. The problem has nonetheless been approached under different views and formulations in IR and RS respectively, giving rise to different models, methodologies, and metrics, with little convergence between both fields. In this poster we explore the adaptation of diversity metrics, techniques, and principles from ad-hoc IR to the recommendation task, by introducing the notion of user profile aspect as an analogue of query intent. As a particular approach, user aspects are automatically extracted from latent item features. Empirical results support the proposed approach and provide further insights.",
+            "createdDate": "Nov 27, 2015 3:58:47 PM",
+            "datatype": "Publication",
+            "id": "076b81e1-a9ca-3a41-939a-b36bac26f82d",
+            "keywords": [
+                "-information retrieval",
+                "diversity",
+                "document similarity",
+                "recommender system"
+            ],
+            "kind": "Digital",
+            "tasks": [],
+            "title": "Intent-oriented Diversity in Recommender Systems"
+        },
+        {
+            "authors": [
+                "Jaewon Choi",
+                "Hong Joo Lee",
+                "Farhana Sajjad",
+                "Habin Lee"
+            ],
+            "createdDate": "Nov 27, 2015 3:58:47 PM",
+            "datatype": "Publication",
+            "id": "d93c7702-4a68-3050-b0ed-b70da65ba15a",
+            "keywords": [
+                "Cross-cultural research",
+                "Mobile recommender system",
+                "Theory of reasoned action",
+                "User attitude",
+                "mobile recommender system",
+                "theory of reasoned action"
+            ],
+            "kind": "Digital",
+            "tasks": [],
+            "title": "The influence of national culture on the attitude towards mobile recommender systems"
+        },
+        {
+            "authors": [
+                "Jobin Wilson",
+                "Santanu Chaudhury",
+                "Brejesh Lall"
+            ],
+            "content": "Standard Collaborative Filtering (CF) algorithms make use of interactions between users and items in the form of implicit or explicit ratings alone for generating recommendations. Similarity among users or items is calculated purely based on rating overlap in this case,without considering explicit properties of users or items involved, limiting their applicability in domains with very sparse rating spaces. In many domains such as movies, news or electronic commerce recommenders, considerable contextual data in text form describing item properties is available along with the rating data, which could be utilized to improve recommendation quality.In this paper, we propose a novel approach to improve standard CF based recommenders by utilizing latent Dirichlet allocation (LDA) to learn latent properties of items, expressed in terms of topic proportions, derived from their textual description. We infer user's topic preferences or persona in the same latent space,based on her historical ratings. While computing similarity between users, we make use of a combined similarity measure involving rating overlap as well as similarity in the latent topic space. This approach alleviates sparsity problem as it allows calculation of similarity between users even if they have not rated any items in common. Our experiments on multiple public datasets indicate that the proposed hybrid approach significantly outperforms standard user Based and item Based CF recommenders in terms of classification accuracy metrics such as precision, recall and f-measure.",
+            "createdDate": "Nov 27, 2015 3:58:47 PM",
+            "datatype": "Publication",
+            "id": "10251a8e-b224-3b03-b2ee-28bff7b110b3",
+            "kind": "Digital",
+            "tasks": [],
+            "title": "Improving Collaborative Filtering Based Recommenders Using Topic Modelling"
+        },
+        {
+            "authors": [
+                "Salma Noor",
+                "Kirk Martinez"
+            ],
+            "content": "Web-based knowledge systems support an impressive and growing amount of information. Among the difficulties faced by these systems is the problem of overwhelming the user with a vast amount of data, often referred to as information overload. The problem has escalated with the ever increasing issues of time constraints and the extensive use of handheld devices. The use of context is one possible way out helping with this situation. To provide a more robust approach to context gathering we propose the use of Social Web technologies alongside the Semantic Web. As the social web is heavily used it could provide a better understanding of a user\u00c3\u00a2\u00c2\u20ac\u00c2\u2122s interests and intentions. The proposed system gathers information about users from their social web identities and enriches it with ontological knowledge. Thus an interest model for the user can be created which can serve as a good source of contextual knowledge. This work bridges the gap between the user and system searches by analyzing the virtual existence of a user and making interesting recommendations accordingly.",
+            "createdDate": "Nov 27, 2015 3:58:47 PM",
+            "datatype": "Publication",
+            "id": "b3e80387-467d-3e0f-b8b8-5708f62fbdb4",
+            "keywords": [
+                "Context",
+                "Cultural Heritage",
+                "Ontologies",
+                "Recommender Systems",
+                "Semantic Web",
+                "Web 2.0",
+                "linked data",
+                "tagging",
+                "user interest modeling"
+            ],
+            "kind": "Digital",
+            "tasks": [],
+            "title": "Using Social Data as Context for Making Recommendations : An Ontology based Approach"
+        },
+        {
+            "authors": [
+                "Massimiliano Albanese",
+                "Antonio D'Acierno",
+                "Vincenzo Moscato",
+                "Fabio Persia",
+                "Antonio Picariello"
+            ],
+            "content": "One of the most important challenge in the information access field is information overload. To cope with this problem, in this paper, we present a strategy for a semantic multimedia recommender system that computes customized recommendations using semantic contents and low-level features of multimedia objects, past behavior of individual users and behavior of the users' community as a whole. We have implemented a recommender prototype for browsing the Uffizi Gallery digital picture collection. Then, we investigated the effectiveness of the proposed approach, based on the users satisfaction. The obtained preliminary experimental results show that our approach is quite promising and encourages further research in this direction.",
+            "createdDate": "Nov 27, 2015 3:58:47 PM",
+            "datatype": "Publication",
+            "id": "f426b571-19ac-305f-b9f4-feb64852701f",
+            "kind": "Digital",
+            "tasks": [],
+            "title": "A multimedia semantic recommender system for cultural heritage applications"
+        },
+        {
+            "authors": [
+                "Yiwen Wang",
+                "Natalia Stash",
+                "Lora Aroyo",
+                "Laura Hollink",
+                "A.Th. Schreiber"
+            ],
+            "createdDate": "Nov 27, 2015 3:58:47 PM",
+            "datatype": "Publication",
+            "id": "4c89a379-961a-356a-b169-15b6b8a26e7b",
+            "kind": "Digital",
+            "tasks": [],
+            "title": "Using Semantic Relations for Content-based Recommender Systems in Cultural Heritage"
+        },
+        {
+            "authors": [
+                "Cataldo Musto",
+                "Fedelucio Narducci",
+                "Pasquale Lops",
+                "Marco De Gemmis",
+                "Giovanni Semeraro"
+            ],
+            "content": "Throughout the last decade, the area of Digital Libraries (DL) get more and more interest from both the research and development communities. Likewise, since the release of new platforms enriches them with new features and makes DL more powerful and effective, the number of web sites integrating these kind of tools is rapidly growing. In this paper we propose an approach for the exploitation of digital libraries for personalization goal in cultural heritage scenario. Specifically, we tried to integrate FIRSt (Folksonomy-based Item Recommender syStem), a content-based recommender system developed at the University of Bari, and Fedora, a flexible digital library architecture, in a framework for the adaptive fruition of cultural heritage implemented within the activities of the CHAT research project. In this scenario, the role of the digital library was to store information (such as textual and multimedial ones) about paintings gathered from the Vatican Picture Gallery and to provide them in a multimodal and personalized way through a PDA device given to a user before her visit in a museum. This paper describes the system architecture of our recommender system and its integration in the framework implemented for the CHAT project, showing how this recommendation model has been applied to recommend the artworks located at the Vatican Picture Gallery (Pinacoteca Vaticana), providing users with a personalized museum tour tailored on their tastes. The experimental evaluation we performed also confirmed that these recommendation services are really able to catch the real user preferences thus improving their experience in cultural heritage fruition. &copy; 2010 Springer-Verlag.",
+            "createdDate": "Nov 27, 2015 3:58:47 PM",
+            "datatype": "Publication",
+            "id": "f6f5b361-1a6f-309d-b451-54453da2ac63",
+            "keywords": [
+                "Classification (of information);Integration;Learni"
+            ],
+            "kind": "Digital",
+            "tasks": [],
+            "title": "Integrating a content-based recommender system into digital libraries for cultural heritage"
+        },
+        {
+            "authors": [
+                "N Davies",
+                "K Cheverst",
+                "K Mitchell",
+                "A Efrat"
+            ],
+            "createdDate": "Nov 27, 2015 3:58:47 PM",
+            "datatype": "Publication",
+            "id": "42037da2-6eb5-3f36-90c3-9a30bd01359f",
+            "kind": "Digital",
+            "tasks": [],
+            "title": "Using and Determining Location in a Context-Sensitive Tour Guide: The GUIDE Experience"
+        },
+        {
+            "authors": [
+                "Gediminas Adomavicius",
+                "Ramesh Sankaranarayanan",
+                "Shahana Sen",
+                "Alexander Tuzhilin"
+            ],
+            "content": "The article presents a multidimensional (MD) approach to recommender systems that can provide recommendations based on additional contextual information besides the typical information on users and items used in most of the current recommender systems. This approach supports multiple dimensions, profiling information, and hierarchical aggregation of recommendations. The article also presents a multidimensional rating estimation method capable of selecting two-dimensional segments of ratings pertinent to the recommendation context and applying standard collaborative filtering or other traditional two-dimensional rating estimation techniques to these segments. A comparison of the multidimensional and two-dimensional rating estimation approaches is made, and the tradeoffs between the two are studied. Moreover, the article introduces a combined rating estimation method, which identifies the situations where the MD approach outperforms the stan- dard two-dimensional approach and uses the MD approach in those situations and the standard two-dimensional approach elsewhere. Finally, the article presents a pilot empirical study of the combined approach, using a multidimensional movie recommender system that was developed for implementing this approach and testing its performance.",
+            "createdDate": "Nov 27, 2015 3:58:47 PM",
+            "datatype": "Publication",
+            "id": "d041850b-3b42-364d-afd5-b7366fbfef1b",
+            "kind": "Digital",
+            "tasks": [],
+            "title": "Incorporating contextual information in recommender systems using a multidimensional approach"
+        },
+        {
+            "authors": [
+                "Andreas Lommatzsch"
+            ],
+            "createdDate": "Nov 27, 2015 3:58:47 PM",
+            "datatype": "Publication",
+            "id": "13e44387-50e4-30f9-990e-f89abd552484",
+            "keywords": [
+                "context-aware",
+                "online evaluation",
+                "real-time recommendations"
+            ],
+            "kind": "Digital",
+            "tasks": [],
+            "title": "Real-Time News Recommendation Using Context-Aware Ensembles"
+        },
+        {
+            "authors": [
+                "Shaoqing Wang",
+                "Benyou Zou",
+                "Cuiping Li",
+                "Kankan Zhao",
+                "Qiang Liu",
+                "Hong Chen"
+            ],
+            "createdDate": "Nov 27, 2015 3:58:47 PM",
+            "datatype": "Publication",
+            "id": "8270c4d0-82f6-3461-8d93-6d8d3eb2f455",
+            "keywords": [
+                "[Electronic Manuscript]"
+            ],
+            "kind": "Digital",
+            "tasks": [],
+            "title": "CROWN : A Context-Aware Recommender for Web News"
+        },
+        {
+            "authors": [
+                "I. Cantador",
+                "a. Bellogin",
+                "P. Castells"
+            ],
+            "content": "News@hand is a news recommender system that makes use of semantic technologies to provide several on-line news recommendation services. News contents and user preferences are described in terms of concepts appearing in a set of domain ontologies. Based on the similarities between item descriptions and user profiles, and the se-mantic relations between concepts, content-based and collaborative recommendation models are supported by the system. In this paper, we evaluate a model that personalizes the order in which news articles are shown to the user according to his long-term interest profile, and other model that reorders the news items lists taking into account the current semantic context of interest of the user. The combination of those models is investigated showing significant improvements on the experimental tasks performed.",
+            "createdDate": "Nov 27, 2015 3:58:47 PM",
+            "datatype": "Publication",
+            "id": "26c276c8-11fb-34ae-9337-2071141a9003",
+            "keywords": [
+                "context",
+                "ontology",
+                "recommender systems",
+                "semantic web",
+                "user modelling"
+            ],
+            "kind": "Digital",
+            "tasks": [],
+            "title": "Ontology-Based Personalised and Context-Aware Recommendations of News Items"
+        },
+        {
+            "authors": [
+                "Aaron Beach",
+                "Mike Gartrell",
+                "Xinyu Xing",
+                "Richard Han",
+                "Qin Lv",
+                "Shivakant Mishra",
+                "Karim Seada"
+            ],
+            "content": "In this paper, we identify mobile social networks as an important new direction of research in mobile computing, and show how an expanded definition of mobile social networks that includes sensor networks can enable exciting new context-aware applications, such as context-aware video screens, music jukeboxes, and mobile health applications. We offer SocialFusion as a system capable of systematically integrating such diverse mobile, social, and sensing input streams and effectuating the appropriate context-aware output action. We explain some of the major challenges that SocialFusion must overcome. We describe some preliminary results that we have obtained in implementing the SocialFusion vision.",
+            "createdDate": "Nov 27, 2015 3:58:47 PM",
+            "datatype": "Publication",
+            "id": "234d1262-12d0-3fdd-89b1-c8a2beb92ade",
+            "kind": "Digital",
+            "tasks": [],
+            "title": "Fusing Mobile, Sensor, and Social Data To Fully Enable Context-Aware Computing"
+        },
+        {
+            "authors": [
+                "Umberto Panniello",
+                "Michele Gorgoglione"
+            ],
+            "content": "Recently, there has been growing interest in recommender systems (RSs) and particularly in context-aware RSs. Methods for generating context-aware recommendations were classified into the pre-filtering, post-filtering and contextual modeling approaches. This paper focuses on comparing the pre-filtering, the post-filtering, the contextual modeling and the un-contextual approaches and on identifying which method dominates the others and under which circumstances. Although some of these methods have been studied independently, no prior research compared the relative performance to determine which of them is better. This paper proposes an effective method of comparing the three methods to incorporate context and selecting the best alternatives. As a result, it provides analysts with a practical suggestion on how to pick a good approach in an effective manner to improve the performance of a context-aware recommender system.",
+            "createdDate": "Nov 27, 2015 3:58:47 PM",
+            "datatype": "Publication",
+            "id": "1918eabd-17be-3ba4-a309-cea46c98869e",
+            "keywords": [
+                "Algorithms",
+                "Collaborative filtering",
+                "Context-aware",
+                "Recommender systems"
+            ],
+            "kind": "Digital",
+            "tasks": [],
+            "title": "Incorporating context into recommender systems: An empirical comparison of context-based approaches"
+        },
+        {
+            "authors": [
+                "Cosimo Palmisano",
+                "Alexander Tuzhilin",
+                "Michele Gorgoglione"
+            ],
+            "content": "The idea that context is important when predicting customer behavior has been maintained by scholars in marketing and data mining. However, no systematic study measuring how much the contextual information really matters in building customer models in personalization applications has been done before. In this paper, we study how important the contextual information is when predicting customer behavior and how to use it when building customer models. It is done by conducting an empirical study across a wide range of experimental conditions. The experimental results show that context does matter when modeling the behavior of individual customers and that it is possible to infer the context from the existing data with reasonable accuracy in certain cases. It is also shown that significant performance improvements can be achieved if the context is \"cleverly\" modeled, as described in this paper. These findings have significant implications for data miners and marketers. They show that contextual information does matter in personalization and companies have different opportunities to both make context valuable for improving predictive performance of customers' behavior and decreasing the costs of gathering contextual information.",
+            "createdDate": "Nov 27, 2015 3:58:47 PM",
+            "datatype": "Publication",
+            "id": "fc5fb3f4-2c4d-3524-87da-5af0d5cf8cd7",
+            "keywords": [
+                "Context",
+                "Data mining",
+                "Personalization",
+                "Predictive modeling",
+                "User modeling"
+            ],
+            "kind": "Digital",
+            "tasks": [],
+            "title": "Using context to improve predictive modeling of customers in personalization applications"
+        },
+        {
+            "authors": [
+                "Marius Kaminskas",
+                "Francesco Ricci"
+            ],
+            "content": "Context-aware music recommender systems are capable to suggest music items taking into consideration contextual conditions, such as the user mood or location, that may influence the user preferences at a particular moment. In this paper we consider a particular kind of context aware recommendation task\u00c3\u00a2\u00c2\u20ac\u00c2\u201dselecting music content that fits a place of interest (POI). To address this problem we have used emotional tags attached by a users\u00c3\u00a2\u00c2\u20ac\u00c2\u2122 population to both music and POIs. Moreover, we have considered a set of similarity metrics for tagged resources to establish a match between music tracks and POIs. In order to test our hypothesis, i.e., that the users will reckon that a music track suits a POI when this track is selected by our approach, we have designed a live user experiment where subjects are repeatedly presented with POIs and a selection of music tracks, some of them matching the presented POI and some not. The results of the experiment show that there is a strong overlap between the users\u00c3\u00a2\u00c2\u20ac\u00c2\u2122 selections and the best matching music that is recommended by the system for a POI. Keywords:",
+            "createdDate": "Nov 27, 2015 3:58:47 PM",
+            "datatype": "Publication",
+            "id": "c8b49e46-4a77-3e74-87ad-ebaba16b04c0",
+            "keywords": [
+                "context",
+                "emotions",
+                "location-aware",
+                "music",
+                "recommender systems",
+                "social tagging"
+            ],
+            "kind": "Digital",
+            "tasks": [],
+            "title": "Location-adapted music recommendation using tags"
+        },
+        {
+            "authors": [
+                "Linas Baltrunas",
+                "Bernd Ludwig",
+                "Francesco Ricci"
+            ],
+            "content": "Context aware recommender systems (CARS) adapt the rec- ommendations to the specific situation in which the items will be consumed. In this paper we present a novel context- aware recommendation algorithm that extends Matrix Fac- torization. We model the interaction of the contextual fac- tors with item ratings introducing additional model param- eters. The performed experiments show that the proposed solution provides comparable results to the best, state of the art, and more complex approaches. The proposed so- lution has the advantage of smaller computational cost and provides the possibility to represent at different granulari- ties the interaction between context and items. We have exploited the proposed model in two recommendation ap- plications: places of interest and music.",
+            "createdDate": "Nov 27, 2015 3:58:47 PM",
+            "datatype": "Publication",
+            "id": "83cbbd8e-a3bc-3de4-a353-3d46cf51b1ad",
+            "keywords": [
+                "collaborative filtering",
+                "context-based reasoning",
+                "matrix factorization",
+                "recommender systems"
+            ],
+            "kind": "Digital",
+            "tasks": [],
+            "title": "Matrix Factorization Techniques for Context Aware"
+        },
+        {
+            "authors": [
+                "Federica Cena",
+                "Luca Console",
+                "Cristina Gena",
+                "Anna Goy",
+                "Guido Levi",
+                "Sonia Modeo",
+                "Ilaria Torre"
+            ],
+            "createdDate": "Nov 27, 2015 3:58:47 PM",
+            "datatype": "Publication",
+            "id": "d5e6ed39-80b7-3d20-b7a7-7d66c5370399",
+            "keywords": [
+                "adaptive systems",
+                "context modeling",
+                "ubiquitous information access",
+                "user modeling"
+            ],
+            "kind": "Digital",
+            "tasks": [],
+            "title": "Federica Cena"
+        },
+        {
+            "authors": [
+                "Umberto Panniello",
+                "Alexander Tuzhilin",
+                "Michele Gorgoglione"
+            ],
+            "createdDate": "Nov 27, 2015 3:58:47 PM",
+            "datatype": "Publication",
+            "id": "e5379050-0528-3541-947a-2436ba2d52d2",
+            "keywords": [
+                "accuracy",
+                "b",
+                "cars",
+                "context-aware recommender systems",
+                "contextual modeling",
+                "department of mechanics",
+                "diversity",
+                "gorgoglione",
+                "m",
+                "management and mathematics",
+                "panniello",
+                "performance measures",
+                "politecnico di bari",
+                "post-filtering",
+                "pre-filtering",
+                "u",
+                "viale japigia 182"
+            ],
+            "kind": "Digital",
+            "tasks": [],
+            "title": "Comparing context-aware recommender systems in terms of accuracy and diversity"
+        },
+        {
+            "authors": [
+                "Jonghun Kim",
+                "Daesung Lee",
+                "Kyung Yong Chung"
+            ],
+            "createdDate": "Nov 27, 2015 3:58:47 PM",
+            "datatype": "Publication",
+            "id": "11ea5db3-c568-35de-8642-50c37057d117",
+            "keywords": [
+                "Collaborative filtering",
+                "Context-aware",
+                "Item recommendation",
+                "Personalized service",
+                "U-healthcare service"
+            ],
+            "kind": "Digital",
+            "tasks": [],
+            "title": "Item recommendation based on context-aware model for personalized u-healthcare service"
+        },
+        {
+            "authors": [
+                "Matthias Braunhofer"
+            ],
+            "createdDate": "Nov 27, 2015 3:58:47 PM",
+            "datatype": "Publication",
+            "id": "70b4b86c-4fcc-3c18-9f59-43acb59d4976",
+            "keywords": [
+                "Recommender systems",
+                "context-aware recommender system",
+                "related work",
+                "tourism"
+            ],
+            "kind": "Digital",
+            "tasks": [],
+            "title": "A Context-Aware Model for Proactive Recommender Systems in the Tourism Domain"
+        },
+        {
+            "authors": [
+                "Tim Hussein",
+                "Timm Linder",
+                "Werner Gaulke",
+                "J\u00c3\u0192\u00c2\u00bcrgen Ziegler"
+            ],
+            "createdDate": "Nov 27, 2015 3:58:47 PM",
+            "datatype": "Publication",
+            "id": "19657458-0e66-3756-87ae-a2c223776a74",
+            "kind": "Digital",
+            "tasks": [],
+            "title": "Hybreed: A software framework for developing context-aware hybrid recommender systems"
+        },
+        {
+            "authors": [
+                "AS Das",
+                "M Datar",
+                "A Garg",
+                "S Rajaram"
+            ],
+            "content": "Several approaches to collaborative filtering have been stud- ied but seldom have studies been reported for large (several million users and items) and dynamic (the underlying item set is continually changing) settings. In this paper we de- scribe our approach to collaborative filtering for generating personalized recommendations for users of Google News. We generate recommendations using three approaches: collabo- rative filtering using MinHash clustering, Probabilistic La- tent Semantic Indexing (PLSI), and covisitation counts. We combine recommendations from different algorithms using a linear model. Our approach is content agnostic and con- sequently domain independent, making it easily adaptable for other applications and languages with minimal effort. This paper will describe our algorithms and system setup in detail, and report results of running the recommendations engine on Google News.",
+            "createdDate": "Nov 27, 2015 3:58:47 PM",
+            "datatype": "Publication",
+            "id": "068cf77e-b58a-3611-8378-ecc2aa7b5a36",
+            "keywords": [
+                "google news",
+                "mapreduce",
+                "mendation system",
+                "minhash",
+                "online recom-",
+                "plsi",
+                "scalable collaborative filtering"
+            ],
+            "kind": "Digital",
+            "tasks": [],
+            "title": "Google news personalization: scalable online collaborative filtering"
+        },
+        {
+            "authors": [
+                "Pedro G. Campos",
+                "Fernando D\u00c3\u0192\u00c2\u00adez",
+                "Iv\u00c3\u0192\u00c2\u00a1n Cantador"
+            ],
+            "createdDate": "Nov 27, 2015 3:58:47 PM",
+            "datatype": "Publication",
+            "id": "b56cb155-8692-347c-b0ae-67077759b2bf",
+            "kind": "Digital",
+            "tasks": [],
+            "title": "Time-aware recommender systems: a comprehensive survey and analysis of existing evaluation protocols"
+        },
+        {
+            "authors": [
+                "Jong-yi Hong",
+                "Eui-ho Suh",
+                "Sung-Jin Kim"
+            ],
+            "createdDate": "Nov 27, 2015 3:58:47 PM",
+            "datatype": "Publication",
+            "id": "689dd120-49f5-395e-9de2-0075b074dfe5",
+            "keywords": [
+                "classification framework",
+                "context-aware systems"
+            ],
+            "kind": "Digital",
+            "tasks": [],
+            "title": "Context-aware systems: A literature review and classification"
+        },
+        {
+            "authors": [
+                "Ariel Pashtan",
+                "Remy Blattler",
+                "Andi Heusser",
+                "Peter Scheuermann"
+            ],
+            "content": "In this paper we describe our current implementation and future plans for CATIS, a context-aware tourist information system that leverages Web services and XML technologies for its implementation. We review notions of context as they relate to tourists, and provide relevant tourism scenarios that helped drive our design. Our system architecture is Web services-based and includes a context manager element that manages both dynamic and static context. The elements of context in our work are location, time of day, speed, direction of travel, personal preferences, and device type. We describe how these elements are leveraged to adapt Web-based information that is delivered to mobile tourists. Our future plans for incorporating mobility in the user\u00c3\u00a2\u00c2\u20ac\u00c2\u2122s context, and how to scale our system to support large numbers of mobile users are described as well.",
+            "createdDate": "Nov 27, 2015 3:58:47 PM",
+            "datatype": "Publication",
+            "id": "3fc24db3-92d3-373b-b6e2-07a29f47decf",
+            "kind": "Digital",
+            "tasks": [],
+            "title": "CATIS : A Context-Aware Tourist Information System"
+        },
+        {
+            "authors": [
+                "B. Schilit",
+                "N. Adams",
+                "R. Want"
+            ],
+            "content": "Describes systems that examine and react to an individual's changing context. Such systems can promote and mediate people's interactions with devices, computers and other people, and they can help navigate unfamiliar places. We believe that a limited amount of information covering a person's proximate environment is most important for this form of computing, since the interesting part of the world around us is what we can see, hear and touch. In this paper, we define context-aware computing and describe four categories of context-aware applications: proximate selection, automatic contextual reconfiguration, contextual information and commands, and content-triggered actions. Instances of these application types have been prototyped on the PARCTAB, a wireless palm-sized computer",
+            "createdDate": "Nov 27, 2015 3:58:47 PM",
+            "datatype": "Publication",
+            "id": "41fad9a4-0fa4-366c-8826-d6da82b50f32",
+            "kind": "Digital",
+            "tasks": [],
+            "title": "Context-aware computing applications"
+        },
+        {
+            "authors": [
+                "Gediminas Adomavicius",
+                "Dietmar Jannach"
+            ],
+            "createdDate": "Nov 27, 2015 3:58:47 PM",
+            "datatype": "Publication",
+            "id": "d8d244e5-6794-3da8-ae3b-2184ae6e4e50",
+            "keywords": [
+                "1 context-aware recommender systems",
+                "collaborative filtering",
+                "context-awareness",
+                "popular area of personalization",
+                "recommender systems",
+                "recommender systems represent a",
+                "technologies that"
+            ],
+            "kind": "Digital",
+            "tasks": [],
+            "title": "Preface to the special issue on context-aware recommender systems"
+        },
+        {
+            "authors": [
+                "AK Dey"
+            ],
+            "createdDate": "Nov 27, 2015 3:58:47 PM",
+            "datatype": "Publication",
+            "id": "e34121f7-eb45-3e95-b63c-a47dccb7e8d2",
+            "kind": "Digital",
+            "tasks": [],
+            "title": "Understanding and using context"
+        },
+        {
+            "authors": [
+                "Daniel Salber",
+                "Anind K. Dey",
+                "Gregory D. Abowd"
+            ],
+            "createdDate": "Nov 27, 2015 3:58:47 PM",
+            "datatype": "Publication",
+            "id": "e94cd509-90ee-3597-a203-a91ab8b03013",
+            "keywords": [
+                "an application",
+                "by the application",
+                "covers",
+                "environmental information or context",
+                "information",
+                "s operating environment and",
+                "s typically",
+                "that can be sensed",
+                "that is part of",
+                "thi"
+            ],
+            "kind": "Digital",
+            "tasks": [],
+            "title": "The Context Toolkit : Aiding the Development of Context-Enabled"
+        },
+        {
+            "authors": [
+                "Jie Lu",
+                "Dianshuang Wu",
+                "Mingsong Mao",
+                "Wei Wang",
+                "Guangquan Zhang"
+            ],
+            "content": "A recommender system aims to provide users with personalized online product or service recommendations to handle the increasing online information overload problem and improve customer relationship management. Various recommender system techniques have been proposed since the mid-1990s, and many sorts of recommender system software have been developed recently for a variety of applications. Researchers and managers recognize that recommender systems offer great opportunities and challenges for business, government, education, and other domains, with more recent successful developments of recommender systems for real-world applications becoming apparent. It is thus vital that a high quality, instructive review of current trends should be conducted, not only of the theoretical research results but more importantly of the practical developments in recommender systems. This paper therefore reviews up-to-date application developments of recommender systems, clusters their applications into eight main categories: e-government, e-business, e-commerce/e-shopping, e-library, e-learning, e-tourism, e-resource services and e-group activities, and summarizes the related recommendation techniques used in each category. It systematically examines the reported recommender systems through four dimensions: recommendation methods (such as CF), recommender systems software (such as BizSeeker), real-world application domains (such as e-business) and application platforms (such as mobile-based platforms). Some significant new topics are identified and listed as new directions. By providing a state-of-the-art knowledge, this survey will directly support researchers and practical professionals in their understanding of developments in recommender system applications.",
+            "createdDate": "Nov 27, 2015 3:58:47 PM",
+            "datatype": "Publication",
+            "id": "c7e5ec38-f478-3801-ac99-6e3e3a7268eb",
+            "keywords": [
+                "E-commerce",
+                "E-government",
+                "E-learning",
+                "E-service personalization",
+                "Recommender systems"
+            ],
+            "kind": "Digital",
+            "tasks": [],
+            "title": "Recommender System Application Developments: A Survey"
+        },
+        {
+            "authors": [
+                "William Van Woensel"
+            ],
+            "content": "Mobile devices capabilities have increased tremendously over the last few years, enabling mobile users to run resource-heavy applications, such as route planners, web browsers and games, at any time and any place. Much work has been done to facilitate interaction with mobile applications, in mobile settings and on devices with relatively small screens and cumbersome input features. For instance, multi-touch, gesture and voice recognition are deployed to easily execute certain actions, while obtrusiveness of mobile interactions is adapted to suit the user\u00c3\u00a2\u00c2\u20ac\u00c2\u2122s current situation (e.g., in a meeting). However, mobile interactions still have inherent limitations, mainly due to the fact they are mobile in the first place; mobile users often do not have the time, or the comfortable desktop-setting, to interact with mobile applications. In order to cope with such limitations, the mobile user\u00c3\u00a2\u00c2\u20ac\u00c2\u2122s context can further be leveraged. Context is defined as any piece of information related to application interaction, including information on the user\u00c3\u00a2\u00c2\u20ac\u00c2\u2122s surroundings as well as the user and device. By automatically presenting information and services suiting the user\u00c3\u00a2\u00c2\u20ac\u00c2\u2122s current context, mobile interactions can be enhanced. For example, considering the mobile user\u00c3\u00a2\u00c2\u20ac\u00c2\u2122s current surroundings and preferences, he can be notified of nearby shops selling items on his shopping list, or nearby public transportation stations leading back to his hotel. In this dissertation, we present a client-side framework to provision context in mobile settings, which exploits recent evolutions in mobile device technology and the World Wide Web. By leveraging increased mobile processing power and memory capacity, computationally intensive tasks, such as context interpretation, integration and dissemination, are performed locally on the mobile device itself. Furthermore, the machine-readable Semantic Web, the next step in the evolution of the Web, is utilized as an online platform for retrieving context data. Much useful context information, describing people, places and things in the user\u00c3\u00a2\u00c2\u20ac\u00c2\u2122s vicinity, is already captured in small, machine-readable online web sources; including websites (e.g., shops, monuments) and online RDF files (e.g., person profiles). As websites are being increasingly semantically annotated, making the meaning of their content explicit, many of them have become fully-fledged semantic data sources as well. In order to achieve transparent, integrated query access to such small online semantic sources, this dissertation further presents a mobile, client-side query service. This query service comprises indexing and caching components to enable querying such an online dataset on mobile devices.",
+            "createdDate": "Nov 27, 2015 3:58:47 PM",
+            "datatype": "Publication",
+            "id": "2d67588b-e320-37f0-97ea-fcb332c05a26",
+            "kind": "Digital",
+            "tasks": [],
+            "title": "Mobile, client-side context-provisioning via the integrated querying of online semantic web data"
+        },
+        {
+            "authors": [
+                "Zohreh Dehghani Champiri",
+                "Seyed Reza Shahamiri",
+                "Siti Salwah Binti Salim"
+            ],
+            "createdDate": "Nov 27, 2015 3:58:47 PM",
+            "datatype": "Publication",
+            "id": "edf6b35c-dcb6-3538-b38b-40f23f53d4a6",
+            "keywords": [
+                "context-aware recommender system"
+            ],
+            "kind": "Digital",
+            "tasks": [],
+            "title": "A systematic review of scholar context-aware recommender systems"
+        },
+        {
+            "authors": [
+                "Tarak Chaari and Fr\u00c3\u0192\u00c2\u00a9d\u00c3\u0192\u00c2\u00a9rique Laforest",
+                "Augusto Celentano"
+            ],
+            "createdDate": "Nov 27, 2015 3:58:47 PM",
+            "datatype": "Publication",
+            "id": "7e61e461-7b0f-364b-a593-8fd2089a4f9f",
+            "keywords": [
+                "computer applications",
+                "computing and communications",
+                "information systems",
+                "international journal of pervasive",
+                "paper type research paper"
+            ],
+            "kind": "Digital",
+            "tasks": [],
+            "title": "Adaptation in context-aware pervasive information systems: the SECAS project"
+        },
+        {
+            "authors": [
+                "Djallel Bouneffouf",
+                "Amel Bouzeghoub",
+                "Alda Lopes Gan\u00c3\u0192\u00c2\u00a7arski"
+            ],
+            "createdDate": "Nov 27, 2015 3:58:47 PM",
+            "datatype": "Publication",
+            "id": "d6a3df13-401d-3600-97bf-a48ba334ccea",
+            "keywords": [
+                "contextual bandit",
+                "exploitation dilemma",
+                "exploration",
+                "machine learning",
+                "personalization",
+                "recommender",
+                "systems"
+            ],
+            "kind": "Digital",
+            "tasks": [],
+            "title": "LNAI 7301 - Hybrid-<TEX>$\\epsilon$</TEX>-greedy for Mobile Context-Aware Recommender System"
+        },
+        {
+            "authors": [
+                "James Davidson",
+                "Blake Livingston",
+                "Dasarathi Sampath",
+                "Benjamin Liebald",
+                "Junning Liu",
+                "Palash Nandy",
+                "Taylor Van Vleet",
+                "Ullas Gargi",
+                "Sujoy Gupta",
+                "Yu He",
+                "Mike Lambert"
+            ],
+            "content": "We discuss the video recommendation system in use at YouTube, the world\u00c3\u00a2\u00c2\u20ac\u00c2\u2122s most popular online video commu- nity. The system recommends personalized sets of videos to users based on their activity on the site. We discuss some of the unique challenges that the system faces and how we address them. In addition, we provide details on the exper- imentation and evaluation framework used to test and tune new algorithms. We also present some of the findings from these experiments.",
+            "createdDate": "Nov 27, 2015 3:58:47 PM",
+            "datatype": "Publication",
+            "id": "6c92a3f6-b985-3ee1-af57-d5f5c42c18c9",
+            "kind": "Digital",
+            "tasks": [],
+            "title": "The YouTube video recommendation system"
+        },
+        {
+            "authors": [
+                "Anind K Dey",
+                "Gregory D Abowd"
+            ],
+            "content": "In biology teaching, ecological subjects play an important role in dealing with nature in a responsible way. Empirical research has shown that, even after school instruction, students do not understand essential ecological concepts. The main reason is that preconceptions which influence learning are not taken into account in the construction of curricula. We combine findings from two independently-designed studies which have their main objectives in common. In both studies the focus is on students' conceptions of ecological terms and phenomena-ecosystem, and balance-and-change in nature. The studies were conducted within the framework of Educational Reconstruction, where three components of research are linked together: 'scientific clarification', 'comprehension of students' perspectives' and 'construction of instruction'. In order to capture the structure and quality of students' conceptions, qualitative methods were used. The results of both studies indicate that students tend to refer to more or less constant properties, in particular those which are visible in the everyday world. Processes are rarely their concern. Therefore the scientific conceptions of ecosystem, imbalance and the dynamics of biodiversity would be difficult for them to understand. For a better understanding, the dimensions of both space and time should be included in curricular design.",
+            "createdDate": "Nov 27, 2015 3:58:47 PM",
+            "datatype": "Publication",
+            "id": "9344199d-f913-3f9b-872b-1967e5f5a605",
+            "kind": "Digital",
+            "tasks": [],
+            "title": "Towards a Better Understanding of Context and Context-Awareness"
+        },
+        {
+            "authors": [
+                "Mary Bazire",
+                "Patrick Br\u00c3\u0192\u00c2\u00a9zillon"
+            ],
+            "content": "This paper presents an attempt to point out some problematic issues about the understanding of context. Although frequently used in cognitive sciences or other disciplines, context stays a very ill-defined concept. Our goal is to identify the main components of the context on the basis of the analysis of a corpus of 150 definitions coming mainly from the web in different domains of cognitive sciences and close disciplines. We analyzed this corpus of definitions through two methods, namely LSA [1], [2] and STONE [3], [4], and we conclude that finally the content of all the definitions can be analyzed in terms of few parameters like constraint, influence, behavior, nature, structure and system.",
+            "createdDate": "Nov 27, 2015 3:58:47 PM",
+            "datatype": "Publication",
+            "id": "ec096156-4027-3b0f-b6b4-6f20c560ee8d",
+            "keywords": [
+                "context",
+                "contextual elements",
+                "definition"
+            ],
+            "kind": "Digital",
+            "tasks": [],
+            "title": "Understanding context before using it"
+        },
+        {
+            "authors": [
+                "\"We the People: Your Voice in Our Government\" <admin@whitehouse.gov>"
+            ],
+            "content": "Thank you for submitting your signature to the We the People petition &quot;An emergency call to the",
+            "createdDate": "Nov 27, 2015 3:58:51 PM",
+            "datatype": "Email",
+            "id": "15140409d53cacfb",
+            "keywords": [
+                "INBOX",
+                "CATEGORY_UPDATES"
+            ],
+            "kind": "Digital",
+            "tasks": [],
+            "title": "Action Needed: Verify your signature"
+        },
+        {
+            "authors": [
+                "Evernote <no-reply@evernote.com>"
+            ],
+            "content": "Evernote Please verify your email address Click the button below or use the following copy paste link",
+            "createdDate": "Nov 27, 2015 3:58:51 PM",
+            "datatype": "Email",
+            "id": "150a14c5e20e8155",
+            "keywords": [
+                "INBOX",
+                "IMPORTANT",
+                "CATEGORY_PERSONAL",
+                "context"
+            ],
+            "kind": "Digital",
+            "tasks": [],
+            "title": "Verify your Evernote email address"
+        },
+        {
+            "authors": [
+                "Evernote <no-reply@evernote.com>"
+            ],
+            "content": "Evernote Please verify your email address Click the button below or use the following copy paste link",
+            "createdDate": "Nov 27, 2015 3:58:51 PM",
+            "datatype": "Email",
+            "id": "150a144d256e68e2",
+            "keywords": [
+                "INBOX",
+                "IMPORTANT",
+                "CATEGORY_UPDATES",
+                "context"
+            ],
+            "kind": "Digital",
+            "tasks": [],
+            "title": "Verify your Evernote email address"
+        },
+        {
+            "authors": [
+                "Dhanya Mithra <dhanyamithrav@gmail.com>"
+            ],
+            "content": "",
+            "createdDate": "Nov 27, 2015 3:58:52 PM",
+            "datatype": "Email",
+            "id": "1509fcb029ef7c8d",
+            "keywords": [
+                "INBOX",
+                "IMPORTANT",
+                "CATEGORY_PERSONAL",
+                "context"
+            ],
+            "kind": "Digital",
+            "tasks": [],
+            "title": "Datas created..."
+        },
+        {
+            "authors": [
+                "Evernote <no-reply@evernote.com>"
+            ],
+            "content": "Evernote Welcome to your workspace Evernote is the digital workspace that&#39;s with you wherever you",
+            "createdDate": "Nov 27, 2015 3:58:52 PM",
+            "datatype": "Email",
+            "id": "1509e25cfc5e9da3",
+            "keywords": [
+                "INBOX",
+                "CATEGORY_UPDATES",
+                "context"
+            ],
+            "kind": "Digital",
+            "tasks": [],
+            "title": "Get Started with Evernote"
+        },
+        {
+            "authors": [
+                "Dhanya Mithra <dhanyamithrav@gmail.com>"
+            ],
+            "content": "Dear guys, I request you to take a look at this paper on Artvis.",
+            "createdDate": "Nov 27, 2015 3:58:52 PM",
+            "datatype": "Email",
+            "id": "1509e10d6b2b2082",
+            "keywords": [
+                "INBOX",
+                "IMPORTANT",
+                "CATEGORY_PERSONAL",
+                "context"
+            ],
+            "kind": "Digital",
+            "tasks": [],
+            "title": "Artvis"
+        },
+        {
+            "authors": [
+                "Dhanya Mithra <dhanyamithrav@gmail.com>"
+            ],
+            "content": "Dear guys, Lets meet on this wednesday to discuss regarding our meeting. Regards, Dhanya",
+            "createdDate": "Nov 27, 2015 3:58:53 PM",
+            "datatype": "Email",
+            "id": "1509e0ef8f8f073d",
+            "keywords": [
+                "INBOX",
+                "IMPORTANT",
+                "CATEGORY_PERSONAL",
+                "context"
+            ],
+            "kind": "Digital",
+            "tasks": [],
+            "title": "NGUI meeting"
+        },
+        {
+            "authors": [
+                "G5 Ngui <group5ngui@gmail.com>"
+            ],
+            "content": "Dear Dhanya, I request you to read these papers for our project. Regards",
+            "createdDate": "Nov 27, 2015 3:58:53 PM",
+            "datatype": "Email",
+            "id": "1509e0d6751a0486",
+            "keywords": [
+                "SENT"
+            ],
+            "kind": "Digital",
+            "tasks": [],
+            "title": "Publications"
+        },
+        {
+            "authors": [
+                "Google <no-reply@accounts.google.com>"
+            ],
+            "content": "New sign-in from Chrome on Windows Hi G5, Your Google Account group5ngui@gmail.com was just used to",
+            "createdDate": "Nov 27, 2015 3:58:53 PM",
+            "datatype": "Email",
+            "id": "150997071beaedfa",
+            "keywords": [
+                "INBOX",
+                "CATEGORY_PERSONAL",
+                "context"
+            ],
+            "kind": "Digital",
+            "tasks": [],
+            "title": "New sign-in from Chrome on Windows"
+        },
+        {
+            "authors": [
+                "Mendeley <no-reply@mendeley.com>"
+            ],
+            "content": "Please confirm your email address to complete sign up Mendeley Hi Group5, I&#39;m part of the",
+            "createdDate": "Nov 27, 2015 3:58:53 PM",
+            "datatype": "Email",
+            "id": "15098f9ff728b807",
+            "keywords": [
+                "INBOX",
+                "CATEGORY_UPDATES",
+                "mendeley"
+            ],
+            "kind": "Digital",
+            "tasks": [],
+            "title": "Mendeley Sign-up Verification"
+        },
+        {
+            "authors": [
+                "Mendeley <no-reply@mendeley.com>"
+            ],
+            "content": "Please confirm your email address to complete sign up Mendeley Verify your e-mail address Click the",
+            "createdDate": "Nov 27, 2015 3:58:54 PM",
+            "datatype": "Email",
+            "id": "1509050457412d2d",
+            "keywords": [
+                "INBOX",
+                "CATEGORY_UPDATES",
+                "mendeley"
+            ],
+            "kind": "Digital",
+            "tasks": [],
+            "title": "Please confirm your e-mail address"
+        },
+        {
+            "authors": [
+                "Google <no-reply@accounts.google.com>"
+            ],
+            "content": "Your recovery email address changed Hi G5, The recovery email for your Google Account group5ngui@",
+            "createdDate": "Nov 27, 2015 3:58:54 PM",
+            "datatype": "Email",
+            "id": "15077b5a2c511dee",
+            "keywords": [
+                "INBOX",
+                "IMPORTANT",
+                "CATEGORY_UPDATES",
+                "NGUI"
+            ],
+            "kind": "Digital",
+            "tasks": [],
+            "title": "Your recovery email address changed"
+        },
+        {
+            "authors": [
+                "Smartsheet <welcome@smartsheet.com>"
+            ],
+            "content": "To start using your Smartsheet account, click the button to confirm your email address: Confirm Email",
+            "createdDate": "Nov 27, 2015 3:58:54 PM",
+            "datatype": "Email",
+            "id": "15077b4d4d8a1a57",
+            "keywords": [
+                "INBOX",
+                "CATEGORY_UPDATES",
+                "NGUI"
+            ],
+            "kind": "Digital",
+            "tasks": [],
+            "title": "Confirm your email address to start using Smartsheet"
+        },
+        {
+            "authors": [
+                "Evernote <no-reply@evernote.com>"
+            ],
+            "content": "Evernote Welcome to your workspace Evernote is the digital workspace that&#39;s with you wherever you",
+            "createdDate": "Nov 27, 2015 3:58:54 PM",
+            "datatype": "Email",
+            "id": "1505418fd1f62e4e",
+            "keywords": [
+                "INBOX",
+                "IMPORTANT",
+                "CATEGORY_UPDATES",
+                "NGUI"
+            ],
+            "kind": "Digital",
+            "tasks": [],
+            "title": "Get Started with Evernote"
+        },
+        {
+            "authors": [
+                "Gmail Team <mail-noreply@google.com>"
+            ],
+            "content": "Hi G5 Get the official Gmail app The best features of Gmail are only available on your phone and",
+            "createdDate": "Nov 27, 2015 3:58:55 PM",
+            "datatype": "Email",
+            "id": "1504552ed9258f19",
+            "keywords": [
+                "INBOX",
+                "NGUI"
+            ],
+            "kind": "Digital",
+            "tasks": [],
+            "title": "The best of Gmail, wherever you are"
+        },
+        {
+            "authors": [
+                "Gmail Team <mail-noreply@google.com>"
+            ],
+            "content": "Hi G5 Gmail&#39;s inbox puts you in control Inbox video Meet the inbox Gmail&#39;s inbox sorts your",
+            "createdDate": "Nov 27, 2015 3:58:55 PM",
+            "datatype": "Email",
+            "id": "1504552ec54b2bc5",
+            "keywords": [
+                "INBOX",
+                "NGUI"
+            ],
+            "kind": "Digital",
+            "tasks": [],
+            "title": "Stay more organized with Gmail's inbox"
+        },
+        {
+            "authors": [
+                "Gmail Team <mail-noreply@google.com>"
+            ],
+            "content": "Hi G5 Tips to get the most out of Gmail Bring your contacts and mail into Gmail On your computer, you",
+            "createdDate": "Nov 27, 2015 3:58:55 PM",
+            "datatype": "Email",
+            "id": "1504552ebc8c082f",
+            "keywords": [
+                "INBOX",
+                "NGUI"
+            ],
+            "kind": "Digital",
+            "tasks": [],
+            "title": "Three tips to get the most out of Gmail"
+        },
+        {
+            "authors": [
+                "group5ngui"
+            ],
+            "content": "[B@4a3a051f",
+            "createdDate": "Nov 27, 2015 3:58:57 PM",
+            "datatype": "Note",
+            "id": "0a90b18a-8213-4f6e-b999-98158b39bee2",
+            "keywords": [
+                "NGUI"
+            ],
+            "kind": "Digital",
+            "tasks": [],
+            "title": "NGUI"
+        },
+        {
+            "authors": [
+                "group5ngui"
+            ],
+            "content": "[B@27265c4b",
+            "createdDate": "Nov 27, 2015 3:58:57 PM",
+            "datatype": "Note",
+            "id": "04a4a846-14cb-4d39-a565-0fcd9b6b230f",
+            "keywords": [
+                "data",
+                "analysis"
+            ],
+            "kind": "Digital",
+            "tasks": [],
+            "title": "data analysis"
+        },
+        {
+            "authors": [
+                "group5ngui"
+            ],
+            "content": "[B@47755401",
+            "createdDate": "Nov 27, 2015 3:58:57 PM",
+            "datatype": "Note",
+            "id": "951a62f1-5d60-4b3d-8b07-2435f1673206",
+            "keywords": [
+                "Mendeley"
+            ],
+            "kind": "Digital",
+            "tasks": [],
+            "title": "Mendeley"
+        },
+        {
+            "authors": [
+                "group5ngui"
+            ],
+            "content": "[B@67de324d",
+            "createdDate": "Nov 27, 2015 3:58:57 PM",
+            "datatype": "Note",
+            "id": "65fe125e-114f-43d7-a5af-5e84e8a1b625",
+            "keywords": [
+                "action"
+            ],
+            "kind": "Digital",
+            "tasks": [],
+            "title": "action"
+        },
+        {
+            "authors": [
+                "group5ngui"
+            ],
+            "content": "[B@2cb89281",
+            "createdDate": "Nov 27, 2015 3:58:57 PM",
+            "datatype": "Note",
+            "id": "565f4637-78c1-47fb-8a37-5eed5049123b",
+            "keywords": [
+                "context"
+            ],
+            "kind": "Digital",
+            "tasks": [],
+            "title": "context"
+        },
+        {
+            "authors": [
+                "group5ngui"
+            ],
+            "content": "[B@99a6a17",
+            "createdDate": "Nov 27, 2015 3:58:57 PM",
+            "datatype": "Note",
+            "id": "50bc0993-ee69-46e1-ac35-65c68c73c9cb",
+            "keywords": [
+                "recommender"
+            ],
+            "kind": "Digital",
+            "tasks": [],
+            "title": "recommender"
+        }
+    ],
+    "links": [
+        {
+            "source": 0,
+            "target": 1,
+            "type": "Keyword",
+            "value": [
+                "wise"
+            ]
+        },
+        {
+            "source": 4,
+            "target": 6,
+            "type": "Keyword",
+            "value": [
+                "presentation"
+            ]
+        },
+        {
+            "source": 6,
+            "target": 10,
+            "type": "Authorship",
+            "value": [
+                "Reinout Roels"
+            ]
+        },
+        {
+            "source": 8,
+            "target": 10,
+            "type": "Authorship",
+            "value": [
+                "Beat Signer"
+            ]
+        },
+        {
+            "source": 8,
+            "target": 14,
+            "type": "Authorship",
+            "value": [
+                "Sandra Trullemans",
+                "Beat Signer"
+            ]
+        },
+        {
+            "source": 8,
+            "target": 15,
+            "type": "Authorship",
+            "value": [
+                "Sandra Trullemans",
+                "Beat Signer"
+            ]
+        },
+        {
+            "source": 8,
+            "target": 16,
+            "type": "Authorship",
+            "value": [
+                "Sandra Trullemans",
+                "Beat Signer"
+            ]
+        },
+        {
+            "source": 10,
+            "target": 14,
+            "type": "Authorship",
+            "value": [
+                "Beat Signer"
+            ]
+        },
+        {
+            "source": 10,
+            "target": 15,
+            "type": "Authorship",
+            "value": [
+                "Beat Signer"
+            ]
+        },
+        {
+            "source": 10,
+            "target": 16,
+            "type": "Authorship",
+            "value": [
+                "Beat Signer"
+            ]
+        },
+        {
+            "source": 11,
+            "target": 12,
+            "type": "Task",
+            "value": [
+                "Paper writing"
+            ]
+        },
+        {
+            "source": 11,
+            "target": 13,
+            "type": "Task",
+            "value": [
+                "Thesis work"
+            ]
+        },
+        {
+            "source": 13,
+            "target": 14,
+            "type": "Task",
+            "value": [
+                "Next Generation UI project"
+            ]
+        },
+        {
+            "source": 13,
+            "target": 15,
+            "type": "Task",
+            "value": [
+                "Next Generation UI project"
+            ]
+        },
+        {
+            "source": 14,
+            "target": 15,
+            "type": "Authorship",
+            "value": [
+                "Sandra Trullemans",
+                "Beat Signer"
+            ]
+        },
+        {
+            "source": 14,
+            "target": 15,
+            "type": "Task",
+            "value": [
+                "Next Generation UI project"
+            ]
+        },
+        {
+            "source": 14,
+            "target": 16,
+            "type": "Authorship",
+            "value": [
+                "Sandra Trullemans",
+                "Beat Signer"
+            ]
+        },
+        {
+            "source": 15,
+            "target": 16,
+            "type": "Keyword",
+            "value": [
+                "action",
+                "artvis",
+                "artwork explorer",
+                "faceted browsing",
+                "information visualisation",
+                "tangible inter-"
+            ]
+        },
+        {
+            "source": 15,
+            "target": 16,
+            "type": "Authorship",
+            "value": [
+                "Bruno Dumas",
+                "Bram Moerman",
+                "Sandra Trullemans",
+                "Beat Signer"
+            ]
+        },
+        {
+            "source": 15,
+            "target": 91,
+            "type": "Keyword",
+            "value": [
+                "action"
+            ]
+        },
+        {
+            "source": 16,
+            "target": 91,
+            "type": "Keyword",
+            "value": [
+                "action"
+            ]
+        },
+        {
+            "source": 19,
+            "target": 44,
+            "type": "Keyword",
+            "value": [
+                "semantic web"
+            ]
+        },
+        {
+            "source": 20,
+            "target": 22,
+            "type": "Authorship",
+            "value": [
+                "Tom Broens"
+            ]
+        },
+        {
+            "source": 21,
+            "target": 23,
+            "type": "Authorship",
+            "value": [
+                "G Kembellec",
+                "G Chartron",
+                "I Saleh"
+            ]
+        },
+        {
+            "source": 24,
+            "target": 25,
+            "type": "Authorship",
+            "value": [
+                "Linas Baltrunas",
+                "Bernd Ludwig",
+                "Francesco Ricci"
+            ]
+        },
+        {
+            "source": 24,
+            "target": 46,
+            "type": "Keyword",
+            "value": [
+                "Algorithms"
+            ]
+        },
+        {
+            "source": 24,
+            "target": 48,
+            "type": "Authorship",
+            "value": [
+                "Francesco Ricci"
+            ]
+        },
+        {
+            "source": 24,
+            "target": 49,
+            "type": "Authorship",
+            "value": [
+                "Linas Baltrunas",
+                "Bernd Ludwig",
+                "Francesco Ricci"
+            ]
+        },
+        {
+            "source": 25,
+            "target": 36,
+            "type": "Keyword",
+            "value": [
+                "Context"
+            ]
+        },
+        {
+            "source": 25,
+            "target": 46,
+            "type": "Keyword",
+            "value": [
+                "Collaborative filtering"
+            ]
+        },
+        {
+            "source": 25,
+            "target": 47,
+            "type": "Keyword",
+            "value": [
+                "Context"
+            ]
+        },
+        {
+            "source": 25,
+            "target": 48,
+            "type": "Authorship",
+            "value": [
+                "Francesco Ricci"
+            ]
+        },
+        {
+            "source": 25,
+            "target": 49,
+            "type": "Authorship",
+            "value": [
+                "Linas Baltrunas",
+                "Bernd Ludwig",
+                "Francesco Ricci"
+            ]
+        },
+        {
+            "source": 25,
+            "target": 52,
+            "type": "Keyword",
+            "value": [
+                "Collaborative filtering"
+            ]
+        },
+        {
+            "source": 26,
+            "target": 27,
+            "type": "Authorship",
+            "value": [
+                "Lora Aroyo"
+            ]
+        },
+        {
+            "source": 26,
+            "target": 28,
+            "type": "Authorship",
+            "value": [
+                "Lora Aroyo",
+                "Natalia Stash",
+                "Yiwen Wang",
+                "Peter Gorgels",
+                "Lloyd Rutledge"
+            ]
+        },
+        {
+            "source": 26,
+            "target": 38,
+            "type": "Authorship",
+            "value": [
+                "Lora Aroyo",
+                "Natalia Stash",
+                "Yiwen Wang"
+            ]
+        },
+        {
+            "source": 27,
+            "target": 28,
+            "type": "Authorship",
+            "value": [
+                "Guus Schreiber",
+                "Lora Aroyo"
+            ]
+        },
+        {
+            "source": 27,
+            "target": 38,
+            "type": "Authorship",
+            "value": [
+                "Lora Aroyo"
+            ]
+        },
+        {
+            "source": 28,
+            "target": 38,
+            "type": "Authorship",
+            "value": [
+                "Yiwen Wang",
+                "Natalia Stash",
+                "Lora Aroyo"
+            ]
+        },
+        {
+            "source": 30,
+            "target": 31,
+            "type": "Keyword",
+            "value": [
+                "OER",
+                "Open educational resources",
+                "Open learning",
+                "Open textbooks"
+            ]
+        },
+        {
+            "source": 30,
+            "target": 31,
+            "type": "Authorship",
+            "value": [
+                "Ross McKerlich",
+                "Cindy Ives",
+                "Rory McGreal"
+            ]
+        },
+        {
+            "source": 33,
+            "target": 51,
+            "type": "Keyword",
+            "value": [
+                "diversity"
+            ]
+        },
+        {
+            "source": 36,
+            "target": 47,
+            "type": "Keyword",
+            "value": [
+                "Context"
+            ]
+        },
+        {
+            "source": 41,
+            "target": 47,
+            "type": "Authorship",
+            "value": [
+                "Alexander Tuzhilin"
+            ]
+        },
+        {
+            "source": 41,
+            "target": 51,
+            "type": "Authorship",
+            "value": [
+                "Alexander Tuzhilin"
+            ]
+        },
+        {
+            "source": 41,
+            "target": 60,
+            "type": "Authorship",
+            "value": [
+                "Gediminas Adomavicius"
+            ]
+        },
+        {
+            "source": 44,
+            "target": 48,
+            "type": "Keyword",
+            "value": [
+                "context",
+                "recommender systems"
+            ]
+        },
+        {
+            "source": 44,
+            "target": 49,
+            "type": "Keyword",
+            "value": [
+                "recommender systems"
+            ]
+        },
+        {
+            "source": 44,
+            "target": 60,
+            "type": "Keyword",
+            "value": [
+                "recommender systems"
+            ]
+        },
+        {
+            "source": 44,
+            "target": 70,
+            "type": "Keyword",
+            "value": [
+                "context"
+            ]
+        },
+        {
+            "source": 44,
+            "target": 72,
+            "type": "Keyword",
+            "value": [
+                "context"
+            ]
+        },
+        {
+            "source": 44,
+            "target": 73,
+            "type": "Keyword",
+            "value": [
+                "context"
+            ]
+        },
+        {
+            "source": 44,
+            "target": 74,
+            "type": "Keyword",
+            "value": [
+                "context"
+            ]
+        },
+        {
+            "source": 44,
+            "target": 75,
+            "type": "Keyword",
+            "value": [
+                "context"
+            ]
+        },
+        {
+            "source": 44,
+            "target": 76,
+            "type": "Keyword",
+            "value": [
+                "context"
+            ]
+        },
+        {
+            "source": 44,
+            "target": 77,
+            "type": "Keyword",
+            "value": [
+                "context"
+            ]
+        },
+        {
+            "source": 44,
+            "target": 79,
+            "type": "Keyword",
+            "value": [
+                "context"
+            ]
+        },
+        {
+            "source": 44,
+            "target": 92,
+            "type": "Keyword",
+            "value": [
+                "context"
+            ]
+        },
+        {
+            "source": 46,
+            "target": 47,
+            "type": "Authorship",
+            "value": [
+                "Michele Gorgoglione"
+            ]
+        },
+        {
+            "source": 46,
+            "target": 51,
+            "type": "Authorship",
+            "value": [
+                "Umberto Panniello",
+                "Michele Gorgoglione"
+            ]
+        },
+        {
+            "source": 46,
+            "target": 52,
+            "type": "Keyword",
+            "value": [
+                "Collaborative filtering",
+                "Context-aware"
+            ]
+        },
+        {
+            "source": 46,
+            "target": 53,
+            "type": "Keyword",
+            "value": [
+                "Recommender systems"
+            ]
+        },
+        {
+            "source": 46,
+            "target": 63,
+            "type": "Keyword",
+            "value": [
+                "Recommender systems"
+            ]
+        },
+        {
+            "source": 47,
+            "target": 51,
+            "type": "Authorship",
+            "value": [
+                "Alexander Tuzhilin",
+                "Michele Gorgoglione"
+            ]
+        },
+        {
+            "source": 48,
+            "target": 49,
+            "type": "Keyword",
+            "value": [
+                "recommender systems"
+            ]
+        },
+        {
+            "source": 48,
+            "target": 49,
+            "type": "Authorship",
+            "value": [
+                "Francesco Ricci"
+            ]
+        },
+        {
+            "source": 48,
+            "target": 60,
+            "type": "Keyword",
+            "value": [
+                "recommender systems"
+            ]
+        },
+        {
+            "source": 48,
+            "target": 70,
+            "type": "Keyword",
+            "value": [
+                "context"
+            ]
+        },
+        {
+            "source": 48,
+            "target": 72,
+            "type": "Keyword",
+            "value": [
+                "context"
+            ]
+        },
+        {
+            "source": 48,
+            "target": 73,
+            "type": "Keyword",
+            "value": [
+                "context"
+            ]
+        },
+        {
+            "source": 48,
+            "target": 74,
+            "type": "Keyword",
+            "value": [
+                "context"
+            ]
+        },
+        {
+            "source": 48,
+            "target": 75,
+            "type": "Keyword",
+            "value": [
+                "context"
+            ]
+        },
+        {
+            "source": 48,
+            "target": 76,
+            "type": "Keyword",
+            "value": [
+                "context"
+            ]
+        },
+        {
+            "source": 48,
+            "target": 77,
+            "type": "Keyword",
+            "value": [
+                "context"
+            ]
+        },
+        {
+            "source": 48,
+            "target": 79,
+            "type": "Keyword",
+            "value": [
+                "context"
+            ]
+        },
+        {
+            "source": 48,
+            "target": 92,
+            "type": "Keyword",
+            "value": [
+                "context"
+            ]
+        },
+        {
+            "source": 49,
+            "target": 60,
+            "type": "Keyword",
+            "value": [
+                "collaborative filtering",
+                "recommender systems"
+            ]
+        },
+        {
+            "source": 53,
+            "target": 63,
+            "type": "Keyword",
+            "value": [
+                "Recommender systems"
+            ]
+        },
+        {
+            "source": 53,
+            "target": 65,
+            "type": "Keyword",
+            "value": [
+                "context-aware recommender system"
+            ]
+        },
+        {
+            "source": 67,
+            "target": 93,
+            "type": "Keyword",
+            "value": [
+                "recommender"
+            ]
+        },
+        {
+            "source": 70,
+            "target": 72,
+            "type": "Keyword",
+            "value": [
+                "context"
+            ]
+        },
+        {
+            "source": 70,
+            "target": 73,
+            "type": "Keyword",
+            "value": [
+                "context"
+            ]
+        },
+        {
+            "source": 70,
+            "target": 74,
+            "type": "Keyword",
+            "value": [
+                "context"
+            ]
+        },
+        {
+            "source": 70,
+            "target": 75,
+            "type": "Keyword",
+            "value": [
+                "context"
+            ]
+        },
+        {
+            "source": 70,
+            "target": 76,
+            "type": "Keyword",
+            "value": [
+                "context"
+            ]
+        },
+        {
+            "source": 70,
+            "target": 77,
+            "type": "Keyword",
+            "value": [
+                "context"
+            ]
+        },
+        {
+            "source": 70,
+            "target": 79,
+            "type": "Keyword",
+            "value": [
+                "context"
+            ]
+        },
+        {
+            "source": 70,
+            "target": 92,
+            "type": "Keyword",
+            "value": [
+                "context"
+            ]
+        },
+        {
+            "source": 71,
+            "target": 73,
+            "type": "Keyword",
+            "value": [
+                "CATEGORY_UPDATES"
+            ]
+        },
+        {
+            "source": 71,
+            "target": 75,
+            "type": "Keyword",
+            "value": [
+                "CATEGORY_UPDATES"
+            ]
+        },
+        {
+            "source": 71,
+            "target": 80,
+            "type": "Keyword",
+            "value": [
+                "CATEGORY_UPDATES"
+            ]
+        },
+        {
+            "source": 71,
+            "target": 81,
+            "type": "Keyword",
+            "value": [
+                "CATEGORY_UPDATES"
+            ]
+        },
+        {
+            "source": 71,
+            "target": 82,
+            "type": "Keyword",
+            "value": [
+                "CATEGORY_UPDATES"
+            ]
+        },
+        {
+            "source": 71,
+            "target": 83,
+            "type": "Keyword",
+            "value": [
+                "CATEGORY_UPDATES"
+            ]
+        },
+        {
+            "source": 71,
+            "target": 84,
+            "type": "Keyword",
+            "value": [
+                "CATEGORY_UPDATES"
+            ]
+        },
+        {
+            "source": 72,
+            "target": 73,
+            "type": "Keyword",
+            "value": [
+                "IMPORTANT",
+                "context"
+            ]
+        },
+        {
+            "source": 72,
+            "target": 73,
+            "type": "Authorship",
+            "value": [
+                "Evernote <no-reply@evernote.com>"
+            ]
+        },
+        {
+            "source": 72,
+            "target": 74,
+            "type": "Keyword",
+            "value": [
+                "IMPORTANT",
+                "CATEGORY_PERSONAL",
+                "context"
+            ]
+        },
+        {
+            "source": 72,
+            "target": 75,
+            "type": "Keyword",
+            "value": [
+                "context"
+            ]
+        },
+        {
+            "source": 72,
+            "target": 75,
+            "type": "Authorship",
+            "value": [
+                "Evernote <no-reply@evernote.com>"
+            ]
+        },
+        {
+            "source": 72,
+            "target": 76,
+            "type": "Keyword",
+            "value": [
+                "IMPORTANT",
+                "CATEGORY_PERSONAL",
+                "context"
+            ]
+        },
+        {
+            "source": 72,
+            "target": 77,
+            "type": "Keyword",
+            "value": [
+                "IMPORTANT",
+                "CATEGORY_PERSONAL",
+                "context"
+            ]
+        },
+        {
+            "source": 72,
+            "target": 79,
+            "type": "Keyword",
+            "value": [
+                "CATEGORY_PERSONAL",
+                "context"
+            ]
+        },
+        {
+            "source": 72,
+            "target": 82,
+            "type": "Keyword",
+            "value": [
+                "IMPORTANT"
+            ]
+        },
+        {
+            "source": 72,
+            "target": 84,
+            "type": "Keyword",
+            "value": [
+                "IMPORTANT"
+            ]
+        },
+        {
+            "source": 72,
+            "target": 84,
+            "type": "Authorship",
+            "value": [
+                "Evernote <no-reply@evernote.com>"
+            ]
+        },
+        {
+            "source": 72,
+            "target": 92,
+            "type": "Keyword",
+            "value": [
+                "context"
+            ]
+        },
+        {
+            "source": 73,
+            "target": 74,
+            "type": "Keyword",
+            "value": [
+                "IMPORTANT",
+                "context"
+            ]
+        },
+        {
+            "source": 73,
+            "target": 75,
+            "type": "Keyword",
+            "value": [
+                "CATEGORY_UPDATES",
+                "context"
+            ]
+        },
+        {
+            "source": 73,
+            "target": 75,
+            "type": "Authorship",
+            "value": [
+                "Evernote <no-reply@evernote.com>"
+            ]
+        },
+        {
+            "source": 73,
+            "target": 76,
+            "type": "Keyword",
+            "value": [
+                "IMPORTANT",
+                "context"
+            ]
+        },
+        {
+            "source": 73,
+            "target": 77,
+            "type": "Keyword",
+            "value": [
+                "IMPORTANT",
+                "context"
+            ]
+        },
+        {
+            "source": 73,
+            "target": 79,
+            "type": "Keyword",
+            "value": [
+                "context"
+            ]
+        },
+        {
+            "source": 73,
+            "target": 80,
+            "type": "Keyword",
+            "value": [
+                "CATEGORY_UPDATES"
+            ]
+        },
+        {
+            "source": 73,
+            "target": 81,
+            "type": "Keyword",
+            "value": [
+                "CATEGORY_UPDATES"
+            ]
+        },
+        {
+            "source": 73,
+            "target": 82,
+            "type": "Keyword",
+            "value": [
+                "IMPORTANT",
+                "CATEGORY_UPDATES"
+            ]
+        },
+        {
+            "source": 73,
+            "target": 83,
+            "type": "Keyword",
+            "value": [
+                "CATEGORY_UPDATES"
+            ]
+        },
+        {
+            "source": 73,
+            "target": 84,
+            "type": "Keyword",
+            "value": [
+                "IMPORTANT",
+                "CATEGORY_UPDATES"
+            ]
+        },
+        {
+            "source": 73,
+            "target": 84,
+            "type": "Authorship",
+            "value": [
+                "Evernote <no-reply@evernote.com>"
+            ]
+        },
+        {
+            "source": 73,
+            "target": 92,
+            "type": "Keyword",
+            "value": [
+                "context"
+            ]
+        },
+        {
+            "source": 74,
+            "target": 75,
+            "type": "Keyword",
+            "value": [
+                "context"
+            ]
+        },
+        {
+            "source": 74,
+            "target": 76,
+            "type": "Keyword",
+            "value": [
+                "IMPORTANT",
+                "CATEGORY_PERSONAL",
+                "context"
+            ]
+        },
+        {
+            "source": 74,
+            "target": 76,
+            "type": "Authorship",
+            "value": [
+                "Dhanya Mithra <dhanyamithrav@gmail.com>"
+            ]
+        },
+        {
+            "source": 74,
+            "target": 77,
+            "type": "Keyword",
+            "value": [
+                "IMPORTANT",
+                "CATEGORY_PERSONAL",
+                "context"
+            ]
+        },
+        {
+            "source": 74,
+            "target": 77,
+            "type": "Authorship",
+            "value": [
+                "Dhanya Mithra <dhanyamithrav@gmail.com>"
+            ]
+        },
+        {
+            "source": 74,
+            "target": 79,
+            "type": "Keyword",
+            "value": [
+                "CATEGORY_PERSONAL",
+                "context"
+            ]
+        },
+        {
+            "source": 74,
+            "target": 82,
+            "type": "Keyword",
+            "value": [
+                "IMPORTANT"
+            ]
+        },
+        {
+            "source": 74,
+            "target": 84,
+            "type": "Keyword",
+            "value": [
+                "IMPORTANT"
+            ]
+        },
+        {
+            "source": 74,
+            "target": 92,
+            "type": "Keyword",
+            "value": [
+                "context"
+            ]
+        },
+        {
+            "source": 75,
+            "target": 76,
+            "type": "Keyword",
+            "value": [
+                "context"
+            ]
+        },
+        {
+            "source": 75,
+            "target": 77,
+            "type": "Keyword",
+            "value": [
+                "context"
+            ]
+        },
+        {
+            "source": 75,
+            "target": 79,
+            "type": "Keyword",
+            "value": [
+                "context"
+            ]
+        },
+        {
+            "source": 75,
+            "target": 80,
+            "type": "Keyword",
+            "value": [
+                "CATEGORY_UPDATES"
+            ]
+        },
+        {
+            "source": 75,
+            "target": 81,
+            "type": "Keyword",
+            "value": [
+                "CATEGORY_UPDATES"
+            ]
+        },
+        {
+            "source": 75,
+            "target": 82,
+            "type": "Keyword",
+            "value": [
+                "CATEGORY_UPDATES"
+            ]
+        },
+        {
+            "source": 75,
+            "target": 83,
+            "type": "Keyword",
+            "value": [
+                "CATEGORY_UPDATES"
+            ]
+        },
+        {
+            "source": 75,
+            "target": 84,
+            "type": "Keyword",
+            "value": [
+                "CATEGORY_UPDATES"
+            ]
+        },
+        {
+            "source": 75,
+            "target": 84,
+            "type": "Authorship",
+            "value": [
+                "Evernote <no-reply@evernote.com>"
+            ]
+        },
+        {
+            "source": 75,
+            "target": 92,
+            "type": "Keyword",
+            "value": [
+                "context"
+            ]
+        },
+        {
+            "source": 76,
+            "target": 77,
+            "type": "Keyword",
+            "value": [
+                "IMPORTANT",
+                "CATEGORY_PERSONAL",
+                "context"
+            ]
+        },
+        {
+            "source": 76,
+            "target": 77,
+            "type": "Authorship",
+            "value": [
+                "Dhanya Mithra <dhanyamithrav@gmail.com>"
+            ]
+        },
+        {
+            "source": 76,
+            "target": 79,
+            "type": "Keyword",
+            "value": [
+                "CATEGORY_PERSONAL",
+                "context"
+            ]
+        },
+        {
+            "source": 76,
+            "target": 82,
+            "type": "Keyword",
+            "value": [
+                "IMPORTANT"
+            ]
+        },
+        {
+            "source": 76,
+            "target": 84,
+            "type": "Keyword",
+            "value": [
+                "IMPORTANT"
+            ]
+        },
+        {
+            "source": 76,
+            "target": 92,
+            "type": "Keyword",
+            "value": [
+                "context"
+            ]
+        },
+        {
+            "source": 77,
+            "target": 79,
+            "type": "Keyword",
+            "value": [
+                "CATEGORY_PERSONAL",
+                "context"
+            ]
+        },
+        {
+            "source": 77,
+            "target": 82,
+            "type": "Keyword",
+            "value": [
+                "IMPORTANT"
+            ]
+        },
+        {
+            "source": 77,
+            "target": 84,
+            "type": "Keyword",
+            "value": [
+                "IMPORTANT"
+            ]
+        },
+        {
+            "source": 77,
+            "target": 92,
+            "type": "Keyword",
+            "value": [
+                "context"
+            ]
+        },
+        {
+            "source": 79,
+            "target": 82,
+            "type": "Authorship",
+            "value": [
+                "Google <no-reply@accounts.google.com>"
+            ]
+        },
+        {
+            "source": 79,
+            "target": 92,
+            "type": "Keyword",
+            "value": [
+                "context"
+            ]
+        },
+        {
+            "source": 80,
+            "target": 81,
+            "type": "Keyword",
+            "value": [
+                "CATEGORY_UPDATES",
+                "mendeley"
+            ]
+        },
+        {
+            "source": 80,
+            "target": 81,
+            "type": "Authorship",
+            "value": [
+                "Mendeley <no-reply@mendeley.com>"
+            ]
+        },
+        {
+            "source": 80,
+            "target": 82,
+            "type": "Keyword",
+            "value": [
+                "CATEGORY_UPDATES"
+            ]
+        },
+        {
+            "source": 80,
+            "target": 83,
+            "type": "Keyword",
+            "value": [
+                "CATEGORY_UPDATES"
+            ]
+        },
+        {
+            "source": 80,
+            "target": 84,
+            "type": "Keyword",
+            "value": [
+                "CATEGORY_UPDATES"
+            ]
+        },
+        {
+            "source": 81,
+            "target": 82,
+            "type": "Keyword",
+            "value": [
+                "CATEGORY_UPDATES"
+            ]
+        },
+        {
+            "source": 81,
+            "target": 83,
+            "type": "Keyword",
+            "value": [
+                "CATEGORY_UPDATES"
+            ]
+        },
+        {
+            "source": 81,
+            "target": 84,
+            "type": "Keyword",
+            "value": [
+                "CATEGORY_UPDATES"
+            ]
+        },
+        {
+            "source": 82,
+            "target": 83,
+            "type": "Keyword",
+            "value": [
+                "CATEGORY_UPDATES",
+                "NGUI"
+            ]
+        },
+        {
+            "source": 82,
+            "target": 84,
+            "type": "Keyword",
+            "value": [
+                "IMPORTANT",
+                "CATEGORY_UPDATES",
+                "NGUI"
+            ]
+        },
+        {
+            "source": 82,
+            "target": 85,
+            "type": "Keyword",
+            "value": [
+                "NGUI"
+            ]
+        },
+        {
+            "source": 82,
+            "target": 86,
+            "type": "Keyword",
+            "value": [
+                "NGUI"
+            ]
+        },
+        {
+            "source": 82,
+            "target": 87,
+            "type": "Keyword",
+            "value": [
+                "NGUI"
+            ]
+        },
+        {
+            "source": 82,
+            "target": 88,
+            "type": "Keyword",
+            "value": [
+                "NGUI"
+            ]
+        },
+        {
+            "source": 83,
+            "target": 84,
+            "type": "Keyword",
+            "value": [
+                "CATEGORY_UPDATES",
+                "NGUI"
+            ]
+        },
+        {
+            "source": 83,
+            "target": 85,
+            "type": "Keyword",
+            "value": [
+                "NGUI"
+            ]
+        },
+        {
+            "source": 83,
+            "target": 86,
+            "type": "Keyword",
+            "value": [
+                "NGUI"
+            ]
+        },
+        {
+            "source": 83,
+            "target": 87,
+            "type": "Keyword",
+            "value": [
+                "NGUI"
+            ]
+        },
+        {
+            "source": 83,
+            "target": 88,
+            "type": "Keyword",
+            "value": [
+                "NGUI"
+            ]
+        },
+        {
+            "source": 84,
+            "target": 85,
+            "type": "Keyword",
+            "value": [
+                "NGUI"
+            ]
+        },
+        {
+            "source": 84,
+            "target": 86,
+            "type": "Keyword",
+            "value": [
+                "NGUI"
+            ]
+        },
+        {
+            "source": 84,
+            "target": 87,
+            "type": "Keyword",
+            "value": [
+                "NGUI"
+            ]
+        },
+        {
+            "source": 84,
+            "target": 88,
+            "type": "Keyword",
+            "value": [
+                "NGUI"
+            ]
+        },
+        {
+            "source": 85,
+            "target": 86,
+            "type": "Keyword",
+            "value": [
+                "NGUI"
+            ]
+        },
+        {
+            "source": 85,
+            "target": 86,
+            "type": "Authorship",
+            "value": [
+                "Gmail Team <mail-noreply@google.com>"
+            ]
+        },
+        {
+            "source": 85,
+            "target": 87,
+            "type": "Keyword",
+            "value": [
+                "NGUI"
+            ]
+        },
+        {
+            "source": 85,
+            "target": 87,
+            "type": "Authorship",
+            "value": [
+                "Gmail Team <mail-noreply@google.com>"
+            ]
+        },
+        {
+            "source": 85,
+            "target": 88,
+            "type": "Keyword",
+            "value": [
+                "NGUI"
+            ]
+        },
+        {
+            "source": 86,
+            "target": 87,
+            "type": "Keyword",
+            "value": [
+                "NGUI"
+            ]
+        },
+        {
+            "source": 86,
+            "target": 87,
+            "type": "Authorship",
+            "value": [
+                "Gmail Team <mail-noreply@google.com>"
+            ]
+        },
+        {
+            "source": 86,
+            "target": 88,
+            "type": "Keyword",
+            "value": [
+                "NGUI"
+            ]
+        },
+        {
+            "source": 87,
+            "target": 88,
+            "type": "Keyword",
+            "value": [
+                "NGUI"
+            ]
+        },
+        {
+            "source": 88,
+            "target": 89,
+            "type": "Authorship",
+            "value": [
+                "group5ngui"
+            ]
+        },
+        {
+            "source": 88,
+            "target": 90,
+            "type": "Authorship",
+            "value": [
+                "group5ngui"
+            ]
+        },
+        {
+            "source": 88,
+            "target": 91,
+            "type": "Authorship",
+            "value": [
+                "group5ngui"
+            ]
+        },
+        {
+            "source": 88,
+            "target": 92,
+            "type": "Authorship",
+            "value": [
+                "group5ngui"
+            ]
+        },
+        {
+            "source": 88,
+            "target": 93,
+            "type": "Authorship",
+            "value": [
+                "group5ngui"
+            ]
+        },
+        {
+            "source": 89,
+            "target": 90,
+            "type": "Authorship",
+            "value": [
+                "group5ngui"
+            ]
+        },
+        {
+            "source": 89,
+            "target": 91,
+            "type": "Authorship",
+            "value": [
+                "group5ngui"
+            ]
+        },
+        {
+            "source": 89,
+            "target": 92,
+            "type": "Authorship",
+            "value": [
+                "group5ngui"
+            ]
+        },
+        {
+            "source": 89,
+            "target": 93,
+            "type": "Authorship",
+            "value": [
+                "group5ngui"
+            ]
+        },
+        {
+            "source": 90,
+            "target": 91,
+            "type": "Authorship",
+            "value": [
+                "group5ngui"
+            ]
+        },
+        {
+            "source": 90,
+            "target": 92,
+            "type": "Authorship",
+            "value": [
+                "group5ngui"
+            ]
+        },
+        {
+            "source": 90,
+            "target": 93,
+            "type": "Authorship",
+            "value": [
+                "group5ngui"
+            ]
+        },
+        {
+            "source": 91,
+            "target": 92,
+            "type": "Authorship",
+            "value": [
+                "group5ngui"
+            ]
+        },
+        {
+            "source": 91,
+            "target": 93,
+            "type": "Authorship",
+            "value": [
+                "group5ngui"
+            ]
+        },
+        {
+            "source": 92,
+            "target": 93,
+            "type": "Authorship",
+            "value": [
+                "group5ngui"
+            ]
+        }
+    ]
+}

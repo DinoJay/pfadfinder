@@ -1,77 +1,45 @@
 import React from "react";
 import d3Timeline from "../lib/d3Timeline.js";
 
-var linkedByIndex = new function() {
-  return {
-    index: {},
-    nodes: [],
-    init: function(nodes, links) {
-      links.forEach(d => this.index[d.source + "," + d.target] = d);
-      this.nodes = nodes;
-      return this;
-    },
-    isConnected: function(a, b, type) {
-        // var isEdge0 =  (this.index[a.index + "," + b.index]
-        //     && this.index[a.index + "," + b.index].values.indexOf(type));
-        var isEdge1 = (this.index[b.index + "," + a.index]
-                      && this.index[b.index + "," + a.index].values.indexOf(type));
-        return  isEdge1;
-    },
-    nbs: function(a, type) {
-      // TODO: BUG!
-      return this.nodes.filter(b => {
-        var isEdge0 =  (this.index[a.index + "," + b.index]
-            && this.index[a.index + "," + b.index].values.indexOf(type));
-        var isEdge1 = (this.index[a.index + "," + b.index]
-                      && this.index[a.index + "," + b.index].values.indexOf(type));
-        return isEdge0 || isEdge1;
-      });
-    }
-    // getEdges: function(a) {
-    //   return this.nodes.map(b => {
-    //     var edge = (this.index[a.index + "," + b.index]
-    //       || this.index[b.index + "," + a.index]);
-    //       if (edge) return this.nodes[edge.target];
-    //   }).filter(d => d);
-    // }
-  };
-};
-
 var Timeline = React.createClass({
   getDefaultProps: function() {
     return {
-      width: 600,
+      width: 300,
       height: 2000,
       margin: {
         left: 40,
         right: 40,
         top: 0,
         bottom: 0
-      },
-      initData: [],
-      selected: [],
-      initDataType: "datatype"
+      }
     };
+  },
+
+  getInitialState: function() {
+    return {data: []};
   },
 
   componentDidMount: function() {
     var el = this.getDOMNode();
-    d3Timeline.create(el, { ...this.props, ...this.state});
-    d3Timeline.update(el, { ...this.props, ...this.state});
+    d3Timeline.create(el, this.props);
+    d3Timeline.update(el, this.props, this.state.data);
   },
 
   componentDidUpdate: function() {
     var el = this.getDOMNode();
 
-    // TODO: anti pattern
-    this.props.data.forEach(d => d.date = new Date(d.createdDate));
+    var data = this.props.data.map(d => {
+      d.date = new Date(d.createdDate);
+      d.metatype = "doc";
+      return d;
+    });
 
-    d3Timeline.update(el, { ...this.props, ...this.state});
+    d3Timeline.update(el, this.props, data);
   },
 
   render: function() {
     return (
-      <div id="timeline-cont"></div>
+      <div id="timeline-cont" className="scroll-wrapper"></div>
     );
   }
 });

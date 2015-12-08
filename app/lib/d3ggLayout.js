@@ -1,49 +1,40 @@
 import d3 from "d3";
 import d3MeasureText from "d3-measure-text"; d3MeasureText.d3 = d3;
 import _ from "lodash";
+
 import $ from "jquery";
 
-import { makeEdges } from "./misc.js";
-
+import { makeEdges, DOC_URL, EMAIL_URL, CALENDAR_URL, relationColors} from "./misc.js";
 
 const D2R = Math.PI / 180;
 
 var NODE_RAD = 20;
-var NODE_PADDING = 20;
+// var NODE_PADDING = 20;
 var LABEL_OFFSET = 15;
-
 // var INIT_RAD_LAYOUT = 150;
 // var INIT_NODE_PADDING = 20;
-var LAYOUT_RAD = 150;
-
-var DOC_URL = "https://cdn4.iconfinder.com/data/icons/flat-icon-set/128/"
-              + "flat_icons-graficheria.it-11.png";
-var EMAIL_URL = "https://cdn0.iconfinder.com/data/icons/social-icons-20/200"
-                + "/mail-icon-128.png";
-
-var CALENDAR_URL = "https://cdn1.iconfinder.com/data/icons/education-colored-"
-                   +"icons-vol-3/128/145-128.png";
+var LAYOUT_RAD = 175;
 
 Array.prototype.last = function() {
     return this[this.length-1];
 };
 
-function getTangibles() {
- $.ajax({
-  url: "http://localhost:8080/CamCapture/AjaxServlet",
-  type: "POST",
-  dataType: "jsonp",
-    // Accept: 'application/sparql-results+json',
-    // async: false,
-    success: function(data) {
-      console.log("data", data);
+
+
+function getTangibles(successFunc) {
+  $.ajax({
+    url: "http://localhost:8080/CamCapture/AjaxTypeServlet?callback=?",
+    type: "get",
+    dataType: "jsonp",
+    jsonp: "callback",
+    success: function(type) {
+      successFunc(type);
     },
     error: function(err) {
-      console.log("err", err);
+       console.log("err", err);
     }
- });
+  });
 }
-
 
 function backgroundArc(radius) {
   return d3.svg.arc()
@@ -52,6 +43,7 @@ function backgroundArc(radius) {
            .startAngle(0)
            .endAngle(2 * Math.PI);
 }
+
 function labelArc(innerRadius, outerRadius) {
   return d3.svg.arc()
            .innerRadius(innerRadius)
@@ -60,50 +52,16 @@ function labelArc(innerRadius, outerRadius) {
            .endAngle(2 * Math.PI);
 }
 
-// function wrap() {
-//         var self = d3.select(this),
-//             textLength = self.node().getComputedTextLength(),
-//             text = self.text();
-//         while (textLength > 12 && text.length > 0) {
-//             // text = text.slice(0, -1);
-//             self.text(text + "...");
-//             textLength = self.node().getComputedTextLength();
-//         }
-//     }
-// function wrap(title, width) {
-//     var text = d3.select(this),
-//         words = title.split(/\s+/).reverse(),
-//         word,
-//         line = [],
-//         lineNumber = 0,
-//         lineHeight = 1.1, // ems
-//     while (word = words.pop()) {
-//       line.push(word);
-//       tspan.text(line.join(" "));
-//       if (tspan.node().getComputedTextLength() > width) {
-//         line.pop();
-//         tspan.text(line.join(" "));
-//         line = [word];
-//         tspan = text.append("tspan").attr("x", 0).attr("y", y).attr("dy", ++lineNumber * lineHeight + dy + "em").text(word);
-//       }
-//     }
-// }
 
 function cropLen(string) {
   if (string.length > 13) return string.substring(0, 14).concat("...");
   else return string;
 }
 
-// var groupPath = function(d) {
-//     var ret ="M" +
-//       d3.geom.hull(d.values.map(function(e) { return [e.x, e.y]; }))
-//         .join("L")
-//     + "Z";
-//     return ret !== "MZ" ? ret : null;
-// };
 
 // var groupFill = function(d, i) { return fill(i & 3); };
 // var fill = d3.scale.category10();
+
 
 function collide(data, alpha, padding) {
   var quadtree = d3.geom.quadtree(data);
@@ -167,8 +125,7 @@ function radial(d, radius, alpha, energy, center) {
 
 
 function tick(node, link, width, height) {
-  function lineData(d){
-    var straightLine = d3.svg.line().interpolate("bundle")
+  function lineData(d){ var straightLine = d3.svg.line().interpolate("bundle")
             .x(d => d.x)
             .y(d => d.y);
 
@@ -186,37 +143,15 @@ function tick(node, link, width, height) {
 
   return function(e) {
     nodeGroups.forEach(group => {
-
-      // TODO: better solution
-      // if (group.key === "1") {
-      //   console.log("group", group);
-      //   var maxNodes = Math.floor( 360 / (NODE_RAD + LABEL_OFFSET) );
-      //   var firstNodes = group.values.slice(0, maxNodes + 1);
-      //   var restNodes = group.values.slice(maxNodes+1);
-      //
-      //   firstNodes.forEach((d, i) => {
-      //     var radius = d.dim*LAYOUT_RAD;
-      //     d.angle = d.angle || 360 / firstNodes.length * i;
-      //     radial(d, radius + d.offset, e.alpha, 0.9, {x: width/2, y: height/2});
-      //   });
-      //
-      //   restNodes.forEach((d, i) => {
-      //     var radius = d.dim*LAYOUT_RAD;
-      //     d.angle = d.angle || 360 / restNodes.length * i;
-      //     d.offset = NODE_RAD + LABEL_OFFSET + 50;
-      //     radial(d, radius + d.offset, e.alpha, 0.9, {x: width/2, y: height/2});
-      //   });
-      // } else {
-        group.values.forEach((d, i) => {
-          var radius = d.dim*LAYOUT_RAD;
-          d.angle = d.angle || 360 / group.values.length * i;
-          // d.offset = NODE_RAD + LABEL_OFFSET + 50;
-          radial(d, radius + d.offset, e.alpha, 0.9, {x: width/2, y: height/2});
-        });
-      // }
+      group.values.forEach((d, i) => {
+        var radius = d.dim*LAYOUT_RAD;
+        d.angle = d.angle || 360 / group.values.length * i;
+        // d.offset = NODE_RAD + LABEL_OFFSET + 50;
+        radial(d, radius + d.offset, e.alpha, 0.9, {x: width/2, y: height/2});
+      });
     });
 
-    node.each(collide(node.data(), 0.1, 10 + LABEL_OFFSET));
+    node.each(collide(node.data(), 0.1, NODE_RAD + LABEL_OFFSET));
 
     node.attr("transform", d => "translate(" + d.x + "," + d.y + ")");
     link.attr("d", lineData);
@@ -235,48 +170,23 @@ function tick(node, link, width, height) {
   };
 }
 
-// props
-// {
-// widthTotal:
-// heightTotal: 500,
-// width:
-// height:
-// svg: svg,
-// linkedByIndex:
-//  data: [],
-//  view: "overview"
-//  margin: {
-//    left: 40,
-//    right: 40,
-//    top: 40,
-//    bottom: 0
-//  },
-//}
-
-var create = function(el, props) {
-
-  // TODO: fix hack
-  props.initData.forEach(d => {
+var create = function(el, props, state) {
+  state.data.forEach(d => {
     d.radius = NODE_RAD;
-    // d.index = i;
-    // d.group = parseInt(d.group) % 4;
   });
 
-  props.dataStack = [ props.initData ];
+  state.dataStack = [ state.data ];
 
-  //TODO: props to include as arg
   d3.select(el).append("svg")
-    // .attr("id", "pf")
     .attr("width", props.width)
     .attr("height", props.height);
 
-  // console.log("this Create", this);
   this.force.size([props.width, props.height]);
 
-  this.update(props, this);
+  return this;
 };
 
-function update(props, that) {
+function update(props, state, that) {
   var svg = d3.select("#vis-cont svg");
   var edges = [];
   var selectedNode = props.path.last();
@@ -286,8 +196,8 @@ function update(props, that) {
   if (selectedNode) {
     // TODO: fix later
     var type = "Keyword";
-    var nbs = props.linkedByIndex.nbs(selectedNode, type);
-    // console.log("nbs", nbs);
+    var nbs = state.linkedByIndex.nbs(selectedNode, type);
+    console.log("nbs", nbs);
     var sumRadius = d3.sum(nbs, d => d.radius);
 
     nbs.forEach((d, i) => {
@@ -295,7 +205,8 @@ function update(props, that) {
         id: selectedNode.title + "-" + d.title,
         source: selectedNode,
         target: d,
-        value: 1
+        value: 1,
+        type: d.connectedByType
       });
       d.connectedByType = type;
       d.dim = selectedNode.dim + 1;
@@ -309,22 +220,19 @@ function update(props, that) {
 
     // attach nbs
     if (props.forward) {
-      props.dataStack.push(_.uniq(props.path.concat(nbs), "title"));
+      console.log("forward");
+      state.dataStack.push(_.uniq(props.path.concat(nbs), "title"));
     }
 
     // console.log("update Graph inner", this);
     that.force.links(edges);
   }
 
-  that.force.nodes(props.dataStack.last());
-  // console.log("dataStack", props.dataStack.last().map(d => d.title));
+  that.force.nodes(state.dataStack.last());
 
-  // TODO: fix ID issue
   var node = svg.selectAll("g.group")
-                // TODO: does not work with id
-                .data(props.dataStack.last(), d => d.id);
+                .data(state.dataStack.last(), d => d.id);
 
-  // TODO: important
   node
     .enter()
     .call(function() {
@@ -367,7 +275,7 @@ function update(props, that) {
         .attr("xlink:href",(_, i) => "#arc"+i)
         .attr("startOffset", 3/40)
         .attr("dy","-1em")
-        .text(d => cropLen(d.title));//.each(wrap);
+        .text(d => cropLen(d.title));
 
       g.append("path")
         .attr("d", labelArc(NODE_RAD, NODE_RAD + LABEL_OFFSET))
@@ -393,16 +301,16 @@ function update(props, that) {
       console.log("clicked d", d);
 
       if (!d.selected) {
-        getTangibles();
-        // TODO: Ajax Request
-        d.fixed = true;
-        d.selected = true;
-        props.path.push(d);
-        props.forward = true;
+        getTangibles(function(type) {
+          d.fixed = true;
+          d.selected = true;
+          props.path.push(d);
+          props.forward = true;
 
-        props.getPath(props.path);
-
-        update(props, that);
+          console.log("retrieved Type", type);
+          props.getPath(props.path);
+          update(props, state, that);
+        });
       } else {
         // only last node can be disabled
         if (props.path.last().id !== d.id) return;
@@ -411,30 +319,33 @@ function update(props, that) {
 
         props.path.pop();
         props.forward = false;
-        props.dataStack.pop();
+        state.dataStack.pop();
 
         // send path to parent component
         console.log("props.path", props.path);
         props.getPath(props.path);
-        props.dataStack.last().forEach(e => {
+        state.dataStack.last().forEach(e => {
           if (e.dim > d.dim) e.dim = d.dim;
         });
         // reset angles
-        if (d.dim === 1) props.dataStack.last().forEach(e => e.angle = null );
-        update(props, that);
+        if (d.dim === 1) state.dataStack.last().forEach(e => e.angle = null );
+        update(props, state, that);
       }
     });
 
   var link = d3.select("#vis-cont svg").selectAll(".link")
         .data(edges, d => d.source.title + "-" + d.target.title);
 
-  link.style("stroke-width", d => d.value);
+  link
+    .style("stroke-width", d => d.target.selected ? 15 : 1)
+    .style("stroke", d => d.target.selected ? relationColors[d.type] : null);
 
   link
     .enter()
     .insert("path", ":first-child")
-    .attr("class", "link")
-    .style("stroke", 20);
+    .attr("class", "link");
+    // .style("stroke-width", d => d.value)
+    // .style("stroke", 20);
 
   that.force.on("tick", tick(node, link, props.width, props.height));
 

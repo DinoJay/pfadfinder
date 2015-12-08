@@ -1,15 +1,13 @@
 import d3 from "d3";
 import moment from "moment";
+// import _ from "lodash";
 
-import { makeEdges } from "./misc.js";
-
-
-var DOC_URL = "https://cdn4.iconfinder.com/data/icons/flat-icon-set/128/"
-              + "flat_icons-graficheria.it-11.png";
-var EMAIL_URL = "https://cdn0.iconfinder.com/data/icons/social-icons-20/200"
-                + "/mail-icon-128.png";
-var CALENDAR_URL = "https://cdn1.iconfinder.com/data/icons/education-colored-"
-                   +"icons-vol-3/128/145-128.png";
+import {
+  makeEdges,
+  relationColors,
+  DOC_URL,
+  EMAIL_URL,
+  CALENDAR_URL } from "./misc.js";
 
 // const BOXWIDTH  = 140;
 // const BOXHEIGHT = 40;
@@ -25,32 +23,30 @@ Array.prototype.last = function() {
     return this[this.length-1];
 };
 
-function collide(data, alpha, padding) {
-  var quadtree = d3.geom.quadtree(data);
-  return function(d) {
-      var r = d.radius + padding,
-          // nx1 = d.x - r,
-          // nx2 = d.x + r,
-          ny1 = d.y - r,
-          ny2 = d.y + r;
-      quadtree.visit(function(quad, x1, y1, x2, y2) {
-        if (quad.point && (quad.point !== d)) {
-          var y = d.y - quad.point.y,
-              l = Math.abs(y),
-              r = d.radius + padding + quad.point.radius;
-
-          // console.log("lr quadPoint", l, r, quad.point.radius);
-          if (l < r) {
-            l = (l - r) / l * alpha;
-            d.y -= y *= l;
-            quad.point.y += y;
-          }
-        }
-        return y1 > ny2 || y2 < ny1;
-    });
-  };
-}
-
+// function collide(data, alpha, padding) {
+//   var quadtree = d3.geom.quadtree(data);
+//   return function(d) {
+//       var r = d.radius + padding,
+//           // nx1 = d.x - r,
+//           // nx2 = d.x + r,
+//           ny1 = d.y - r,
+//           ny2 = d.y + r;
+//       quadtree.visit(function(quad, x1, y1, x2, y2) {
+//         if (quad.point && (quad.point !== d)) {
+//           var y = d.y - quad.point.y,
+//               l = Math.abs(y),
+//               r = d.radius + padding + quad.point.radius;
+//
+//           if (l < r) {
+//             l = (l - r) / l * alpha;
+//             d.y -= y *= l;
+//             quad.point.y += y;
+//           }
+//         }
+//         return y1 > ny2 || y2 < ny1;
+//     });
+//   };
+// }
 function overlap(a, b) {
     // return ( (a.x < b.x < a.x2() && a.y < b.y < a.y2()) || (a.x < b.x2() < a.x2() && a.y < b.y2() < a.y2()) );
     // TODO: understand
@@ -66,37 +62,39 @@ function overlap(a, b) {
 //     };
 // }
 
-function pushAxis(d, posY, posX, alpha, energy) {
-    var affectSize = alpha * energy;
-    d.y += (posY - d.y) * affectSize;
-    d.x += (posX - d.x) * affectSize;
-}
+// function pushAxis(d, posY, posX, alpha, energy) {
+//     var affectSize = alpha * energy;
+//     d.y += (posY - d.y) * affectSize;
+//     d.x += (posX - d.x) * affectSize;
+// }
 
-function tick(detailBox, yScale, link, linkText, width, height) {
+function tick(detailBox, link, linkContainer, width) {
   return function(e) {
-    // detailBox.each(movePos(pos, alpha));
-    detailBox.each((d, i) => pushAxis(d, yScale(i), width/2,
-                                      e.alpha, 0.5));
-    // detailBox.each(collide(detailBox.data(), e.alpha, 10));
-    // link.attr("d", lineData);
-    link.attr("d", d => {
-      var sourceX, centerX, targetX;
-      if ( d.counter % 2 === 0 ) {
-          sourceX =  d.source.x;
-          centerX = d.source.centerX() - 200;
-          targetX = d.target.x;
-       }
-      else {
-        sourceX =  d.source.x2();
-        centerX = d.source.centerX() + 200;
-        targetX = d.target.x2();
-      }
-      var centerY = (d.source.y2() + d.target.y)/2;
+    // detailBox.each((d, i) => pushAxis(d, yScale(d.title), width/2, e.alpha, 0.5));
+    detailBox.each((d, i) => {
+      var affectSize = e.alpha * 0.5;
+      // TODO: fix calculation
+      d.y += (i * 600 - d.y) * affectSize;
+      d.x += (width/2 - d.x) * affectSize;
+    });
 
-          return "M" + sourceX + "," + d.source.y2()
-              + "S" + centerX + "," + centerY
+    linkContainer.each(d => {
+        var centerY = d.source.y2() + ((d.target.y - d.source.y2()) / 2) - d.height / 2 ;
+        var centerX = d.source.x + d.source.width/2 - d.width/2  ;
+        d.x = centerX;
+        d.y = centerY;
+    });
+
+    link.attr("d", d => {
+      var sourceX =  d.source.centerX();
+      var targetX = d.target.centerX();
+      return "M" + sourceX + "," + d.source.y2()
               + " " + targetX + "," + d.target.y;
     });
+
+    linkContainer
+      .style("left", d => d.x + "px")
+      .style("top", d => d.y + "px");
 
     detailBox
       .style("left", d => d.x + "px")
@@ -121,14 +119,45 @@ function tick(detailBox, yScale, link, linkText, width, height) {
 //    bottom: 0
 //  },
 //}
-function update(el, props) {
+function update(el, props, data) {
 
-  console.log("this force", this);
-  var nodes = props.data.slice();
-  var edges = makeEdges(nodes.slice());
+  var nodes = data;
+  var orgEdges = makeEdges(nodes.slice());
+  var edges = [];
 
-  // TODO: adjust height growth
-  var height = nodes.length * 500;
+  console.log("orgEdges", orgEdges);
+
+  orgEdges.forEach(e => {
+    var s = e.source;
+    var t = e.target;
+    var i = {
+      id: "inter" + s.id + t.id,
+      metatype: "inter",
+      source: s,
+      target: t,
+      type: e.type,
+      value: e.value
+    };
+
+    nodes.push(i);
+
+    edges.push({
+      id: "start"+ s.id+i.id,
+      source: s,
+      target: i,
+      type: e.type
+    },
+    {
+      id: "end"+s.id+i.id,
+      source: i,
+      target: t,
+      type: e.type
+    });
+  });
+
+  console.log("nodes", nodes.filter(d => d.metatype === "inter"));
+  // adjust height growth
+  var height = nodes.filter(d => d.metatype === "doc").length * 400;
   var div = d3.select(el);
 
   div.select("svg")
@@ -137,18 +166,19 @@ function update(el, props) {
   var svg = div.select("svg")
                .attr("height", height);
 
-  var yScale = d3.scale.ordinal()
-      .domain(d3.range(nodes.length))
-      // .rangeRoundBands([0, 100], 200, 0);
-      .rangeRoundBands([props.margin.top, props.margin.top + height], 0.4, 0);
+  // TODO: fix coord calculation
+  // var yScale = d3.scale.ordinal()
+  //     .domain(nodes.filter(d => d.type ==="doc").map(d => d.title))
+  //     .rangeRoundBands([0, 600]);
+      // .range([props.margin.top, props.margin.top + height]);
 
 
   this.force.nodes(nodes);
   this.force.links(edges);
 
-  // TODO: fix ID issue
   var detailBox = div.selectAll(".tooltip")
-                     .data(nodes, d => d.id+"detailBox");
+                     .data(nodes.filter(d => d.metatype === "doc"),
+                           d => d.id+"detailBox");
 
   detailBox.enter()
     .call(function() {
@@ -158,14 +188,24 @@ function update(el, props) {
         .append("span")
           .attr("class", "content");
 
-        container.append("div")
-          .attr("class", "title")
-          .text(d => d.title);
+      container.append("div")
+        .attr("class", "title")
+        .text(d => d.title);
 
       container
         .append("img")
-        // TODO: get pic
-        .attr("src", DOC_URL)
+        .attr("src", d => {
+          switch (d.datatype) {
+            case "Publication":
+              return DOC_URL;
+            case "Email":
+              return EMAIL_URL;
+            case "Note":
+              return CALENDAR_URL;
+            default:
+              return CALENDAR_URL;
+          }
+        })
         .attr("class", "doc-pic")
         .text(d => d.title);
 
@@ -181,8 +221,8 @@ function update(el, props) {
         .text("Authors: ");
 
       subcontent.select(".authors")
-          .append("span")
-          .text(d => d.authors.join(", "));
+        .append("span")
+        .text(d => d.authors.join(", "));
 
       subcontent
         .append("p")
@@ -190,6 +230,7 @@ function update(el, props) {
         .append("span")
         .attr("class", "text-muted")
         .text("Keywords: ");
+
       subcontent.select(".keywords")
         .append("span")
         .text(d => d.keywords ? d.keywords.join(", ") : null);
@@ -218,17 +259,70 @@ function update(el, props) {
     });
 
   detailBox
-    .select("span").each(function(d){
-      var height = this.getBoundingClientRect().height;
-      var width = this.getBoundingClientRect().width;
+    .select(".content").each(function(d){
+      d.height = this.getBoundingClientRect().height;
+      d.width = this.getBoundingClientRect().width;
       d.x2 = function() {
-          return this.x + width;
+        return this.x + d.width;
       };
       d.y2 = function() {
-          return this.y + height;
+        return this.y + d.height;
       };
       d.centerX = function() {
-          return this.x + width / 2;
+        return this.x + d.width / 2;
+      };
+  });
+
+
+  var linkContainer = div.selectAll(".linkContainer")
+    .data(nodes.filter(d => d.metatype === "inter"),
+          d => "linkContainer" + d.id);
+
+  linkContainer.enter()
+    .call(function() {
+      this
+        .insert("div", ":first-child")
+          .attr("class", "linkContainer")
+        .append("div")
+          .attr("class", "content")
+        .append("div")
+          .attr("class", "center")
+          .style("background", d => relationColors[d.type])
+          .style("transform", d => {
+            var transformX;
+            switch (d.value.length) {
+              case 1:
+                transformX = 200;
+                break;
+              case 2:
+                transformX = 75;
+                break;
+              case 3:
+                transformX = 25;
+                break;
+              case 4:
+                transformX = 10;
+                break;
+              default:
+                transformX = 75;
+            }
+            return "translate(-50%," + transformX + "%)";
+          })
+          .text(d => d.value.join(", "));
+    });
+
+  linkContainer
+    .select(".content").each(function(d){
+      d.height = this.getBoundingClientRect().height;
+      d.width = this.getBoundingClientRect().width;
+      d.x2 = function() {
+          return this.x + d.width;
+      };
+      d.y2 = function() {
+          return this.y + d.height;
+      };
+      d.centerX = function() {
+          return this.x + d.width / 2;
       };
   });
 
@@ -239,58 +333,63 @@ function update(el, props) {
     .enter()
     .insert("path", ":first-child")
     .attr("class", "link-detail")
-    .attr("id",function(d) { return "linkId_" + d.id; })
+    .attr("id", d => "linkId_" + d.id)
     .style("stroke", 20)
     .attr("marker-end", "url(#end)");
 
-  var linkText = svg.selectAll(".linkText")
-    // TODO: update mechanism
+  var linkLabel = svg.selectAll(".linkLabel")
     .data(this.force.links(), d => "label" + d.id);
 
-  linkText.enter()
-    .append("g")
-    .append("text")
-      .attr("class","linkText")
-      .attr("dx", -5)
-      .attr("dy", 20)
-      .style("fill", "DarkSlateGray")
-    .append("textPath")
-      .attr("xlink:href",function(d) { return "#linkId_" + d.id;})
-      .attr("transform", "rotate(-90)")
-      .attr("startOffset", "25%")
-      .style("text-anchor", "start")
-    .text(d => d.type);
+  linkLabel.enter()
+    .call(function() {
+      this
+        .append("g")
+        .append("text")
+          .attr("class","linkLabel")
+          .attr("dx", -5)
+          .attr("dy", 20)
+          .style("fill", "DarkSlateGray")
+        .append("textPath")
+          .attr("xlink:href", d => "#linkId_" + d.id)
+          .attr("transform", "rotate(-90)")
+          .attr("startOffset", "10%")
+          .style("text-anchor", "start")
+        .text(d => d.type);
+    });
 
   // build the arrow.
   svg.append("svg:defs").selectAll("marker")
-      .data(["end"])      // Different link/path types can be defined here
-    .enter().append("svg:marker")    // This section adds in the arrows
-      .attr("id", String)
-      .attr("viewBox", "0 -5 10 10")
-      .attr("refX", 5)
-      .attr("refY", 0)
-      .attr("markerWidth", 3)
-      .attr("markerHeight", 3)
-      .attr("orient", "auto")
-      .style("fill", "DarkSlateGray")
-    .append("svg:path")
-      .attr("d", "M0,-5L10,0L0,5");
+    .data(["end"])      // Different link/path types can be defined here
+    .enter()
+    .call(function() {
+      this
+        .append("svg:marker")    // This section adds in the arrows
+          .attr("id", String)
+          .attr("viewBox", "0 -5 10 10")
+          .attr("refX", 5)
+          .attr("refY", 0)
+          .attr("markerWidth", 3)
+          .attr("markerHeight", 3)
+          .attr("orient", "auto")
+          .style("fill", "DarkSlateGray")
+        .append("svg:path")
+          .attr("d", "M0,-5L10,0L0,5");
+    });
 
-  // console.log("linkText", linkText.data());
-
-  this.force.on("tick", tick(detailBox, yScale, link, linkText, props.width, props.height));
+  this.force.on("tick", tick(detailBox, link, linkContainer, props.width));
 
   detailBox.exit().remove();
   link.exit().remove();
-  linkText.exit().remove();
+  linkLabel.exit().remove();
+  linkContainer.exit().remove();
 
   this.force.start();
 }
 
 function create(el, props) {
-      d3.select(el)
-        .append("svg")
-          .attr("width", props.width);
+  d3.select(el)//.select("#timeline-cont")
+    .append("svg")
+      .attr("width", props.width);
 }
 
 
@@ -309,11 +408,11 @@ function create(el, props) {
 const d3Timeline = new function(){
   return {
     force: d3.layout.force()
-              .charge(0)
-              .gravity(0.2)
-              .friction(0.9)
-              .linkDistance(0)
-              .linkStrength(0),
+                    .charge(0)
+                    .gravity(0.2)
+                    .friction(0.9)
+                    .linkDistance(0)
+                    .linkStrength(0),
 
     update: update,
 

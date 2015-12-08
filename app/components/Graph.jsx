@@ -7,26 +7,23 @@ var linkedByIndex = new function() {
     index: {},
     nodes: [],
     init: function(nodes, links) {
-      links.forEach(d => this.index[d.source + "," + d.target] = d);
+      links.forEach(l => this.index[l.source + "," + l.target] = l);
       this.nodes = nodes;
       return this;
     },
-    // nbs: function(a, type) {
-    //   // console.log("linkedByIndex", this.nodes, "Index", this.index);
-    //   return this.nodes.filter(b => {
-    //     return (this.index[a.i + "," + b.i] #<{(| || this.index[a.i + "," + b.i] |)}>#);
-    //         // && this.index[a.index + "," + b.index].values.indexOf(type));
-    //   });
-    // },
     nbs: function(a) {
-      return this.nodes.filter(b => {
-        var isEdge0 = this.index[a.i + "," + b.i] && a.i !== b.i;
-        // var isEdge1 = this.index[b.index + "," + a.index] || a.index !== b.index;
-        return isEdge0; //|| isEdge1;
+      var nbs = [];
+      this.nodes.forEach(b => {
+        if (a.i !== b.i && this.index[a.i + "," + b.i]) {
+          b.linkedBy = this.index[a.i + "," + b.i];
+          nbs.push(b);
+        }
       });
+      return nbs;
     }
   };
 };
+
 var Graph = React.createClass({
   getDefaultProps: function() {
     return {
@@ -53,22 +50,44 @@ var Graph = React.createClass({
       return d;
     });
 
-    console.log("documents", documents);
 
+    console.log("FILTER", this.props.filter);
     var initDocs;
     if (this.props.filter) {
-      initDocs = documents.filter(d => d.datatype === this.props.filter);
-    } else initDocs = documents;
+      initDocs = documents
+                    .filter(d => d.datatype === this.props.filter)
+                    .slice(0, 40);
+
+    } else initDocs = documents;//;.slice(0, 40);
 
     return {
       linkedByIndex: linkedByIndex.init(initDocs, this.props.data.links),
-      initData: initDocs
+      // TODO: fix later
+      data: initDocs,
+      that: null
     };
+  },
+
+
+  componentDidUpdate: function() {
+    if (this.props.filter) {
+      var docs = this.state.data.filter(d => d.datatype === this.props.filter);
+      var links = linkedByIndex.init(docs, this.props.data.links);
+      d3ggLayout.update(this.props,
+                        {
+                          linkedByIndex: links,
+                          data: docs,
+                          dataStack: [docs]
+                        },
+                        this.state.that);
+    }
   },
 
   componentDidMount: function() {
     var el = this.getDOMNode();
-    d3ggLayout.create(el, { ...this.props, ...this.state});
+    var that = d3ggLayout.create(el, this.props, this.state);
+    this.setState({that: that});
+    d3ggLayout.update(this.props, this.state, that);
   },
 
   render: function() {
