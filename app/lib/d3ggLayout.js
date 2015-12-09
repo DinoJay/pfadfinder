@@ -296,7 +296,7 @@ function update(props, state, that) {
     });
 
   node
-    .on("mouseenter", function(d) {
+    .on("touchmove", function(d) {
       console.log("clicked d", d.x, d.y);
       if (!d.selected) {
         // getTangibles(function(tangibles) {
@@ -313,7 +313,7 @@ function update(props, state, that) {
         // });
       }
     })
-    .on("mouseout", function(d) {
+    .on("touchend", function(d) {
         if (props.path.last().id !== d.id) return;
         d.fixed = false;
         d.selected = false;
