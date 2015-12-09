@@ -8,7 +8,8 @@ import {
   sourceColors,
   DOC_URL,
   EMAIL_URL,
-  CALENDAR_URL} from "../lib/misc";
+  CALENDAR_URL
+} from "../lib/misc";
 
 function relationTypeLegend(el) {
   var ordinal = d3.scale.ordinal()

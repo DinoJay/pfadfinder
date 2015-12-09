@@ -11,12 +11,13 @@ var linkedByIndex = new function() {
       this.nodes = nodes;
       return this;
     },
-    nbs: function(a) {
+    nbs: function(a, type) {
       var nbs = [];
       this.nodes.forEach(b => {
         if (a.i !== b.i && this.index[a.i + "," + b.i]) {
           b.linkedBy = this.index[a.i + "," + b.i];
-          nbs.push(b);
+          console.log("LinkedBy, ", b.linkedBy);
+          if (b.linkedBy.type === type) nbs.push(b);
         }
       });
       return nbs;
@@ -71,8 +72,9 @@ var Graph = React.createClass({
 
   componentDidUpdate: function() {
     if (this.props.filter) {
-      var docs = this.state.data.filter(d => d.datatype === this.props.filter);
+      var docs = this.state.data.filter(d => d.kind === this.props.filter);
       var links = linkedByIndex.init(docs, this.props.data.links);
+      console.log("DOCS", docs);
       d3ggLayout.update(this.props,
                         {
                           linkedByIndex: links,

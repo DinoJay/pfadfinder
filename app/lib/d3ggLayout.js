@@ -19,21 +19,20 @@ Array.prototype.last = function() {
     return this[this.length-1];
 };
 
-
-
 function getTangibles(successFunc) {
-  $.ajax({
-    url: "http://localhost:8080/CamCapture/AjaxTypeServlet?callback=?",
-    type: "get",
-    dataType: "jsonp",
-    jsonp: "callback",
-    success: function(type) {
-      successFunc(type);
-    },
-    error: function(err) {
-       console.log("err", err);
-    }
-  });
+$.ajax({ url: "http://localhost:8080/CamCapture/AjaxServlet?callback=?",
+ type: "get",
+ dataType: "jsonp",
+ jsonp: "callback",
+   // Accept: 'application/sparql-results+json',
+   // async: false,
+   success: function(tangibles) {
+     successFunc(tangibles);
+   },
+   error: function(err) {
+     console.log("err", err);
+   }
+});
 }
 
 function backgroundArc(radius) {
@@ -297,22 +296,24 @@ function update(props, state, that) {
     });
 
   node
-    .on("click", function(d) {
-      console.log("clicked d", d);
-
+    .on("mouseenter", function(d) {
+      console.log("clicked d", d.x, d.y);
       if (!d.selected) {
-        getTangibles(function(type) {
+        // getTangibles(function(tangibles) {
           d.fixed = true;
           d.selected = true;
+          // TODO: change to state
           props.path.push(d);
           props.forward = true;
+          // state.tangibles = tangibles;
 
-          console.log("retrieved Type", type);
+          // console.log("retrieved Type", tangibles);
           props.getPath(props.path);
           update(props, state, that);
-        });
-      } else {
-        // only last node can be disabled
+        // });
+      }
+    })
+    .on("mouseout", function(d) {
         if (props.path.last().id !== d.id) return;
         d.fixed = false;
         d.selected = false;
@@ -331,7 +332,7 @@ function update(props, state, that) {
         if (d.dim === 1) state.dataStack.last().forEach(e => e.angle = null );
         update(props, state, that);
       }
-    });
+    );
 
   var link = d3.select("#vis-cont svg").selectAll(".link")
         .data(edges, d => d.source.title + "-" + d.target.title);

@@ -24,7 +24,7 @@ var CircleMenu = React.createClass({
   clickHandler: function (e) {
     e.preventDefault();
     console.log("event", e);
-    this.props.getDocType("Publication");
+    this.props.getDocKind("Digital");
   },
 
   render: function() {

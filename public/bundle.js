@@ -20598,8 +20598,8 @@
 	    this.setState({ path: pathCopy });
 	  },
 	
-	  getDocType: function getDocType(docType) {
-	    this.setState({ docType: docType });
+	  getDocKind: function getDocKind(docKind) {
+	    this.setState({ docKind: docKind });
 	  },
 	
 	  // changeView: function () {
@@ -20624,15 +20624,15 @@
 	        width: this.state.width,
 	        height: this.state.height,
 	        diameter: 100,
-	        getDocType: this.getDocType
+	        getDocKind: this.getDocKind
 	      }),
 	      _react2["default"].createElement(_componentsGraph2["default"], {
 	        width: this.state.width,
 	        height: this.state.height,
 	        data: data,
 	        margin: this.props.margin,
-	        getPath: this.getPath
-	        // filter={this.state.docType}
+	        getPath: this.getPath,
+	        filter: this.state.docKind
 	      }),
 	      _react2["default"].createElement(_componentsLegend2["default"], null),
 	      _react2["default"].createElement(_componentsTimeline2["default"], { data: this.state.path })
@@ -20682,14 +20682,15 @@
 	      this.nodes = nodes;
 	      return this;
 	    },
-	    nbs: function nbs(a) {
+	    nbs: function nbs(a, type) {
 	      var _this2 = this;
 	
 	      var nbs = [];
 	      this.nodes.forEach(function (b) {
 	        if (a.i !== b.i && _this2.index[a.i + "," + b.i]) {
 	          b.linkedBy = _this2.index[a.i + "," + b.i];
-	          nbs.push(b);
+	          console.log("LinkedBy, ", b.linkedBy);
+	          if (b.linkedBy.type === type) nbs.push(b);
 	        }
 	      });
 	      return nbs;
@@ -20748,9 +20749,10 @@
 	
 	    if (this.props.filter) {
 	      var docs = this.state.data.filter(function (d) {
-	        return d.datatype === _this4.props.filter;
+	        return d.kind === _this4.props.filter;
 	      });
 	      var links = linkedByIndex.init(docs, this.props.data.links);
+	      console.log("DOCS", docs);
 	      _libD3ggLayoutJs2["default"].update(this.props, {
 	        linkedByIndex: links,
 	        data: docs,
@@ -20824,13 +20826,14 @@
 	};
 	
 	function getTangibles(successFunc) {
-	  _jquery2["default"].ajax({
-	    url: "http://localhost:8080/CamCapture/AjaxServlett?callback=?",
+	  _jquery2["default"].ajax({ url: "http://localhost:8080/CamCapture/AjaxServlet?callback=?",
 	    type: "get",
 	    dataType: "jsonp",
 	    jsonp: "callback",
-	    success: function success(type) {
-	      successFunc(type);
+	    // Accept: 'application/sparql-results+json',
+	    // async: false,
+	    success: function success(tangibles) {
+	      successFunc(tangibles);
 	    },
 	    error: function error(err) {
 	      console.log("err", err);
@@ -21070,41 +21073,43 @@
 	  });
 	
 	  node.on("click", function (d) {
-	    console.log("clicked d", d);
+	    console.log("clicked d", d.x, d.y);
 	
 	    if (!d.selected) {
-	      getTangibles(function (type) {
-	        d.fixed = true;
-	        d.selected = true;
-	        props.path.push(d);
-	        props.forward = true;
+	      // getTangibles(function(tangibles) {
+	      d.fixed = true;
+	      d.selected = true;
+	      // TODO: change to state
+	      props.path.push(d);
+	      props.forward = true;
+	      // state.tangibles = tangibles;
 	
-	        console.log("retrieved Type", type);
-	        props.getPath(props.path);
-	        update(props, state, that);
-	      });
-	    } else {
-	      // only last node can be disabled
-	      if (props.path.last().id !== d.id) return;
-	      d.fixed = false;
-	      d.selected = false;
-	
-	      props.path.pop();
-	      props.forward = false;
-	      state.dataStack.pop();
-	
-	      // send path to parent component
-	      console.log("props.path", props.path);
+	      // console.log("retrieved Type", tangibles);
 	      props.getPath(props.path);
-	      state.dataStack.last().forEach(function (e) {
-	        if (e.dim > d.dim) e.dim = d.dim;
-	      });
-	      // reset angles
-	      if (d.dim === 1) state.dataStack.last().forEach(function (e) {
-	        return e.angle = null;
-	      });
 	      update(props, state, that);
-	    }
+	      // });
+	    } else {
+	        // only last node can be disabled
+	        if (props.path.last().id !== d.id) return;
+	        d.fixed = false;
+	        d.selected = false;
+	
+	        props.path.pop();
+	        props.forward = false;
+	        state.dataStack.pop();
+	
+	        // send path to parent component
+	        console.log("props.path", props.path);
+	        props.getPath(props.path);
+	        state.dataStack.last().forEach(function (e) {
+	          if (e.dim > d.dim) e.dim = d.dim;
+	        });
+	        // reset angles
+	        if (d.dim === 1) state.dataStack.last().forEach(function (e) {
+	          return e.angle = null;
+	        });
+	        update(props, state, that);
+	      }
 	  });
 	
 	  var link = _d32["default"].select("#vis-cont svg").selectAll(".link").data(edges, function (d) {
@@ -64286,7 +64291,7 @@
 	  clickHandler: function clickHandler(e) {
 	    e.preventDefault();
 	    console.log("event", e);
-	    this.props.getDocType("Publication");
+	    this.props.getDocKind("Digital");
 	  },
 	
 	  render: function render() {

@@ -43,8 +43,8 @@ var App = React.createClass({
     this.setState({path: pathCopy});
   },
 
-  getDocType: function(docType) {
-    this.setState({docType: docType});
+  getDocKind: function(docKind) {
+    this.setState({docKind: docKind});
   },
 
   // changeView: function () {
@@ -68,7 +68,7 @@ var App = React.createClass({
           width={this.state.width}
           height={this.state.height}
           diameter={100}
-          getDocType={this.getDocType}
+          getDocKind={this.getDocKind}
         />
         <Graph
           width={this.state.width}
@@ -76,7 +76,7 @@ var App = React.createClass({
           data={data}
           margin={this.props.margin}
           getPath={this.getPath}
-          // filter={this.state.docType}
+          filter={this.state.docKind}
         />
         <Legend/>
         <Timeline data={this.state.path} />
