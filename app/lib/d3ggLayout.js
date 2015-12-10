@@ -4,7 +4,9 @@ import _ from "lodash";
 
 import $ from "jquery";
 
-import { makeEdges, DOC_URL, EMAIL_URL, CALENDAR_URL, relationColors} from "./misc.js";
+import { makeEdges, DOC_URL, EMAIL_URL, CALENDAR_URL,
+  relationColors, NOTE_URL
+} from "./misc.js";
 
 const D2R = Math.PI / 180;
 
@@ -19,20 +21,22 @@ Array.prototype.last = function() {
     return this[this.length-1];
 };
 
-function getTangibles(successFunc) {
-$.ajax({ url: "http://localhost:8080/CamCapture/AjaxTypeServlett?callback=?",
- type: "get",
- dataType: "jsonp",
- jsonp: "callback",
-   // Accept: 'application/sparql-results+json',
-   // async: false,
-   success: function(tangibles) {
-     successFunc(tangibles);
-   },
-   error: function(err) {
-     console.log("err", err);
-   }
-});
+function getTangibles(length, successFunc) {
+  $.ajax({
+    url: "http://localhost:8080/CamCapture/AjaxTypeServlett?callback=?",
+    type: "get",
+    data: {length: length},
+    dataType: "jsonp",
+    jsonp: "callback",
+    // Accept: "application/sparql-results+json",
+    // async: false,
+    success: function(tangibles) {
+       successFunc(tangibles);
+    },
+    error: function(err) {
+      console.log("err", err);
+    }
+  });
 }
 
 function myDiffList(oldTypes, newTypes) {
@@ -183,11 +187,6 @@ function tick(node, link, width, height) {
 }
 
 var create = function(el, props, state) {
-  window.oncontextmenu = function(event) {
-       event.preventDefault();
-       event.stopPropagation();
-       return false;
-  };
   state.data.forEach(d => {
     d.radius = NODE_RAD;
   });
@@ -265,7 +264,7 @@ function update(props, state, that) {
             case "Email":
               return EMAIL_URL;
             case "Note":
-              return CALENDAR_URL;
+              return NOTE_URL;
             default:
               return CALENDAR_URL;
           }
@@ -318,7 +317,7 @@ function update(props, state, that) {
       // d3.event.stopPropagation();
 
       if (!d.selected) {
-        getTangibles(function(types) {
+        getTangibles(props.path.length, function(types) {
           d.fixed = true;
           d.selected = true;
           // TODO: change to state
@@ -357,7 +356,32 @@ function update(props, state, that) {
         if (d.dim === 1) state.dataStack.last().forEach(e => e.angle = null );
         update(props, state, that);
       }
-    );
+    )
+    .on("click", function(d) {
+      d3.event.preventDefault();
+      var type = "Keyword";
+
+      // var selectedNode = props.path.last();
+      var nbs = state.linkedByIndex.nbs(d, type);
+
+      var ul = d3.select("#vis-cont")
+          .insert("ul", ":first-child")
+          .attr("id", "context-menu")
+          .attr("class", "menu")
+          .style("position", "absolute")
+          .style("left", d.x + "px")
+          .style("top", d.y + "px")
+          .style("display", "inline-block");
+
+      ul.selectAll("li")
+        .data(nbs)
+        .enter()
+      .append("li")
+        .text("teast");
+
+      console.log("nbs", nbs.map(d => d.linkedBy.value));
+
+    });
 
   var link = d3.select("#vis-cont svg").selectAll(".link")
         .data(edges, d => d.source.title + "-" + d.target.title);

@@ -85,15 +85,20 @@ var Graph = React.createClass({
   },
 
   componentDidMount: function() {
+    // window.oncontextmenu = function(event) {
+    //   event.preventDefault();
+    //   event.stopPropagation();
+    //   return false;
+    // };
     var el = this.getDOMNode();
     var that = d3ggLayout.create(el, this.props, this.state);
     this.setState({that: that});
     d3ggLayout.update(this.props, this.state, that);
   },
 
-  render: function() {
-    return (
-      <div id="vis-cont"></div>
+  render: function() { return (
+      <div id="vis-cont">
+      </div>
     );
   }
 });

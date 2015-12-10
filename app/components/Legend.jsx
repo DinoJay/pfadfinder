@@ -8,7 +8,7 @@ import {
   sourceColors,
   DOC_URL,
   EMAIL_URL,
-  CALENDAR_URL
+  NOTE_URL
 } from "../lib/misc";
 
 function relationTypeLegend(el) {
@@ -82,17 +82,15 @@ function picLegend(el) {
 
   iconCont.append("svg:image")
       .attr("xlink:href", d => {
-          switch (d) {
-            case "Publication":
-              return DOC_URL;
-            case "Email":
-              return EMAIL_URL;
-            case "Note":
-              return CALENDAR_URL;
-            default:
-              return CALENDAR_URL;
-          }
-       })
+        switch (d) {
+          case "Publication":
+            return DOC_URL;
+          case "Email":
+            return EMAIL_URL;
+          case "Note":
+            return NOTE_URL;
+        }
+      })
       .attr("height", 23)
       .attr("width", 23)
       .attr("x", "0")

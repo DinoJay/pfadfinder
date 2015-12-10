@@ -1,9 +1,7 @@
 export function makeEdges(stack) {
   var edges = [];
   var c = stack.length;
-  while(stack.length > 1) {
-    var target = stack.pop();
-    var source = stack[stack.length - 1];
+  while(stack.length > 1) { var target = stack.pop(); var source = stack[stack.length - 1];
     var edge  = {
       id: source.id + "-" + target.id,
       counter: c--,
@@ -38,3 +36,6 @@ export var EMAIL_URL = "https://cdn0.iconfinder.com/data/icons/social-icons-20/2
 
 export var CALENDAR_URL = "https://cdn1.iconfinder.com/data/icons/education-colored-"
                    +"icons-vol-3/128/145-128.png";
+
+export var NOTE_URL = "evernoteIcon.png";
+
