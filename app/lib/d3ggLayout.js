@@ -40,14 +40,17 @@ function getTangibles(length, successFunc) {
 }
 
 function myDiffList(oldTypes, newTypes) {
+  // TODO: clone oldTypes
+  var newType;
   newTypes.forEach(type => {
     var index = oldTypes.indexOf(type);
     if (index >= 0) {
         oldTypes.splice(index, 1);
     } else {
-      return type;
+      newType = type;
     }
   });
+  return newType;
 }
 
 function backgroundArc(radius) {
@@ -325,7 +328,6 @@ function update(props, state, that) {
 
           // TODO: check if it works
           state.type = myDiffList(state.types, types);
-          console.log("difflist", myDiffList(state.types, types));
           console.log("state.type", state.type);
           state.types = types;
 
@@ -354,51 +356,32 @@ function update(props, state, that) {
         if (d.dim === 1) state.dataStack.last().forEach(e => e.angle = null );
         update(props, state, that);
       }
-    )
-    .on("click", function(d) {
-      d3.event.preventDefault();
-      var type = "Keyword";
-
-      // var selectedNode = props.path.last();
-      var nbs = state.linkedByIndex.nbs(d, type);
-
-      var nbsByType = [];
-
-      nbs.forEach(d => {
-        d.linkedBy.value.forEach(e => {
-          // TODO: dirty
-          d.typeValue = e;
-          nbsByType.push(d);
-        });
-      });
-
-      var nestedNbs = d3.nest()
-        .key(function(d) { return d.typeValue; })
-        .entries(nbsByType);
-
-      var ul = d3.select("#vis-cont")
-          .insert("ul", ":first-child")
-          .attr("id", "context-menu")
-          .attr("class", "menu")
-          .style("position", "absolute")
-          .style("left", d.x + "px")
-          .style("top", d.y + "px")
-          .style("display", "inline-block");
-
-      ul.selectAll("li")
-        .data(nestedNbs)
-        .enter()
-      .append("li")
-      .on("click", function(e) {
-        console.log("value", e);
-        props.forward = true;
-        update(props, state, that, nbs);
-      })
-        .text(d => d.key);
-
-      console.log("nbs", nbs.map(d => d.linkedBy.value));
-
-    });
+    );
+    // .on("click", function(d) {
+    //   d3.event.preventDefault();
+    //   var type = "Keyword";
+    //
+    //   // var selectedNode = props.path.last();
+    //   var nbs = state.linkedByIndex.nbs(d, type);
+    //
+    //   var ul = d3.select("#vis-cont")
+    //       .insert("ul", ":first-child")
+    //       .attr("id", "context-menu")
+    //       .attr("class", "menu")
+    //       .style("position", "absolute")
+    //       .style("left", d.x + "px")
+    //       .style("top", d.y + "px")
+    //       .style("display", "inline-block");
+    //
+    //   ul.selectAll("li")
+    //     .data(nbs)
+    //     .enter()
+    //   .append("li")
+    //     .text("teast");
+    //
+    //   console.log("nbs", nbs.map(d => d.linkedBy.value));
+    //
+    // });
 
   var link = d3.select("#vis-cont svg").selectAll(".link")
         .data(edges, d => d.source.title + "-" + d.target.title);
