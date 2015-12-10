@@ -20,7 +20,7 @@ Array.prototype.last = function() {
 };
 
 function getTangibles(successFunc) {
-$.ajax({ url: "http://localhost:8080/CamCapture/AjaxServlet?callback=?",
+$.ajax({ url: "http://localhost:8080/CamCapture/AjaxTypeServlett?callback=?",
  type: "get",
  dataType: "jsonp",
  jsonp: "callback",
@@ -33,6 +33,20 @@ $.ajax({ url: "http://localhost:8080/CamCapture/AjaxServlet?callback=?",
      console.log("err", err);
    }
 });
+}
+
+function myDiffList(oldTypes, newTypes) {
+  // TODO: clone oldTypes
+  var newType;
+  newTypes.forEach(type => {
+    var index = oldTypes.indexOf(type);
+    if (index >= 0) {
+        oldTypes.splice(index, 1);
+    } else {
+      newType = type;
+    }
+  });
+  return newType;
 }
 
 function backgroundArc(radius) {
@@ -179,6 +193,7 @@ var create = function(el, props, state) {
   });
 
   state.dataStack = [ state.data ];
+  state.types = [];
 
   d3.select(el).append("svg")
     .attr("width", props.width)
@@ -199,6 +214,7 @@ function update(props, state, that) {
   if (selectedNode) {
     // TODO: fix later
     var type = "Keyword";
+    // getTangibles(function(types) {});
     var nbs = state.linkedByIndex.nbs(selectedNode, type);
     console.log("nbs", nbs);
     var sumRadius = d3.sum(nbs, d => d.radius);
@@ -223,7 +239,6 @@ function update(props, state, that) {
 
     // attach nbs
     if (props.forward) {
-      console.log("forward");
       state.dataStack.push(_.uniq(props.path.concat(nbs), "title"));
     }
 
@@ -289,33 +304,37 @@ function update(props, state, that) {
         .attr("opacity", 0.5);
     });
 
-  console.log("Node data", node.data());
   var maxDim = d3.max(node.data(), d => d.dim);
   node
     .attr("opacity", d => {
       if (d.dim < maxDim && !d.selected) return 0.1;
       // TODO: delete later
-      if (d.dim === maxDim && !d.selected) return 0.5;
-      return 1;
+      // if (d.dim === maxDim && !d.selected) return 0.5;
+      // return 1;
     });
 
   node
     .on("touchstart", function(d) {
       // d3.event.stopPropagation();
-      console.log("clicked d", d.x, d.y);
+
       if (!d.selected) {
-        // getTangibles(function(tangibles) {
+        getTangibles(function(types) {
           d.fixed = true;
           d.selected = true;
           // TODO: change to state
           props.path.push(d);
           props.forward = true;
-          // state.tangibles = tangibles;
+          console.log("state types before", "length", state.types.length);
+          console.log("retrieved Type", "length", types.length);
 
-          // console.log("retrieved Type", tangibles);
+          // TODO: check if it works
+          state.type = myDiffList(state.types, types);
+          state.types = types;
+
+          console.log("NEW state types", "length", state.types.length);
           props.getPath(props.path);
           update(props, state, that);
-        // });
+        });
       }
     })
     .on("touchend", function(d) {
@@ -329,7 +348,6 @@ function update(props, state, that) {
         state.dataStack.pop();
 
         // send path to parent component
-        console.log("props.path", props.path);
         props.getPath(props.path);
         state.dataStack.last().forEach(e => {
           if (e.dim > d.dim) e.dim = d.dim;

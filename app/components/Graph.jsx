@@ -16,7 +16,6 @@ var linkedByIndex = new function() {
       this.nodes.forEach(b => {
         if (a.i !== b.i && this.index[a.i + "," + b.i]) {
           b.linkedBy = this.index[a.i + "," + b.i];
-          console.log("LinkedBy, ", b.linkedBy);
           if (b.linkedBy.type === type) nbs.push(b);
         }
       });
