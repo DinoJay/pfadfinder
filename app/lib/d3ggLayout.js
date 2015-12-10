@@ -162,14 +162,18 @@ function tick(node, link, width, height) {
           .insert("path", ":first-child")
           .attr("d", backgroundArc(radius))
           .attr("id", "background-arc" + lastGroup.key)
-          .attr("transform", "translate(" + width/2 + "," +  height/2  + ")")
-          .style("stroke-width", 1)
+          .attr("transform", "translate(" + width/2 + "," +  height/2  + ")") .style("stroke-width", 1)
           .attr("fill", "lightgrey");
     }
   };
 }
 
 var create = function(el, props, state) {
+  window.oncontextmenu = function(event) {
+       event.preventDefault();
+       event.stopPropagation();
+       return false;
+  };
   state.data.forEach(d => {
     d.radius = NODE_RAD;
   });
@@ -296,7 +300,8 @@ function update(props, state, that) {
     });
 
   node
-    .on("touchmove", function(d) {
+    .on("touchstart", function(d) {
+      // d3.event.stopPropagation();
       console.log("clicked d", d.x, d.y);
       if (!d.selected) {
         // getTangibles(function(tangibles) {
@@ -314,6 +319,7 @@ function update(props, state, that) {
       }
     })
     .on("touchend", function(d) {
+        // d3.event.stopPropagation();
         if (props.path.last().id !== d.id) return;
         d.fixed = false;
         d.selected = false;
