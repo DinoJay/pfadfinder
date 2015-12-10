@@ -18,7 +18,9 @@ var LABEL_OFFSET = 15;
 var LAYOUT_RAD = 175;
 
 Array.prototype.last = function() {
-    return this[this.length-1];
+    if (this.length > 0)
+      return this[this.length-1];
+    else return null;
 };
 
 function getTangibles(length, successFunc) {
@@ -203,7 +205,7 @@ var create = function(el, props, state) {
   return this;
 };
 
-function update(props, state, that) {
+function update(props, state, that, nbs) {
   var svg = d3.select("#vis-cont svg");
   var edges = [];
   var selectedNode = props.path.last();
@@ -211,11 +213,6 @@ function update(props, state, that) {
   // console.log("selectedNode", selectedNode);
 
   if (selectedNode) {
-    // TODO: fix later
-    var type = "Keyword";
-    // getTangibles(function(types) {});
-    var nbs = state.linkedByIndex.nbs(selectedNode, type);
-    console.log("nbs", nbs);
     var sumRadius = d3.sum(nbs, d => d.radius);
 
     nbs.forEach((d, i) => {
@@ -226,7 +223,7 @@ function update(props, state, that) {
         value: 1,
         type: d.connectedByType
       });
-      d.connectedByType = type;
+      // d.connectedByType = type;
       d.dim = selectedNode.dim + 1;
 
       d.angle = selectedNode.angle - (sumRadius / (d.dim*2))
@@ -313,32 +310,69 @@ function update(props, state, that) {
     });
 
   node
-    .on("touchstart", function(d) {
+    .on("click", function(d) {
       // d3.event.stopPropagation();
-
       if (!d.selected) {
-        getTangibles(props.path.length, function(types) {
+        // getTangibles(props.path.length, function(types) {
           d.fixed = true;
           d.selected = true;
           // TODO: change to state
           props.path.push(d);
           props.forward = true;
           console.log("state types before", "length", state.types.length);
-          console.log("retrieved Type", "length", types.length);
+          // console.log("retrieved Type", "length", types.length);
 
           // TODO: check if it works
-          state.type = myDiffList(state.types, types);
+          // state.type = myDiffList(state.types, types);
           console.log("state.type", state.type);
-          state.types = types;
+          // state.types = types;
 
           console.log("NEW state types", "length", state.types.length);
           props.getPath(props.path);
-          update(props, state, that);
-        });
-      }
-    })
-    .on("touchend", function(d) {
+
+          var type = "Keyword";
+          // var selectedNode = props.path.last();
+          var nbs = state.linkedByIndex.nbs(d, type);
+
+          var nbsByLinkValueDuplicates = _.flatten(nbs.map(d => {
+            return d.linkedBy.value.map(v => {
+              d.linkValue = v;
+              return d;
+            });
+          }));
+
+          var nestedNbs = d3.nest()
+            .key(function(d) { return d.linkValue; })
+            .entries(nbsByLinkValueDuplicates);
+
+          var ul = d3.select("#vis-cont")
+              .insert("ul", ":first-child")
+              .attr("id", "context-menu")
+              .attr("class", "menu")
+              .style("position", "absolute")
+              .style("left", d.x + "px")
+              .style("top", (d.y - 70) + "px")
+              .style("display", "inline-block");
+
+          ul.selectAll("li")
+            .data(nestedNbs)
+            .enter()
+          .append("li")
+            .on("click", d => {
+              state.dataStack.pop();
+              d3.select("#context-menu").remove();
+              update(props, state, that, d.values);
+            })
+            .text(d => d.key);
+
+          // console.log("nbs", nbs.map(d => d.linkedBy.value));
+          update(props, state, that, []);
+        // });
+      } else {
         // d3.event.stopPropagation();
+        //
+        d3.select("#context-menu").remove();
+
         if (props.path.last().id !== d.id) return;
         d.fixed = false;
         d.selected = false;
@@ -354,34 +388,16 @@ function update(props, state, that) {
         });
         // reset angles
         if (d.dim === 1) state.dataStack.last().forEach(e => e.angle = null );
-        update(props, state, that);
+
+        var nbs1 = [];
+        if (props.path.length > 0) {
+          nbs1 = state.linkedByIndex.nbs(props.path.last(), "Keyword");
+        }
+        else nbs1 = [];
+
+        update(props, state, that, nbs1);
       }
-    );
-    // .on("click", function(d) {
-    //   d3.event.preventDefault();
-    //   var type = "Keyword";
-    //
-    //   // var selectedNode = props.path.last();
-    //   var nbs = state.linkedByIndex.nbs(d, type);
-    //
-    //   var ul = d3.select("#vis-cont")
-    //       .insert("ul", ":first-child")
-    //       .attr("id", "context-menu")
-    //       .attr("class", "menu")
-    //       .style("position", "absolute")
-    //       .style("left", d.x + "px")
-    //       .style("top", d.y + "px")
-    //       .style("display", "inline-block");
-    //
-    //   ul.selectAll("li")
-    //     .data(nbs)
-    //     .enter()
-    //   .append("li")
-    //     .text("teast");
-    //
-    //   console.log("nbs", nbs.map(d => d.linkedBy.value));
-    //
-    // });
+    });
 
   var link = d3.select("#vis-cont svg").selectAll(".link")
         .data(edges, d => d.source.title + "-" + d.target.title);
