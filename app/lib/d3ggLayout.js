@@ -41,16 +41,16 @@ function getTangibles(length, successFunc) {
 
 function myDiffList(oldTypes, newTypes) {
   // TODO: clone oldTypes
-  var newType;
+  var nTypes = [];
   newTypes.forEach(type => {
     var index = oldTypes.indexOf(type);
     if (index >= 0) {
         oldTypes.splice(index, 1);
     } else {
-      newType = type;
+      newTypes.push(type);
     }
   });
-  return newType;
+  return nTypes;
 }
 
 function backgroundArc(radius) {
@@ -327,7 +327,8 @@ function update(props, state, that) {
           console.log("retrieved Type", "length", types.length);
 
           // TODO: check if it works
-          state.type = myDiffList(state.types, types);
+          state.type = myDiffList(state.types, types)[0];
+          console.log("difflist", myDiffList(state.types, types));
           console.log("state.type", state.type);
           state.types = types;
 
