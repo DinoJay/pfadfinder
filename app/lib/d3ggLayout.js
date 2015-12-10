@@ -200,7 +200,7 @@ var create = function(el, props, state) {
   return this;
 };
 
-function update(props, state, that, nbs) {
+function update(props, state, that) {
   var svg = d3.select("#vis-cont svg");
   var edges = [];
   var selectedNode = props.path.last();
@@ -211,7 +211,7 @@ function update(props, state, that, nbs) {
     // TODO: fix later
     var type = "Keyword";
     // getTangibles(function(types) {});
-    // var nbs = state.linkedByIndex.nbs(selectedNode, type);
+    var nbs = state.linkedByIndex.nbs(selectedNode, type);
     console.log("nbs", nbs);
     var sumRadius = d3.sum(nbs, d => d.radius);
 
