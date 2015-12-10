@@ -329,6 +329,7 @@ function update(props, state, that) {
 
           // TODO: check if it works
           state.type = myDiffList(state.types, types);
+          console.log("state.type", state.type);
           state.types = types;
 
           console.log("NEW state types", "length", state.types.length);
