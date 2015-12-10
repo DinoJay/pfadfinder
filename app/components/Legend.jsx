@@ -101,7 +101,6 @@ function picLegend(el) {
     .attr("class", "label")
     .attr("transform", d => "translate(34," + ( 15 + ordinal(d) ) + ")");
 
-
 }
 
 var Legend = React.createClass({

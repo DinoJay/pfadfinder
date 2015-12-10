@@ -23,7 +23,7 @@ Array.prototype.last = function() {
 
 function getTangibles(length, successFunc) {
   $.ajax({
-    url: "http://localhost:8080/CamCapture/AjaxTypeServlett?callback=?",
+    url: "http://localhost:8080/CamCapture/AjaxTypeServlet?callback=?",
     type: "get",
     data: {length: length},
     dataType: "jsonp",
