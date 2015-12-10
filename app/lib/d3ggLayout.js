@@ -40,17 +40,14 @@ function getTangibles(length, successFunc) {
 }
 
 function myDiffList(oldTypes, newTypes) {
-  // TODO: clone oldTypes
-  var nTypes = [];
   newTypes.forEach(type => {
     var index = oldTypes.indexOf(type);
     if (index >= 0) {
         oldTypes.splice(index, 1);
     } else {
-      newTypes.push(type);
+      return type;
     }
   });
-  return nTypes;
 }
 
 function backgroundArc(radius) {
@@ -203,7 +200,7 @@ var create = function(el, props, state) {
   return this;
 };
 
-function update(props, state, that) {
+function update(props, state, that, nbs) {
   var svg = d3.select("#vis-cont svg");
   var edges = [];
   var selectedNode = props.path.last();
@@ -214,7 +211,7 @@ function update(props, state, that) {
     // TODO: fix later
     var type = "Keyword";
     // getTangibles(function(types) {});
-    var nbs = state.linkedByIndex.nbs(selectedNode, type);
+    // var nbs = state.linkedByIndex.nbs(selectedNode, type);
     console.log("nbs", nbs);
     var sumRadius = d3.sum(nbs, d => d.radius);
 
@@ -327,7 +324,7 @@ function update(props, state, that) {
           console.log("retrieved Type", "length", types.length);
 
           // TODO: check if it works
-          state.type = myDiffList(state.types, types)[0];
+          state.type = myDiffList(state.types, types);
           console.log("difflist", myDiffList(state.types, types));
           console.log("state.type", state.type);
           state.types = types;
@@ -365,6 +362,20 @@ function update(props, state, that) {
       // var selectedNode = props.path.last();
       var nbs = state.linkedByIndex.nbs(d, type);
 
+      var nbsByType = [];
+
+      nbs.forEach(d => {
+        d.linkedBy.value.forEach(e => {
+          // TODO: dirty
+          d.typeValue = e;
+          nbsByType.push(d);
+        });
+      });
+
+      var nestedNbs = d3.nest()
+        .key(function(d) { return d.typeValue; })
+        .entries(nbsByType);
+
       var ul = d3.select("#vis-cont")
           .insert("ul", ":first-child")
           .attr("id", "context-menu")
@@ -375,10 +386,15 @@ function update(props, state, that) {
           .style("display", "inline-block");
 
       ul.selectAll("li")
-        .data(nbs)
+        .data(nestedNbs)
         .enter()
       .append("li")
-        .text("teast");
+      .on("click", function(e) {
+        console.log("value", e);
+        props.forward = true;
+        update(props, state, that, nbs);
+      })
+        .text(d => d.key);
 
       console.log("nbs", nbs.map(d => d.linkedBy.value));
 
