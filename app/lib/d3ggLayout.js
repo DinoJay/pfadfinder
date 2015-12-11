@@ -26,7 +26,7 @@ Array.prototype.last = function() {
 function getTangibles(length, successFunc) {
   console.log("getTangibles length", length);
   $.ajax({
-    url: "http://localhost:8080/CamCapture/AjaxTypeServlet?callback=?",
+    url: "http://localhost:8080/CamCapture/AjaxTypeServlett?callback=?",
     type: "get",
     data: {length: length},
     dataType: "jsonp",
@@ -355,26 +355,28 @@ function update(props, state, that, nbs) {
     .on("touchstart", function(d) {
       // d3.event.stopPropagation();
       if (!d.selected) {
+          d.fixed = true;
+          d.selected = true;
+          // TODO: change to state
+          props.path.push(d);
+          props.forward = true;
+          console.log("state types before", "length", state.types.length);
+          // console.log("retrieved Type", "length", types.length);
+
+          // TODO: check if it works
+          console.log("state.type", state.type);
+          // state.types = types;
+
+          console.log("NEW state types", "length", state.types.length);
+          props.getPath(props.path);
 
           getTangibles(props.path.length, function(types) {
-            // console.log("response server", types);
+            console.log("New response server", types);
+            console.log("oldTypes", state.types);
             var type = myDiffList(state.types, types);
-            state.type = type;
+            console.log("type", type);
             // var type = "Keyword";
             state.types = types;
-            d.fixed = true;
-            d.selected = true;
-            // TODO: change to state
-            props.path.push(d);
-            props.forward = true;
-            console.log("state types before", "length", state.types.length);
-            // console.log("retrieved Type", "length", types.length);
-
-            // TODO: check if it works
-            console.log("state.type", state.type);
-
-            console.log("NEW state types", "length", state.types.length);
-            props.getPath(props.path);
             contextMenu(d, props, state, type, that);
           });
 
