@@ -358,9 +358,9 @@ function update(props, state, that, nbs) {
 
           getTangibles(props.path.length, function(types) {
             // console.log("response server", types);
-            // var type = myDiffList(state.types, types);
-            var type = "Keyword";
-            // state.types = types;
+            var type = myDiffList(state.types, types);
+            // var type = "Keyword";
+            state.types = types;
             d.fixed = true;
             d.selected = true;
             // TODO: change to state
@@ -371,7 +371,6 @@ function update(props, state, that, nbs) {
 
             // TODO: check if it works
             console.log("state.type", state.type);
-            // state.types = types;
 
             console.log("NEW state types", "length", state.types.length);
             props.getPath(props.path);
