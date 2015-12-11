@@ -359,6 +359,7 @@ function update(props, state, that, nbs) {
           getTangibles(props.path.length, function(types) {
             // console.log("response server", types);
             var type = myDiffList(state.types, types);
+            state.type = type;
             // var type = "Keyword";
             state.types = types;
             d.fixed = true;
