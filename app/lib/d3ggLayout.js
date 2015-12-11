@@ -352,7 +352,7 @@ function update(props, state, that, nbs) {
     });
 
   node
-    .on("click", function(d) {
+    .on("touchstart", function(d) {
       // d3.event.stopPropagation();
       if (!d.selected) {
           d.fixed = true;
