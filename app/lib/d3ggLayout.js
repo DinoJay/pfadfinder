@@ -54,6 +54,7 @@ function getTangibles(length, successFunc) {
 
 function myDiffList(oldTypes, newTypes) {
   // TODO: clone oldTypes
+  if (oldTypes.length >= newTypes) return newTypes.last();
   var newType;
   newTypes.forEach(type => {
     var index = oldTypes.indexOf(type);
@@ -234,11 +235,11 @@ function contextMenu(d, props, state, type, that) {
     .append("li")
       .text(d => d.key)
       .each(function(d){
-	Hammer(this).on("tap", function(){
+        Hammer(this).on("tap", function(){
           state.dataStack.pop();
           d3.select(".context-menu").remove();
           update(props, state, that, d.values);
-	});
+        });
       });
 
 }
@@ -387,7 +388,7 @@ function update(props, state, that, nbs) {
             console.log("New response server", types);
             console.log("oldTypes", state.types);
             var type = myDiffList(state.types, types);
-            console.log("type", type)
+            console.log("type", type);
             // var type = "Keyword";
             state.types = types;
             contextMenu(d, props, state, type, that);
