@@ -24,6 +24,7 @@ Array.prototype.last = function() {
 };
 
 function getTangibles(length, successFunc) {
+  console.log("getTangibles length", length);
   $.ajax({
     url: "http://localhost:8080/CamCapture/AjaxTypeServlet?callback=?",
     type: "get",
