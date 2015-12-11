@@ -1,5 +1,6 @@
 import d3 from "d3";
 import d3MeasureText from "d3-measure-text"; d3MeasureText.d3 = d3;
+
 import _ from "lodash";
 
 import $ from "jquery";
@@ -7,6 +8,15 @@ import $ from "jquery";
 import { makeEdges, DOC_URL, EMAIL_URL, CALENDAR_URL,
   relationColors, NOTE_URL
 } from "./misc.js";
+
+
+import Hammer from "hammerjs";
+
+//Hummer.jsのイベントのリスナー
+function addHummerEventListener(that, d){
+
+
+}
 
 const D2R = Math.PI / 180;
 
@@ -222,12 +232,15 @@ function contextMenu(d, props, state, type, that) {
       .data(nestedNbs)
       .enter()
     .append("li")
-      .on("click", function(d) {
-        state.dataStack.pop();
-        d3.select(".context-menu").remove();
-        update(props, state, that, d.values);
-      })
-      .text(d => d.key);
+      .text(d => d.key)
+      .each(function(d){
+	Hammer(this).on("tap", function(){
+          state.dataStack.pop();
+          d3.select(".context-menu").remove();
+          update(props, state, that, d.values);
+	});
+      });
+
 }
 
 var create = function(el, props, state) {
@@ -353,7 +366,7 @@ function update(props, state, that, nbs) {
 
   node
     .on("touchstart", function(d) {
-      // d3.event.stopPropagation();
+      d3.event.stopPropagation();
       if (!d.selected) {
           d.fixed = true;
           d.selected = true;
@@ -374,7 +387,7 @@ function update(props, state, that, nbs) {
             console.log("New response server", types);
             console.log("oldTypes", state.types);
             var type = myDiffList(state.types, types);
-            console.log("type", type);
+            console.log("type", type)
             // var type = "Keyword";
             state.types = types;
             contextMenu(d, props, state, type, that);
@@ -386,6 +399,7 @@ function update(props, state, that, nbs) {
       }
     })
     .on("touchend", function(d) {
+        d3.event.stopPropagation();
         if (!d.selected) return;
         d3.select(".context-menu").remove();
 

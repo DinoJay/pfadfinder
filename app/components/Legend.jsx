@@ -3,6 +3,8 @@ import d3 from "d3";
 import "d3-svg-legend";
 import _ from "lodash";
 
+import Hammer from "hammerjs";
+
 import {
   relationColors,
   sourceColors,
@@ -11,6 +13,22 @@ import {
   NOTE_URL
 } from "../lib/misc";
 
+//Hummer.jsのイベントのリスナー
+function addHummerEventListener(that, d){
+
+	Hammer(that).on("tap", function(event){
+		console.log(event);
+		alert("Tap! "+d.lable);
+	});
+	Hammer(that).on("swipeleft", function(event){
+		console.log(event);
+		alert("Swipe Left! "+d.lable);
+	});
+	Hammer(that).on("swiperight", function(event){
+		console.log(event);
+		alert("Swipe Right! "+d.lable);
+	});
+}
 function relationTypeLegend(el) {
   var ordinal = d3.scale.ordinal()
     .domain(["Authorship", "Keyword", "Task"])
