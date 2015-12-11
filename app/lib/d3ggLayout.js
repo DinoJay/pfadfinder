@@ -191,7 +191,9 @@ function tick(node, link, width, height) {
 function contextMenu(d, props, state, type, that) {
     // var selectedNode = props.path.last();
     var nbs = state.linkedByIndex.nbs(d, type);
+    state.nbs = nbs;
     if (nbs.length == 0) return;
+
 
     var nbsByLinkValueDuplicates = _.flatten(nbs.map(d => {
       return d.linkedBy.value.map(v => {
@@ -349,7 +351,7 @@ function update(props, state, that, nbs) {
     });
 
   node
-    .on("click", function(d) {
+    .on("touchstart", function(d) {
       // d3.event.stopPropagation();
       if (!d.selected) {
           d.fixed = true;
@@ -361,20 +363,25 @@ function update(props, state, that, nbs) {
           // console.log("retrieved Type", "length", types.length);
 
           // TODO: check if it works
-          // state.type = myDiffList(state.types, types);
           console.log("state.type", state.type);
           // state.types = types;
 
           console.log("NEW state types", "length", state.types.length);
           props.getPath(props.path);
 
-          var type = "Keyword";
-          // getTangibles(props.path.length, function(types) {
+          getTangibles(props.path.length, function(types) {
+            var type = myDiffList(state.types, types);
+            state.types = types;
             contextMenu(d, props, state, type, that);
-          // });
+          });
 
           update(props, state, that, []);
       } else {
+        true;
+      }
+    })
+    .on("touchend", function(d) {
+        if (!d.selected) return;
         d3.select(".context-menu").remove();
 
         if (props.path.last().id !== d.id) return;
@@ -395,12 +402,12 @@ function update(props, state, that, nbs) {
 
         var nbs1 = [];
         if (props.path.length > 0) {
-          nbs1 = state.linkedByIndex.nbs(props.path.last(), "Keyword");
+          nbs1 = state.nbs;
         }
         else nbs1 = [];
 
         update(props, state, that, nbs1);
-      }
+
     });
 
   var link = d3.select("#vis-cont svg").selectAll(".link")
