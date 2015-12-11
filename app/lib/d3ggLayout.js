@@ -352,7 +352,7 @@ function update(props, state, that, nbs) {
     });
 
   node
-    .on("touchstart", function(d) {
+    .on("click", function(d) {
       // d3.event.stopPropagation();
       if (!d.selected) {
           d.fixed = true;
@@ -371,9 +371,10 @@ function update(props, state, that, nbs) {
           props.getPath(props.path);
 
           getTangibles(props.path.length, function(types) {
-            console.log("response server", types);
-            var type = myDiffList(state.types, types);
-            state.types = types;
+            // console.log("response server", types);
+            // var type = myDiffList(state.types, types);
+            var type = "Keyword";
+            // state.types = types;
             contextMenu(d, props, state, type, that);
           });
 
