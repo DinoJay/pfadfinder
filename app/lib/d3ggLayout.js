@@ -53,8 +53,11 @@ function getTangibles(length, successFunc) {
 }
 
 function myDiffList(oldTypes, newTypes) {
-  // TODO: clone oldTypes
-  if (oldTypes.length >= newTypes) return newTypes.last();
+  if (oldTypes.length >= newTypes) {
+    if (newTypes.length > 0)
+      return newTypes.last();
+  }
+
   var newType;
   newTypes.forEach(type => {
     var index = oldTypes.indexOf(type);
