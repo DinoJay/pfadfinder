@@ -39,7 +39,7 @@ var Timeline = React.createClass({
 
   render: function() {
     return (
-      <div id="timeline-cont" className="scroll-wrapper"></div>
+      <div id="timeline-cont" className="scroll-wrapper size"></div>
     );
   }
 });

@@ -188,6 +188,45 @@ function tick(node, link, width, height) {
   };
 }
 
+function contextMenu(d, props, state, type, that) {
+    // var selectedNode = props.path.last();
+    var nbs = state.linkedByIndex.nbs(d, type);
+    if (nbs.length == 0) return;
+
+    var nbsByLinkValueDuplicates = _.flatten(nbs.map(d => {
+      return d.linkedBy.value.map(v => {
+        d.linkValue = v;
+        return d;
+      });
+    }));
+
+    var nestedNbs = d3.nest()
+      .key(function(d) { return d.linkValue; })
+      .entries(nbsByLinkValueDuplicates);
+
+    var ul = d3.select("#vis-cont")
+        .insert("div")
+        .attr("class", "context-menu")
+        .insert("ul", ":first-child")
+        .attr("class", "list")
+        .style("position", "absolute")
+        .style("left", d.x + "px")
+        .style("top", (d.y  - (nestedNbs.length * 25 )) + "px")
+        .style("margin-top", -75 + "px")
+        .style("display", "inline");
+
+    ul.selectAll("li")
+      .data(nestedNbs)
+      .enter()
+    .append("li")
+      .on("click", function(d) {
+        state.dataStack.pop();
+        d3.select(".context-menu").remove();
+        update(props, state, that, d.values);
+      })
+      .text(d => d.key);
+}
+
 var create = function(el, props, state) {
   state.data.forEach(d => {
     d.radius = NODE_RAD;
@@ -313,7 +352,6 @@ function update(props, state, that, nbs) {
     .on("click", function(d) {
       // d3.event.stopPropagation();
       if (!d.selected) {
-        // getTangibles(props.path.length, function(types) {
           d.fixed = true;
           d.selected = true;
           // TODO: change to state
@@ -331,47 +369,13 @@ function update(props, state, that, nbs) {
           props.getPath(props.path);
 
           var type = "Keyword";
-          // var selectedNode = props.path.last();
-          var nbs = state.linkedByIndex.nbs(d, type);
+          // getTangibles(props.path.length, function(types) {
+            contextMenu(d, props, state, type, that);
+          // });
 
-          var nbsByLinkValueDuplicates = _.flatten(nbs.map(d => {
-            return d.linkedBy.value.map(v => {
-              d.linkValue = v;
-              return d;
-            });
-          }));
-
-          var nestedNbs = d3.nest()
-            .key(function(d) { return d.linkValue; })
-            .entries(nbsByLinkValueDuplicates);
-
-          var ul = d3.select("#vis-cont")
-              .insert("ul", ":first-child")
-              .attr("id", "context-menu")
-              .attr("class", "menu")
-              .style("position", "absolute")
-              .style("left", d.x + "px")
-              .style("top", (d.y - 70) + "px")
-              .style("display", "inline-block");
-
-          ul.selectAll("li")
-            .data(nestedNbs)
-            .enter()
-          .append("li")
-            .on("click", d => {
-              state.dataStack.pop();
-              d3.select("#context-menu").remove();
-              update(props, state, that, d.values);
-            })
-            .text(d => d.key);
-
-          // console.log("nbs", nbs.map(d => d.linkedBy.value));
           update(props, state, that, []);
-        // });
       } else {
-        // d3.event.stopPropagation();
-        //
-        d3.select("#context-menu").remove();
+        d3.select(".context-menu").remove();
 
         if (props.path.last().id !== d.id) return;
         d.fixed = false;
