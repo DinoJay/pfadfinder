@@ -6,7 +6,7 @@ import Timeline from "./components/Timeline";
 import CircleMenu from "./components/CircleMenu";
 import Legend from "./components/Legend";
 
-var data = require("json!./data/data3.json");
+var data = require("json!./data/data4.json");
 
 require("./style.less");
 
