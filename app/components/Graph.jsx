@@ -17,6 +17,7 @@ var linkedByIndex = new function() {
         if (a.i !== b.i && this.index[a.i + "," + b.i]) {
           b.linkedBy = this.index[a.i + "," + b.i];
           if (b.linkedBy.type === type) nbs.push(b);
+          else if (!type) nbs.push(b);
         }
       });
       return nbs;
@@ -70,31 +71,24 @@ var Graph = React.createClass({
 
 
   componentDidUpdate: function() {
-    if (this.props.filter) {
-      var docs = this.state.data.filter(d => d.kind === this.props.filter);
-      var links = linkedByIndex.init(docs, this.props.data.links);
-      console.log("DOCS", docs);
-      d3ggLayout.update(this.props,
-                        {
-                          linkedByIndex: links,
-                          data: docs,
-                          dataStack: [docs]
-                        },
-                        this.state.that);
-    }
+    // if (this.props.filter) {
+    //   var docs = this.state.data.filter(d => d.kind === this.props.filter);
+    //   var links = linkedByIndex.init(docs, this.props.data.links);
+    //   // TODO: join to props
+    //   d3ggLayout.update(this.props,
+    //                     {
+    //                       linkedByIndex: links,
+    //                       data: docs,
+    //                       nbs: []
+    //                     },
+    //                     this.state.that);
+    // }
   },
 
   componentDidMount: function() {
-    window.oncontextmenu = function(event) {
-      event.preventDefault();
-      event.stopPropagation();
-      return false;
-    };
-    //
     var el = this.getDOMNode();
-    var that = d3ggLayout.create(el, this.props, this.state);
-    this.setState({that: that});
-    d3ggLayout.update(this.props, this.state, that);
+    var props = Object.assign(this.props, this.state);
+    d3ggLayout.create(el, props);
   },
 
   render: function() { return (

@@ -7,7 +7,7 @@ import {
   relationColors,
   DOC_URL,
   EMAIL_URL,
-  CALENDAR_URL } from "./misc.js";
+  NOTE_URL } from "./misc.js";
 
 // const BOXWIDTH  = 140;
 // const BOXHEIGHT = 40;
@@ -201,9 +201,7 @@ function update(el, props, data) {
             case "Email":
               return EMAIL_URL;
             case "Note":
-              return CALENDAR_URL;
-            default:
-              return CALENDAR_URL;
+              return NOTE_URL;
           }
         })
         .attr("class", "doc-pic")

@@ -3,8 +3,6 @@ import d3 from "d3";
 import "d3-svg-legend";
 import _ from "lodash";
 
-import Hammer from "hammerjs";
-
 import {
   relationColors,
   sourceColors,
@@ -13,25 +11,9 @@ import {
   NOTE_URL
 } from "../lib/misc";
 
-//Hummer.jsのイベントのリスナー
-function addHummerEventListener(that, d){
-
-	Hammer(that).on("tap", function(event){
-		console.log(event);
-		alert("Tap! "+d.lable);
-	});
-	Hammer(that).on("swipeleft", function(event){
-		console.log(event);
-		alert("Swipe Left! "+d.lable);
-	});
-	Hammer(that).on("swiperight", function(event){
-		console.log(event);
-		alert("Swipe Right! "+d.lable);
-	});
-}
 function relationTypeLegend(el) {
   var ordinal = d3.scale.ordinal()
-    .domain(["Authorship", "Keyword", "Task"])
+    .domain(["Author", "Keyword", "Task"])
     .range(_.values(relationColors));
 
   var svg = d3.select(el).select("#rel-leg")
@@ -44,9 +26,6 @@ function relationTypeLegend(el) {
     .attr("transform", "translate(20,20)");
 
   var legendOrdinal = d3.legend.color()
-    //d3 symbol creates a path-string, for example
-    //"M0,-8.059274488676564L9.306048591020996,
-    //8.059274488676564 -9.306048591020996,8.059274488676564Z"
     .shape("path", d3.svg.symbol().type("circle").size(400)())
     .shapePadding(10)
     .scale(ordinal);
@@ -130,29 +109,17 @@ var Legend = React.createClass({
     picLegend(el);
   },
 
-  // componentDidUpdate: function() {
-  //   var el = this.getDOMNode();
-  //
-  //   var data = this.props.data.map(d => {
-  //     d.date = new Date(d.createdDate);
-  //     d.metatype = "doc";
-  //     return d;
-  //   });
-  //
-  //   d3Timeline.update(el, this.props, data);
-  // },
-
   render: function() {
     return (
       <div id="legends">
         <div id="rel-leg">
-          <h3>Type of Relations</h3>
+          <h3>Facets</h3>
         </div>
         <div id="doc-leg">
-          <h3>Type of Documents</h3>
+          <h3>Types</h3>
         </div>
         <div id="source-leg">
-          <h3>Source of Documents</h3>
+          <h3>Source</h3>
         </div>
       </div>
     );

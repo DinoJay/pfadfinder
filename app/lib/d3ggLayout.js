@@ -3,28 +3,17 @@ import d3MeasureText from "d3-measure-text"; d3MeasureText.d3 = d3;
 
 import _ from "lodash";
 
-import $ from "jquery";
-
 import { makeEdges, DOC_URL, EMAIL_URL, CALENDAR_URL,
   relationColors, NOTE_URL
 } from "./misc.js";
-
-
-import Hammer from "hammerjs";
-
-//Hummer.jsのイベントのリスナー
-function addHummerEventListener(that, d){
-
-
-}
 
 const D2R = Math.PI / 180;
 
 var NODE_RAD = 20;
 // var NODE_PADDING = 20;
-var LABEL_OFFSET = 15;
-// var INIT_RAD_LAYOUT = 150;
+var LABEL_OFFSET = 15; // var INIT_RAD_LAYOUT = 150;
 // var INIT_NODE_PADDING = 20;
+var INIT_LAYOUT_RAD = 260;
 var LAYOUT_RAD = 175;
 
 Array.prototype.last = function() {
@@ -32,43 +21,6 @@ Array.prototype.last = function() {
       return this[this.length-1];
     else return null;
 };
-
-function getTangibles(length, successFunc) {
-  console.log("getTangibles length", length);
-  $.ajax({
-    url: "http://localhost:8080/CamCapture/AjaxTypeServlett?callback=?",
-    type: "get",
-    data: {length: length},
-    dataType: "jsonp",
-    jsonp: "callback",
-    // Accept: "application/sparql-results+json",
-    // async: false,
-    success: function(tangibles) {
-       successFunc(tangibles);
-    },
-    error: function(err) {
-      console.log("err", err);
-    }
-  });
-}
-
-function myDiffList(oldTypes, newTypes) {
-  if (oldTypes.length >= newTypes) {
-    if (newTypes.length > 0)
-      return newTypes.last();
-  }
-
-  var newType;
-  newTypes.forEach(type => {
-    var index = oldTypes.indexOf(type);
-    if (index >= 0) {
-        oldTypes.splice(index, 1);
-    } else {
-      newType = type;
-    }
-  });
-  return newType;
-}
 
 function backgroundArc(radius) {
   return d3.svg.arc()
@@ -91,11 +43,6 @@ function cropLen(string) {
   if (string.length > 13) return string.substring(0, 14).concat("...");
   else return string;
 }
-
-
-// var groupFill = function(d, i) { return fill(i & 3); };
-// var fill = d3.scale.category10();
-
 
 function collide(data, alpha, padding) {
   var quadtree = d3.geom.quadtree(data);
@@ -126,16 +73,7 @@ function collide(data, alpha, padding) {
 }
 
 
-// function movePos(pos, alpha) {
-//     return function(d) {
-//         d.x = d.x + (pos.x - d.x) * (0.1 + 0.02) * alpha * 1.1;
-//         d.y = d.y + (pos.y - d.y) * (0.1 + 0.02) * alpha * 1.1;
-//     };
-// }
-
-
 function radial(d, radius, alpha, energy, center) {
-
   var currentAngleRadians = d.angle * D2R;
 
   var radialPoint = {
@@ -150,16 +88,9 @@ function radial(d, radius, alpha, energy, center) {
 }
 
 
-// function movePos(pos, alpha) {
-//     return function(d) {
-//         d.x = d.x + (pos.x - d.x) * (0.1 + 0.02) * alpha * 1.1;
-//         d.y = d.y + (pos.y - d.y) * (0.1 + 0.02) * alpha * 1.1;
-//     };
-// }
-
-
 function tick(node, link, width, height) {
-  function lineData(d){ var straightLine = d3.svg.line().interpolate("bundle")
+  var lineData = function(d){
+    var straightLine = d3.svg.line().interpolate("bundle")
             .x(d => d.x)
             .y(d => d.y);
 
@@ -168,92 +99,110 @@ function tick(node, link, width, height) {
         {x: d.target.x, y: d.target.y}
     ];
     return straightLine(points);
-  }
+  };
 
   var nodeGroups = d3.nest()
                    .key(d => d.dim)
                    .entries(node.data());
-  var lastGroup = nodeGroups[nodeGroups.length - 1];
+  // var lastGroup = nodeGroups[nodeGroups.length - 1];
 
   return function(e) {
     nodeGroups.forEach(group => {
       group.values.forEach((d, i) => {
-        var radius = d.dim*LAYOUT_RAD;
+        var radius = INIT_LAYOUT_RAD + (d.dim - 1) * LAYOUT_RAD;
         d.angle = d.angle || 360 / group.values.length * i;
         // d.offset = NODE_RAD + LABEL_OFFSET + 50;
         radial(d, radius + d.offset, e.alpha, 0.9, {x: width/2, y: height/2});
       });
     });
 
-    node.each(collide(node.data(), 0.1, NODE_RAD + LABEL_OFFSET));
-
-    node.attr("transform", d => "translate(" + d.x + "," + d.y + ")");
-    link.attr("d", lineData);
-
-    var arc = d3.select("#background-arc" + lastGroup.key);
-    if (e.alpha < 0.1 && arc.empty()) {
-      var radius = lastGroup.key*(LAYOUT_RAD - NODE_RAD - LABEL_OFFSET);
-        d3.select("#vis-cont svg")
-          .insert("path", ":first-child")
-          .attr("d", backgroundArc(radius))
-          .attr("id", "background-arc" + lastGroup.key)
-          .attr("transform", "translate(" + width/2 + "," +  height/2  + ")") .style("stroke-width", 1)
-          .attr("fill", "lightgrey");
+    if (e.alpha < 0.4) {
+      node.each(collide(node.data(), 0.1, NODE_RAD + LABEL_OFFSET));
+      node.attr("transform", d => "translate(" + d.x + "," + d.y + ")");
+      link.attr("d", lineData);
     }
+
+    // var arc = d3.select("#background-arc" + lastGroup.key);
+    // if (lastGroup.key > 1 && e.alpha < 0.1 && arc.empty()) {
+    //   var radius = INIT_LAYOUT_RAD + lastGroup.key * (LAYOUT_RAD - NODE_RAD - LABEL_OFFSET);
+    //     d3.select("#vis-cont svg")
+    //       .insert("path", ":first-child")
+    //       .attr("d", backgroundArc(radius))
+    //       .attr("id", "background-arc" + lastGroup.key)
+    //       .attr("transform", "translate(" + width/2 + "," +  height/2  + ")") .style("stroke-width", 1)
+    //       .attr("fill", "lightgrey");
+    // }
   };
 }
 
-function contextMenu(d, props, state, type, that) {
-    // var selectedNode = props.path.last();
-    var nbs = state.linkedByIndex.nbs(d, type);
-    state.nbs = nbs;
-    if (nbs.length == 0) return;
+function contextMenu(d, props, state, that) {
 
+    var nbsList = [];
+    ["Authorship", "Keyword", "Task"].forEach(facet => {
+      var nbs = props.linkedByIndex.nbs(d, facet);
+      if (nbs.length > 0) nbsList.push({key: facet, values: nbs});
+    });
 
-    var nbsByLinkValueDuplicates = _.flatten(nbs.map(d => {
-      return d.linkedBy.value.map(v => {
-        d.linkValue = v;
-        return d;
-      });
-    }));
+    if (nbsList.length == 0) return;
 
-    var nestedNbs = d3.nest()
-      .key(function(d) { return d.linkValue; })
-      .entries(nbsByLinkValueDuplicates);
+    var topContextMenu = len => {
+          switch (len) {
+            case 1:
+              return 25;
+            case 2:
+              return 60;
+            case 3:
+              return 100;
+      }
+    };
 
     var ul = d3.select("#vis-cont")
-        .insert("div")
-        .attr("class", "context-menu")
-        .insert("ul", ":first-child")
-        .attr("class", "list")
-        .style("position", "absolute")
-        .style("left", d.x + "px")
-        .style("top", (d.y  - (nestedNbs.length * 25 )) + "px")
-        .style("margin-top", -75 + "px")
-        .style("display", "inline");
+      .insert("div")
+      .attr("class", "context-menu")
+      .insert("ul", ":first-child")
+      .attr("class", "list")
+      .style("position", "absolute")
+      .style("left", d.x + "px")
+      .style("top", d.y  - (topContextMenu(nbsList.length)) + "px")
+      .style("margin-top", -75 + "px")
+      .style("display", "inline");
 
     ul.selectAll("li")
-      .data(nestedNbs)
+      .data(nbsList)
       .enter()
     .append("li")
-      .text(d => d.key)
-      .each(function(d){
-        Hammer(this).on("tap", function(){
-          state.dataStack.pop();
-          d3.select(".context-menu").remove();
-          update(props, state, that, d.values);
-        });
-      });
-
+    .text(d => d.key)
+    .on("click", d => {
+        state.dataStack.pop();
+        d3.select(".context-menu").remove();
+        state.nbs = d.values;
+        console.log("d.values", d.values);
+        state.nbsStack.push(d.values);
+        update(props, state, that, d.values);
+    });
 }
 
-var create = function(el, props, state) {
-  state.data.forEach(d => {
+var create = function(el, props) {
+
+  var state = {};
+  var data = props.data.map(d => {
     d.radius = NODE_RAD;
+    return d;
   });
 
-  state.dataStack = [ state.data ];
-  state.types = [];
+  console.log("data", data);
+  // var nestedData = d3.nest()
+  //   .key(d => d.datatype)
+  //   .entries(data).map(d => {
+  //     d.id = "id" + d.key;
+  //     d.title = d.key;
+  //     d.radius = NODE_RAD;
+  //     return d;
+  //   });
+
+  console.log("nestedData");
+  state.dataStack = [data];
+  state.nbsStack = [];
 
   d3.select(el).append("svg")
     .attr("width", props.width)
@@ -261,6 +210,7 @@ var create = function(el, props, state) {
 
   this.force.size([props.width, props.height]);
 
+  d3ggLayout.update(props, state, this, []);
   return this;
 };
 
@@ -294,7 +244,7 @@ function update(props, state, that, nbs) {
 
     // attach nbs
     if (props.forward) {
-      state.dataStack.push(_.uniq(props.path.concat(nbs), "title"));
+      state.dataStack.push(_.uniq(props.path.concat(nbs), "id"));
     }
 
     // console.log("update Graph inner", this);
@@ -369,37 +319,39 @@ function update(props, state, that, nbs) {
     });
 
   node
-    .on("touchstart", function(d) {
+    .on("click", function(d) {
       d3.event.stopPropagation();
       if (!d.selected) {
-          d.fixed = true;
-          d.selected = true;
-          // TODO: change to state
-          props.path.push(d);
-          props.forward = true;
-          console.log("state types before", "length", state.types.length);
-          // console.log("retrieved Type", "length", types.length);
+        d.fixed = true;
+        d.selected = true;
+        // TODO: change to state
+        props.path.push(d);
+        props.forward = true;
 
-          // TODO: check if it works
-          console.log("state.type", state.type);
-          // state.types = types;
+        props.getPath(props.path);
+        contextMenu(d, props, state, that);
 
-          console.log("NEW state types", "length", state.types.length);
-          props.getPath(props.path);
-
-          getTangibles(props.path.length, function(types) {
-            console.log("New response server", types);
-            console.log("oldTypes", state.types);
-            var type = myDiffList(state.types, types);
-            console.log("type", type);
-            // var type = "Keyword";
-            state.types = types;
-            contextMenu(d, props, state, type, that);
-          });
-
-          update(props, state, that, []);
+        update(props, state, that, []);
       } else {
-        true;
+        d3.select(".context-menu").remove();
+
+        if (props.path.last().id !== d.id) return;
+        d.fixed = false;
+        d.selected = false;
+
+        props.path.pop();
+        props.forward = false;
+        state.dataStack.pop();
+
+        // send path to parent component
+        props.getPath(props.path);
+        state.dataStack.last().forEach(e => {
+          if (e.dim > d.dim) e.dim = d.dim;
+        });
+        // reset angles
+        if (d.dim === 1) state.dataStack.last().forEach(e => e.angle = null );
+
+        update(props, state, that, state.nbsStack.last());
       }
     })
     .on("touchend", function(d) {
@@ -423,13 +375,8 @@ function update(props, state, that, nbs) {
         // reset angles
         if (d.dim === 1) state.dataStack.last().forEach(e => e.angle = null );
 
-        var nbs1 = [];
-        if (props.path.length > 0) {
-          nbs1 = state.nbs;
-        }
-        else nbs1 = [];
 
-        update(props, state, that, nbs1);
+        update(props, state, that, state.nbs);
 
     });
 
@@ -468,14 +415,29 @@ function update(props, state, that, nbs) {
 //   data: [],
 //   view: "overview"
 // };
+
+// class d3ggLayout2 {
+//   constructor() {
+//       this.force = d3.layout.force()
+//                       .charge(0)
+//                       .gravity(0.2)
+//                       .friction(0.9)
+//                       .linkDistance(0)
+//                       .linkStrength(0);
+//     }
+//     update() {
+//       update();
+//     }
+// }
+
 const d3ggLayout = new function(){
   return {
     force: d3.layout.force()
-              .charge(0)
-              .gravity(0.2)
-              .friction(0.9)
-              .linkDistance(0)
-              .linkStrength(0),
+                      .charge(0)
+                      .gravity(0.2)
+                      .friction(0.9)
+                      .linkDistance(0)
+                      .linkStrength(0),
     update: update,
     create: create
   };
