@@ -88,8 +88,19 @@
 	padding:10px;
 	border-bottom: solid 1px #ccc;
 }
+
 .context-menu>ul.list li:hover {
 	background: lightgrey;
 }
+
+.disabled-li {
+  pointer-events: none;  /**<-----------*/
+  opacity: 0.2;
+}
+
+.li-no-hover li:hover {
+  background-color: none;
+}
+
 .context-menu>ul.list li:last-child { border:none }
 

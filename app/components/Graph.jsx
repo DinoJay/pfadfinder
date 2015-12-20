@@ -71,24 +71,24 @@ var Graph = React.createClass({
 
 
   componentDidUpdate: function() {
-    // if (this.props.filter) {
-    //   var docs = this.state.data.filter(d => d.kind === this.props.filter);
-    //   var links = linkedByIndex.init(docs, this.props.data.links);
-    //   // TODO: join to props
-    //   d3ggLayout.update(this.props,
-    //                     {
-    //                       linkedByIndex: links,
-    //                       data: docs,
-    //                       nbs: []
-    //                     },
-    //                     this.state.that);
-    // }
+    if (this.props.filter) {
+      var docs = this.state.data.filter(d => d.kind === this.props.filter);
+      var links = linkedByIndex.init(docs, this.props.data.links);
+      // TODO: this.state does not exist
+      d3ggLayout.update(this.props,
+                        {
+                          linkedByIndex: links,
+                          data: docs,
+                          nbs: []
+                        },
+                        this.state.that);
+    }
   },
 
   componentDidMount: function() {
     var el = this.getDOMNode();
-    var props = Object.assign(this.props, this.state);
-    d3ggLayout.create(el, props);
+    var that = d3ggLayout.create(el, this.props, this.state);
+    d3ggLayout.update(this.props, this.state, that, []);
   },
 
   render: function() { return (

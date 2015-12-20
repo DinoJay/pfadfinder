@@ -1,6 +1,6 @@
 {
   "firebase": "pfadfinder",
-  "public": "./",
+  "public": ".",
   "ignore": [
     "firebase.json",
     "**/.*",

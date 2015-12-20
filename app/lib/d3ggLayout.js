@@ -3,22 +3,32 @@ import d3MeasureText from "d3-measure-text"; d3MeasureText.d3 = d3;
 
 import _ from "lodash";
 
+// import $ from "jquery";
+
 import { makeEdges, DOC_URL, EMAIL_URL, CALENDAR_URL,
-  relationColors, NOTE_URL
+  relationColors, NOTE_URL, facets
 } from "./misc.js";
+
 
 const D2R = Math.PI / 180;
 
 var NODE_RAD = 20;
 // var NODE_PADDING = 20;
-var LABEL_OFFSET = 15; // var INIT_RAD_LAYOUT = 150;
+var LABEL_OFFSET = 15;
+// var INIT_RAD_LAYOUT = 150;
 // var INIT_NODE_PADDING = 20;
-var INIT_LAYOUT_RAD = 260;
 var LAYOUT_RAD = 175;
+var INIT_LAYOUT_RAD = 250;
+
+function position() {
+  this.style("left", function(d) { return d.x + "px"; })
+      .style("top", function(d) { return d.y + "px"; })
+      .style("width", function(d) { return Math.max(0, d.dx - 1) + "px"; })
+      .style("height", function(d) { return Math.max(0, d.dy - 1) + "px"; });
+}
 
 Array.prototype.last = function() {
-    if (this.length > 0)
-      return this[this.length-1];
+    if (this.length > 0) return this[this.length-1];
     else return null;
 };
 
@@ -38,11 +48,15 @@ function labelArc(innerRadius, outerRadius) {
            .endAngle(2 * Math.PI);
 }
 
-
 function cropLen(string) {
   if (string.length > 13) return string.substring(0, 14).concat("...");
   else return string;
 }
+
+
+// var groupFill = function(d, i) { return fill(i & 3); };
+// var fill = d3.scale.category10();
+
 
 function collide(data, alpha, padding) {
   var quadtree = d3.geom.quadtree(data);
@@ -72,10 +86,9 @@ function collide(data, alpha, padding) {
   };
 }
 
-
 function radial(d, radius, alpha, energy, center) {
-  var currentAngleRadians = d.angle * D2R;
 
+  var currentAngleRadians = d.angle * D2R;
   var radialPoint = {
     x: center.x + radius * Math.cos(currentAngleRadians),
     y: center.y + radius * Math.sin(currentAngleRadians)
@@ -89,8 +102,7 @@ function radial(d, radius, alpha, energy, center) {
 
 
 function tick(node, link, width, height) {
-  var lineData = function(d){
-    var straightLine = d3.svg.line().interpolate("bundle")
+  function lineData(d){ var straightLine = d3.svg.line().interpolate("bundle")
             .x(d => d.x)
             .y(d => d.y);
 
@@ -99,12 +111,12 @@ function tick(node, link, width, height) {
         {x: d.target.x, y: d.target.y}
     ];
     return straightLine(points);
-  };
+  }
 
   var nodeGroups = d3.nest()
                    .key(d => d.dim)
                    .entries(node.data());
-  // var lastGroup = nodeGroups[nodeGroups.length - 1];
+  var lastGroup = nodeGroups[nodeGroups.length - 1];
 
   return function(e) {
     nodeGroups.forEach(group => {
@@ -116,93 +128,89 @@ function tick(node, link, width, height) {
       });
     });
 
-    if (e.alpha < 0.4) {
-      node.each(collide(node.data(), 0.1, NODE_RAD + LABEL_OFFSET));
-      node.attr("transform", d => "translate(" + d.x + "," + d.y + ")");
-      link.attr("d", lineData);
-    }
+    node.each(collide(node.data(), 0.1, NODE_RAD + LABEL_OFFSET));
 
-    // var arc = d3.select("#background-arc" + lastGroup.key);
-    // if (lastGroup.key > 1 && e.alpha < 0.1 && arc.empty()) {
-    //   var radius = INIT_LAYOUT_RAD + lastGroup.key * (LAYOUT_RAD - NODE_RAD - LABEL_OFFSET);
-    //     d3.select("#vis-cont svg")
-    //       .insert("path", ":first-child")
-    //       .attr("d", backgroundArc(radius))
-    //       .attr("id", "background-arc" + lastGroup.key)
-    //       .attr("transform", "translate(" + width/2 + "," +  height/2  + ")") .style("stroke-width", 1)
-    //       .attr("fill", "lightgrey");
-    // }
+    node.attr("transform", d => "translate(" + d.x + "," + d.y + ")");
+    link.attr("d", lineData);
+
+    var arc = d3.select("#background-arc" + lastGroup.key);
+    if (e.alpha < 0.1 && arc.empty()) {
+      var radius = lastGroup.key*(LAYOUT_RAD - NODE_RAD - LABEL_OFFSET);
+        d3.select("#vis-cont svg")
+          .insert("path", ":first-child")
+          .attr("d", backgroundArc(radius))
+          .attr("id", "background-arc" + lastGroup.key)
+          .attr("transform", "translate(" + width/2 + "," +  height/2  + ")")
+          .style("stroke-width", 1)
+          .attr("fill", "lightgrey");
+    }
   };
 }
 
-function contextMenu(d, props, state, that) {
+function contextMenu(d, props, state, type, that) {
+  var allNbs = facets.map(type => {
+    var nbs = state.linkedByIndex.nbs(d, type);
+    var nbsByLinkValueDuplicates = _.flatten(nbs.map(d => {
+      return d.linkedBy.value.map(v => {
+        var dCopy = _.cloneDeep(d);
+        dCopy.linkValue = v;
+        return dCopy;
+      });
+    }));
 
-    var nbsList = [];
-    ["Authorship", "Keyword", "Task"].forEach(facet => {
-      var nbs = props.linkedByIndex.nbs(d, facet);
-      if (nbs.length > 0) nbsList.push({key: facet, values: nbs});
-    });
+    var nestedNbs = d3.nest()
+      .key(d => d.linkValue)
+      .entries(nbsByLinkValueDuplicates);
 
-    if (nbsList.length == 0) return;
+    return {key: type, values: nestedNbs};
+  });
 
-    var topContextMenu = len => {
-          switch (len) {
-            case 1:
-              return 25;
-            case 2:
-              return 60;
-            case 3:
-              return 100;
-      }
-    };
-
-    var ul = d3.select("#vis-cont")
+  console.log("allNbs", allNbs);
+  var cont = d3.select("#vis-cont");
+  var ul = cont
       .insert("div")
       .attr("class", "context-menu")
       .insert("ul", ":first-child")
       .attr("class", "list")
       .style("position", "absolute")
       .style("left", d.x + "px")
-      .style("top", d.y  - (topContextMenu(nbsList.length)) + "px")
+      .style("top", (d.y  - (allNbs.length * 40 )) + "px")
       .style("margin-top", -75 + "px")
       .style("display", "inline");
 
-    ul.selectAll("li")
-      .data(nbsList)
-      .enter()
+  console.log("allNbs", allNbs[0].values);
+
+  var li = ul.selectAll("facet-type")
+    .data(allNbs);
+
+  li.enter()
     .append("li")
+    .attr("class", "facet-type")
     .text(d => d.key)
-    .on("click", d => {
-        state.dataStack.pop();
-        d3.select(".context-menu").remove();
-        state.nbs = d.values;
-        console.log("d.values", d.values);
-        state.nbsStack.push(d.values);
-        update(props, state, that, d.values);
+    .on("click", function(d) {
+      var ul = d3.select(this).append("ul");
+      ul.selectAll("facet-value")
+        .data(d.values)
+        .enter()
+        .append("li")
+        .attr("class", "facet-value")
+        .text(p => p.key)
+        .on("click", d => {
+          d3.event.stopPropagation();
+          state.dataStack.pop();
+          console.log("d.values", d.values);
+          update(props, state, that, d.values);
+        });
     });
 }
 
-var create = function(el, props) {
-
-  var state = {};
-  var data = props.data.map(d => {
+var create = function(el, props, state) {
+  state.data.forEach(d => {
     d.radius = NODE_RAD;
-    return d;
   });
 
-  console.log("data", data);
-  // var nestedData = d3.nest()
-  //   .key(d => d.datatype)
-  //   .entries(data).map(d => {
-  //     d.id = "id" + d.key;
-  //     d.title = d.key;
-  //     d.radius = NODE_RAD;
-  //     return d;
-  //   });
-
-  console.log("nestedData");
-  state.dataStack = [data];
-  state.nbsStack = [];
+  state.dataStack = [ state.data ];
+  state.types = [];
 
   d3.select(el).append("svg")
     .attr("width", props.width)
@@ -210,7 +218,6 @@ var create = function(el, props) {
 
   this.force.size([props.width, props.height]);
 
-  d3ggLayout.update(props, state, this, []);
   return this;
 };
 
@@ -244,7 +251,7 @@ function update(props, state, that, nbs) {
 
     // attach nbs
     if (props.forward) {
-      state.dataStack.push(_.uniq(props.path.concat(nbs), "id"));
+      state.dataStack.push(_.uniq(props.path.concat(nbs), "title"));
     }
 
     // console.log("update Graph inner", this);
@@ -324,37 +331,15 @@ function update(props, state, that, nbs) {
       if (!d.selected) {
         d.fixed = true;
         d.selected = true;
-        // TODO: change to state
         props.path.push(d);
         props.forward = true;
-
         props.getPath(props.path);
-        contextMenu(d, props, state, that);
+
+        var type = "Authorship";
+        contextMenu(d, props, state, type, that);
 
         update(props, state, that, []);
       } else {
-        d3.select(".context-menu").remove();
-
-        if (props.path.last().id !== d.id) return;
-        d.fixed = false;
-        d.selected = false;
-
-        props.path.pop();
-        props.forward = false;
-        state.dataStack.pop();
-
-        // send path to parent component
-        props.getPath(props.path);
-        state.dataStack.last().forEach(e => {
-          if (e.dim > d.dim) e.dim = d.dim;
-        });
-        // reset angles
-        if (d.dim === 1) state.dataStack.last().forEach(e => e.angle = null );
-
-        update(props, state, that, state.nbsStack.last());
-      }
-    })
-    .on("touchend", function(d) {
         d3.event.stopPropagation();
         if (!d.selected) return;
         d3.select(".context-menu").remove();
@@ -367,6 +352,12 @@ function update(props, state, that, nbs) {
         props.forward = false;
         state.dataStack.pop();
 
+        console.log("type before", state.type);
+        console.log("state types before", state.types);
+        var index = state.types.indexOf(state.type);
+        state.types.splice(index, 1);
+        console.log("state types after", state.types);
+
         // send path to parent component
         props.getPath(props.path);
         state.dataStack.last().forEach(e => {
@@ -375,8 +366,16 @@ function update(props, state, that, nbs) {
         // reset angles
         if (d.dim === 1) state.dataStack.last().forEach(e => e.angle = null );
 
+        var nbs1 = [];
+        if (props.path.length > 0) {
+          nbs1 = state.nbs;
+        }
+        else nbs1 = [];
 
-        update(props, state, that, state.nbs);
+        update(props, state, that, nbs1);
+        }
+    })
+    .on("touchend", function(d) {
 
     });
 
@@ -415,29 +414,14 @@ function update(props, state, that, nbs) {
 //   data: [],
 //   view: "overview"
 // };
-
-// class d3ggLayout2 {
-//   constructor() {
-//       this.force = d3.layout.force()
-//                       .charge(0)
-//                       .gravity(0.2)
-//                       .friction(0.9)
-//                       .linkDistance(0)
-//                       .linkStrength(0);
-//     }
-//     update() {
-//       update();
-//     }
-// }
-
 const d3ggLayout = new function(){
   return {
     force: d3.layout.force()
-                      .charge(0)
-                      .gravity(0.2)
-                      .friction(0.9)
-                      .linkDistance(0)
-                      .linkStrength(0),
+              .charge(0)
+              .gravity(0.2)
+              .friction(0.9)
+              .linkDistance(0)
+              .linkStrength(0),
     update: update,
     create: create
   };

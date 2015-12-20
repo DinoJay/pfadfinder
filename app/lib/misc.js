@@ -1,7 +1,9 @@
 export function makeEdges(stack) {
   var edges = [];
   var c = stack.length;
-  while(stack.length > 1) { var target = stack.pop(); var source = stack[stack.length - 1];
+  while(stack.length > 1) {
+    var target = stack.pop();
+    var source = stack[stack.length - 1];
     var edge  = {
       id: source.id + "-" + target.id,
       counter: c--,
@@ -28,6 +30,8 @@ export var sourceColors = {
   "Digital": "Blue",
   "Physical": "#000000"
 };
+
+export const facets = ["Keyword", "Authorship", "Task"];
 
 export var DOC_URL = "https://cdn4.iconfinder.com/data/icons/flat-icon-set/128/"
               + "flat_icons-graficheria.it-11.png";
