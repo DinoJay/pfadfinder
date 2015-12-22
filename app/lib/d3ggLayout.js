@@ -3,12 +3,16 @@ import d3MeasureText from "d3-measure-text"; d3MeasureText.d3 = d3;
 
 import _ from "lodash";
 
-// import $ from "jquery";
-
-import { makeEdges, DOC_URL, EMAIL_URL, CALENDAR_URL,
-  relationColors, NOTE_URL, facets
+import {
+  makeEdges,
+  DOC_URL,
+  EMAIL_URL,
+  CALENDAR_URL,
+  relationColors,
+  NOTE_URL,
+  facets,
+  getDepth
 } from "./misc.js";
-
 
 const D2R = Math.PI / 180;
 
@@ -26,6 +30,7 @@ function position() {
       .style("width", function(d) { return Math.max(0, d.dx - 1) + "px"; })
       .style("height", function(d) { return Math.max(0, d.dy - 1) + "px"; });
 }
+var color = d3.scale.category20c();
 
 Array.prototype.last = function() {
     if (this.length > 0) return this[this.length-1];
@@ -123,8 +128,8 @@ function tick(node, link, width, height) {
       group.values.forEach((d, i) => {
         var radius = INIT_LAYOUT_RAD + (d.dim - 1) * LAYOUT_RAD;
         d.angle = d.angle || 360 / group.values.length * i;
-        // d.offset = NODE_RAD + LABEL_OFFSET + 50;
-        radial(d, radius + d.offset, e.alpha, 0.9, {x: width/2, y: height/2});
+        // console.log("radius", radius, "angle", d.angle);
+        radial(d, radius, e.alpha, 0.9, {x: width/2, y: height/2});
       });
     });
 
@@ -147,61 +152,59 @@ function tick(node, link, width, height) {
   };
 }
 
-function contextMenu(d, props, state, type, that) {
+function contextMenu(d, props, state, that) {
   var allNbs = facets.map(type => {
     var nbs = state.linkedByIndex.nbs(d, type);
     var nbsByLinkValueDuplicates = _.flatten(nbs.map(d => {
       return d.linkedBy.value.map(v => {
         var dCopy = _.cloneDeep(d);
         dCopy.linkValue = v;
+        dCopy.connectedByType = type;
         return dCopy;
       });
-    }));
-
+    })
+  );
     var nestedNbs = d3.nest()
       .key(d => d.linkValue)
       .entries(nbsByLinkValueDuplicates);
 
-    return {key: type, values: nestedNbs};
+    return {key: type, children: nestedNbs};
   });
 
-  console.log("allNbs", allNbs);
-  var cont = d3.select("#vis-cont");
-  var ul = cont
-      .insert("div")
-      .attr("class", "context-menu")
-      .insert("ul", ":first-child")
-      .attr("class", "list")
-      .style("position", "absolute")
-      .style("left", d.x + "px")
-      .style("top", (d.y  - (allNbs.length * 40 )) + "px")
-      .style("margin-top", -75 + "px")
-      .style("display", "inline");
+  var root = {key: "facets", children: allNbs};
+  console.log("root", root, "getDepth", getDepth(root));
 
-  console.log("allNbs", allNbs[0].values);
+  // break execution
+  if (getDepth(root) === 2) return;
 
-  var li = ul.selectAll("facet-type")
-    .data(allNbs);
+  var treemap = d3.layout.treemap()
+    // TODO: size
+    .size([200, 200])
+    .sticky(true)
+    .value(d => d.children ? d.children.length : 1);
 
-  li.enter()
-    .append("li")
-    .attr("class", "facet-type")
-    .text(d => d.key)
-    .on("click", function(d) {
-      var ul = d3.select(this).append("ul");
-      ul.selectAll("facet-value")
-        .data(d.values)
-        .enter()
-        .append("li")
-        .attr("class", "facet-value")
-        .text(p => p.key)
-        .on("click", d => {
-          d3.event.stopPropagation();
-          state.dataStack.pop();
-          console.log("d.values", d.values);
-          update(props, state, that, d.values);
-        });
-    });
+  var cont = d3.select("#vis-cont")
+    .insert("div")
+    .attr("class", "context-menu")
+    .style("position", "absolute")
+    .style("left", d.x + "px")
+    .style("top", (d.y  - (allNbs.length * 40)) + "px")
+    .style("margin-top", -75 + "px")
+    .style("display", "inline");
+
+  cont.datum(root).selectAll(".tNode")
+    .data(treemap.nodes)
+    .enter()
+    .append("div")
+      .attr("class", "tNode")
+      .call(position)
+      .on("click", d => {
+        state.dataStack.pop();
+        d3.select(".context-menu").remove();
+        update(props, state, that, d.values);
+      })
+      .style("background", d => !d.children ? relationColors[d.parent.key] : null)
+      .text(d => !d.children && d.depth >= 2 ? d.key : null);
 }
 
 var create = function(el, props, state) {
@@ -209,7 +212,18 @@ var create = function(el, props, state) {
     d.radius = NODE_RAD;
   });
 
-  state.dataStack = [ state.data ];
+  var nestedData = d3.nest()
+                   .key(d => d.datatype)
+                   .entries(state.data);
+
+  nestedData.forEach(d => {
+    d.dim = 1;
+    d.title = d.key;
+    d.id = "id" + d.key;
+  });
+
+  console.log("nestedData", nestedData);
+  state.dataStack = [state.data];
   state.types = [];
 
   d3.select(el).append("svg")
@@ -225,8 +239,6 @@ function update(props, state, that, nbs) {
   var svg = d3.select("#vis-cont svg");
   var edges = [];
   var selectedNode = props.path.last();
-
-  // console.log("selectedNode", selectedNode);
 
   if (selectedNode) {
     var sumRadius = d3.sum(nbs, d => d.radius);
@@ -253,7 +265,6 @@ function update(props, state, that, nbs) {
     if (props.forward) {
       state.dataStack.push(_.uniq(props.path.concat(nbs), "title"));
     }
-
     // console.log("update Graph inner", this);
     that.force.links(edges);
   }
@@ -261,7 +272,7 @@ function update(props, state, that, nbs) {
   that.force.nodes(state.dataStack.last());
 
   var node = svg.selectAll("g.group")
-                .data(state.dataStack.last(), d => d.id);
+    .data(state.dataStack.last(), d => d.id);
 
   node
     .enter()
@@ -316,13 +327,11 @@ function update(props, state, that, nbs) {
         .attr("opacity", 0.5);
     });
 
+  console.log("node.data()", node.data());
   var maxDim = d3.max(node.data(), d => d.dim);
   node
     .attr("opacity", d => {
       if (d.dim < maxDim && !d.selected) return 0.1;
-      // TODO: delete later
-      // if (d.dim === maxDim && !d.selected) return 0.5;
-      // return 1;
     });
 
   node
@@ -335,10 +344,9 @@ function update(props, state, that, nbs) {
         props.forward = true;
         props.getPath(props.path);
 
-        var type = "Authorship";
-        contextMenu(d, props, state, type, that);
+        contextMenu(d, props, state, that);
+        update(props, state, that, d.values ? d.values : []);
 
-        update(props, state, that, []);
       } else {
         d3.event.stopPropagation();
         if (!d.selected) return;
@@ -352,12 +360,6 @@ function update(props, state, that, nbs) {
         props.forward = false;
         state.dataStack.pop();
 
-        console.log("type before", state.type);
-        console.log("state types before", state.types);
-        var index = state.types.indexOf(state.type);
-        state.types.splice(index, 1);
-        console.log("state types after", state.types);
-
         // send path to parent component
         props.getPath(props.path);
         state.dataStack.last().forEach(e => {
@@ -365,33 +367,20 @@ function update(props, state, that, nbs) {
         });
         // reset angles
         if (d.dim === 1) state.dataStack.last().forEach(e => e.angle = null );
+        update(props, state, that, state.nbs);
 
-        var nbs1 = [];
-        if (props.path.length > 0) {
-          nbs1 = state.nbs;
         }
-        else nbs1 = [];
-
-        update(props, state, that, nbs1);
-        }
-    })
-    .on("touchend", function(d) {
-
     });
 
   var link = d3.select("#vis-cont svg").selectAll(".link")
         .data(edges, d => d.source.title + "-" + d.target.title);
 
   link
-    .style("stroke-width", d => d.target.selected ? 15 : 1)
-    .style("stroke", d => d.target.selected ? relationColors[d.type] : null);
-
-  link
     .enter()
     .insert("path", ":first-child")
-    .attr("class", "link");
-    // .style("stroke-width", d => d.value)
-    // .style("stroke", 20);
+    .attr("class", "link")
+    .style("stroke-width", d => d.source.selected ? 10 : 1)
+    .style("stroke", d => d.source.selected ? relationColors[d.type] : null);
 
   that.force.on("tick", tick(node, link, props.width, props.height));
 

@@ -1,3 +1,5 @@
+import d3 from "d3";
+
 export function makeEdges(stack) {
   var edges = [];
   var c = stack.length;
@@ -17,6 +19,19 @@ export function makeEdges(stack) {
   }
 
   return edges;
+}
+
+export function getDepth(obj) {
+    var depth = 0;
+    if (obj.children) {
+        obj.children.forEach(function (d) {
+            var tmpDepth = getDepth(d);
+            if (tmpDepth > depth) {
+                depth = tmpDepth;
+            }
+        });
+    }
+    return 1 + depth;
 }
 
 export var relationColors = {

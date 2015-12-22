@@ -11,6 +11,7 @@ var linkedByIndex = new function() {
       this.nodes = nodes;
       return this;
     },
+
     nbs: function(a, type) {
       var nbs = [];
       this.nodes.forEach(b => {
@@ -68,7 +69,6 @@ var Graph = React.createClass({
       that: null
     };
   },
-
 
   componentDidUpdate: function() {
     if (this.props.filter) {
